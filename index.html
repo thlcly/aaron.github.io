@@ -1,60 +1,691 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-
+    <meta charset="UTF-8">
     <title>Aaron.GitHub.io by thlcly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">Aaron.GitHub.io</h1>
+      <h2 class="project-tagline">aaron&#39;s blog</h2>
+      <a href="https://github.com/thlcly/java-thread" class="btn">View on GitHub</a>
+      <a href="https://github.com/thlcly/java-thread/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/thlcly/java-thread/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <header>
-      <div class="container">
-        <h1>Aaron.GitHub.io</h1>
-        <h2>aaron&#39;s blog</h2>
+    <section class="main-content">
+      <h1>
+<a id="线程提高" class="anchor" href="#%E7%BA%BF%E7%A8%8B%E6%8F%90%E9%AB%98" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>线程提高</h1>
 
-        <section id="downloads">
-          <a href="https://github.com/thlcly/aaron.github.io/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/thlcly/aaron.github.io/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/thlcly/aaron.github.io" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+<h4>
+<a id="1-线程进程程序的区别" class="anchor" href="#1-%E7%BA%BF%E7%A8%8B%E8%BF%9B%E7%A8%8B%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%8C%BA%E5%88%AB" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. 线程，进程，程序的区别</h4>
 
-    <div class="container">
-      <section id="main_content">
-        <h3>
-<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+<ul>
+<li>程序：指静态的程序，就是存放在硬盘上的可执行代码</li>
+<li>进程：正在内存中运行的程序，其包括改程序运行所要的内存空间，CPU执行权等一系列的资源，一个程序可以有多个进程</li>
+<li>线程：指程序代码执行的路径，线程在进程中运行，线程是操作系统分配CPU运算时间的最小单位。</li>
+</ul>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here <a href="https://guides.github.com/features/mastering-markdown/">using GitHub Flavored Markdown</a>, select a template crafted by a designer, and publish. After your page is generated, you can check out the new <code>gh-pages</code> branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.</p>
+<h4>
+<a id="2创建线程的方式" class="anchor" href="#2%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E5%BC%8F" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.创建线程的方式</h4>
 
-<h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Designer Templates</h3>
+<p>方式一：</p>
 
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
+<pre><code>          Thread thread1 = new Thread(){
+             public void run() {
+                 while(true){
+                     try {
+                        Thread. sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System. out.println(Thread.currentThread().getName());
+                    System. out.println(this .getName());
+                }
+            }
+        };
+        thread1.start();
+</code></pre>
 
-<h3>
-<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating pages manually</h3>
+<p><strong>说明：创建线程类Thread的子类将其加入到线程体系中使本身也成为线程体系中的一部分，其中要覆盖父类的run方法在其中编写自己的线程要执行的任务</strong></p>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>方式二：</p>
 
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<pre><code>      Thread thread2 = new Thread(new Runnable() {           
+             @Override
+             public void run() {
+                 while(true ){
+                     try {
+                        Thread. sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System. out.println(Thread.currentThread().getName());
+                     //因为Runnable接口存放的是线程要运行的代码，不是线程对象，所以不能用this.getName();
+                     //System.out.println(this.getName());
+                }
+            }
+        });
 
-<p>You can <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/#mentioning-users-and-teams" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+        thread2.start();
+</code></pre>
 
-<h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
+<p><strong>说明：通过继承Runnable接口将自己线程要执行的任务放入Runnable接口的run方法中，再调用Thread的Thread(Runnable r)构造函数由线程类对象调用自己编程的run()方法而不是默认的run()方法</strong></p>
 
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
+<p>测试：</p>
 
-    
+<pre><code>new Thread(new Runnable() {            
+             @Override
+             public void run() {
+                 while(true ){
+                     try {
+                        Thread. sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System. out.println("Runnable:" +Thread.currentThread ().getName());
+                }
+            }
+        }){
+             public void run() {
+                 while(true ){
+                     try {
+                        Thread. sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System. out.println("Thread:" +Thread.currentThread ().getName());                 
+                }
+            }
+        }.start();
+</code></pre>
+
+<p><strong>说明：这里会输出Thread:Thread-2，因为这里是创建了Thread类的子类并重写了其中的run()方法，所以子类的run()方法会调用自己的run()方法而不是父类(Thread)的run()方法，只有当子类中没有run()方法时才会调用父类的run()方法，所以会输出Thread:Thread-2</strong></p>
+
+<p>其中，父类(Thread)的run()方法是这样定义的：</p>
+
+<pre><code>private Runnable target;
+
+Thread(Runnable r){
+     target = r;
+}
+
+public void run(){
+     if(target!=null){
+          target.run();
+     }
+}
+
+</code></pre>
+
+<h4>
+<a id="3定时器" class="anchor" href="#3%E5%AE%9A%E6%97%B6%E5%99%A8" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.定时器</h4>
+
+<ul>
+<li>创建定时器</li>
+</ul>
+
+<pre><code>        //过1s后调用run()
+         new Timer().schedule(new TimerTask() {
+             @Override
+             public void run() {
+                System. out.println("bombing" );
+            }
+        }, 1000);
+
+        //隔1s后执行run()以后每隔3s执行run()
+
+        new Timer().schedule(new TimerTask() {
+
+             @Override
+             public void run() {
+                System. out.println("bombing" );
+            }
+        }, 1000,3000);
+
+        //每隔2s和4s轮流执行run()方法
+        new Timer().schedule(new MyTask(),2000);
+
+
+        static class MyTask extends TimerTask{
+              static boolean flag=true;
+              @Override
+              public void run() {
+                  System. out.println("bombing" );
+                   if(flag )
+                       new Timer().schedule(new MyTask(), 4000);
+                   else
+                       new Timer().schedule(new MyTask(), 2000);
+                   flag=!flag ;
+              }   
+          }   
+</code></pre>
+
+<p><strong>说明：当创建一个定时器时就会在指定时间后开创一个新的线程并执行覆盖了TimerTask类中的run()方法</strong></p>
+
+<h4>
+<a id="4线程安全的问题" class="anchor" href="#4%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E9%97%AE%E9%A2%98" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4.线程安全的问题</h4>
+
+<ul>
+<li>如果有2个以上的线程要访问同一块资源或者代码就会出现线程安全问题，而解决方法之一就是在公有部分加上synchronized(同一锁对象){}关键字，如果一个实例方法或者静态方法是公有部分就在方法声明时加synchronized,但是实例方法的所对象是this，而静态方法的锁对象是类.class(即类的字节码文件对象)</li>
+</ul>
+
+<p>练习1：子线程先运行10次，然后主线程运行100次，然后又是子线程运行，如此循环50次</p>
+
+<p>解答：</p>
+
+<pre><code>public class ThreadTest1 {
+
+    public static void main(String[] args) {
+         final Business b = new Business();
+        Thread thread = new Thread(new Runnable() {
+
+             @Override
+             public void run() {
+                 for(int i=1; i&lt;=50;i ++)
+                    b.sub(i);
+            }
+        }) ;
+        thread.start();
+         for(int i=1;i&lt;=50;i++){
+            b.main(i);
+        }
+    }
+}
+
+class Business{
+    boolean isSub= true;
+    public synchronized void sub(int loop){
+         while(!isSub ){
+             try {
+                 this.wait();
+            } catch (InterruptedException e) {
+                 // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+         for(int i=0;i&lt;10;i++){
+            System. out.println("sub is " +i+",in loop of"+loop);
+        }
+         isSub= false;
+         this.notifyAll();
+    }
+
+    public synchronized void main(int loop){
+         while(isSub ){
+             try {
+                 this.wait();
+            } catch (InterruptedException e) {
+                 // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+         for(int i=0;i&lt;100;i++){
+            System. out.println("main is " +i+",in loop of"+loop);
+        }
+         isSub= true;
+         this.notifyAll();
+    }
+}
+</code></pre>
+
+<p><strong>说明：
+     - 线程等待和唤醒方法(wait(),notifyAll(),notify())只能在synchronized块中调用，且只能由锁对象调用
+    - 如果多个代码块要互斥则应该将它们放到一个类中用同一个锁对象
+    - 在线程被唤醒时应该再次检查其的运行条件，即用while循环，因为可能线程被唤醒时还是不具备运行条件(即假唤醒)</strong></p>
+
+<p>练习2：实现数据在单独一个线程范围的所有操作中共享而在线程之间相互独立，即数据与线程绑定</p>
+
+<p>解答：
+方法一：将数据和所在线程存入HashMap中，取出时按照线程为Key取出</p>
+
+<pre><code>public class ThreadTest2 {
+
+    static int data ;
+    static HashMap&lt;Thread,Integer&gt; hashMap = new HashMap&lt;Thread,Integer&gt;();
+    public static void main(String[] args) {
+         for(int i=0;i&lt;2;i++){
+             new Thread(new Runnable() {     
+                 @Override
+                 public void run() {
+                     /*
+                    synchronized (ThreadTest2.class) {                   
+                        data = new Random().nextInt();
+                        hashMap.put(Thread.currentThread(),data);
+                        System.out.println(Thread.currentThread()+"is put data:"+data);
+                        new A().get();
+                        new B().get();
+                    }
+                */
+                     //或者
+                     int data = new Random().nextInt();
+                     hashMap.put(Thread.currentThread(), data);
+                    System. out.println(Thread.currentThread()+ "is put data:"+data );
+                     new A().get();
+                     new B().get();
+                }
+            }).start();
+        }       
+    }
+
+    static class A{
+         public void get(){
+            System. out.println(Thread.currentThread()+ "A get"+hashMap.get(Thread. currentThread()));
+           System.out.println(Thread. currentThread()+ "A get"+/*hashMap.get(Thread.currentThread())*/data);
+        }
+    }
+
+    static class B{
+         public void get(){
+            System. out.println(Thread. currentThread()+"B get"+hashMap.get(Thread. currentThread()));
+            System.out.println(Thread. currentThread()+ "B get"+/*hashMap.get(Thread.currentThread())*/data);
+        }
+    }
+}
+
+</code></pre>
+
+<p>方法二：用Java提供的ThreadLocal类实现，ThreadLocal类会将存入的数据自动与执行存入数据的线程相关联</p>
+
+<pre><code>public class ThreadLocalTest {
+
+    //如果要共享的数据有多个可以将其封装成一个对象，然后再将其传入ThreadLocal中，其中ThreadLocal自动会将数据和线程的关联起来
+    static ThreadLocal&lt;Data&gt; threadLocal = new ThreadLocal&lt;Data&gt;();
+    public static void main(String[] args) {
+         for(int i=0;i&lt;2;i++){
+             new Thread(new Runnable() {     
+                 @Override
+                 public void run() {
+                         int ran = new Random().nextInt();
+                        Data data = new Data();
+                        data.setName( "name"+ran);
+                        data.setAge(ran);
+                         threadLocal.set(data);
+                        System. out.println(Thread.currentThread()+ "is put data:"+"name:"+data.getName()+ "age:"+data.getAge());
+                         new A().get();
+                         new B().get();
+                }
+            }).start();
+        }       
+    }
+
+    static class A{
+         public void get(){
+            Data d = threadLocal.get();
+            System. out.println(Thread.currentThread()+ "A get name:"+d.getName()+"age:"+d.getAge());
+        }
+    }
+
+    static class B{
+         public void get(){
+            Data d = threadLocal.get();
+            System. out.println(Thread.currentThread()+ "B get name:"+d.getName()+"age:"+d.getAge());
+        }
+    }
+
+    static class Data{
+         private String name ;
+         private int age ;
+         public String getName() {
+             return name ;
+        }
+         public void setName(String name) {
+             this.name = name;
+        }
+         public int getAge() {
+             return age ;
+        }
+         public void setAge(int age) {
+             this.age = age;
+        }       
+    }
+}
+
+</code></pre>
+
+<p>方法三：优化方法二</p>
+
+<pre><code>public class ThreadLocalTest2 {
+
+    public static void main(String[] args){
+         for(int i=0;i&lt;2;i++){
+             new Thread(new Runnable() {
+
+                 @Override
+                 public void run() {
+                     int ran = new Random().nextInt();
+                    Data data = Data.getInstance();
+                    System. out.println(Thread.currentThread()+ " put data name"+ran+" age "+ran);
+                    data.setName( "name"+ran);
+                    data.setAge(ran);
+                     new A().get();
+                     new B().get();
+                }
+            }).start();
+        }
+    }
+
+    static class A{
+         public void get(){
+            Data data = Data. getInstance();
+            System. out.println(Thread.currentThread()+ " from A name"+data.getName()+" age"+data.getAge());
+        }
+    }
+
+    static class B{
+         public void get(){
+            Data data = Data. getInstance();
+            System. out.println(Thread.currentThread()+ " from A name"+data.getName()+" age"+data.getAge());
+        }
+    }
+
+    static class Data{
+         //定义静态的构造函数，不让外界创建Data的实例对象
+         private Data(){}
+         public static Data getInstance(){
+            Data data = threadLocal.get();
+             if(data == null ){
+                data = new Data();
+                 threadLocal.set(data);
+                 return data;
+            }
+             return threadLocal .get();
+        }
+         private static ThreadLocal&lt;Data&gt; threadLocal = new ThreadLocal&lt;Data&gt;();
+
+         private String name ;
+         private int age ;
+         public String getName() {
+             return name ;
+        }
+         public void setName(String name) {
+             this.name = name;
+        }
+         public int getAge() {
+             return age ;
+        }
+         public void setAge(int age) {
+             this.age = age;
+        }
+    }
+}
+
+</code></pre>
+
+<p>方法四：可以用Atomic包中的类进行解决</p>
+
+<h4>
+<a id="5线程池" class="anchor" href="#5%E7%BA%BF%E7%A8%8B%E6%B1%A0" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5.线程池</h4>
+
+<ul>
+<li>创建方法
+创建方法一：</li>
+</ul>
+
+<pre><code>      //创建可以同时执行3个线程任务的线程池
+      ExecutorService threadPool = Executors.newFixedThreadPool(3);
+      //往线程池中添加任务
+      threadPool.execute(Runnable r);
+</code></pre>
+
+<ul>
+<li>
+<p>线程池中用于存放要执行的线程任务，当创建好线程池，设置好可以同时同步执行的线程数和线程池中的任务之后，线程池会自动的创建线程去执行的线程池中的任务，线程池最多只会创建指定好的线程数去执行任务，其他的任务则等待，直到有线程空闲后在执行，直到线程池中的任务全部执行完为止；如果线程池中的任务比可以创建的线程数少，则线程池会创建和任务相同数量的线程去执行任务。
+ii.当线程池中的任务全部被执行完之后，程序会阻塞，必须要将线程池关闭程序才能结束</p>
+
+<p>创建方法二：  </p>
+</li>
+</ul>
+
+<pre><code>  //创建可以动态生成线程的线程池
+      ExecutorService threadPool = Executors.newCachedThreadPool();
+</code></pre>
+
+<ul>
+<li>利用该方式创建的线程池，会根据任务的数量创建线程数，即如果线程池中还有任务但是没有线程空闲该线程池就会创建一个新的线程去执行线程池中的任务，如果执行了一段时间后线程数大于任务数了，如果有线程在指定时间内一直处于空闲状态，线程池就会收回该线程</li>
+<li>
+<p>当线程池中的任务全部被执行完之后，程序会阻塞，必须要将线程池关闭程序才能结束</p>
+
+<p>创建方法三：</p>
+
+<pre><code>       //创建只有一个线程类的线程池
+       ExecutorService threadPool = Executors.newSingleThreadExecutor();
+</code></pre>
+</li>
+<li>利用该方式创建的线程池只会创建一个线程来执行线程池中的任务，如果这个线程在中途死亡了则线程池会创建一个新的线程来代替，直到任务全部被执行完毕，新创建的线程会自动增加</li>
+<li>
+<p>当线程池中的任务全部被执行完之后，程序会阻塞，必须要将线程池关闭程序才能结束</p>
+
+<p>（2）shutdown和shutdownNow的区别</p>
+</li>
+<li>shutdown：会关闭线程池，使线程池不再接受任务，如果还向已关闭的线程池中添加任务会抛出RejectedExecutionException异常，但是已经在线程池中的任务还是会被执行完</li>
+<li>
+<p>shutdownNow：会关闭线程池，使线程池不再接受任务，且会阻止正在执行的任务</p>
+
+<p>（3）用线程池调用定时器线程</p>
+
+<ul>
+<li>可以在线程池中添加具有定时功能的线程，这些线程会在指定时间之后再去执行线程池中的任务</li>
+<li>当线程池中的任务全部被执行完之后，程序会阻塞，必须要将线程池关闭程序才能结束</li>
+</ul>
+</li>
+</ul>
+
+<pre><code> ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(3);
+
+ //该函数会在指定的时间后创建3个线程去执行线程池中的任务
+ threadPool.schedule(Runnable r,long delay,TimeUnit t)//TimeUnit用于指定时间的单位
+
+
+ //该函数会在指定的时间后按指定创建执行线程去执行线程池中的任务
+ threadPool.scheduleAtFixedRate(Runnable r,long delay,long perid.TimeUnit t)
+</code></pre>
+
+<h4>
+<a id="6获取线程任务执行后的返回值" class="anchor" href="#6%E8%8E%B7%E5%8F%96%E7%BA%BF%E7%A8%8B%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C%E5%90%8E%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>6.获取线程任务执行后的返回值</h4>
+
+<p>如果线程任务执行后有返回值则可以用Callable和Future进行返回和接收，
+     范例：</p>
+
+<pre><code>   public class CallableAndFutureTest {
+
+    /**
+     * @param args
+     * @throws Exception
+     * @throws InterruptedException
+     */
+    public static void main(String[] args) throws InterruptedException, Exception {
+        ExecutorService thread = Executors.newFixedThreadPool(3);
+        Future&lt;String&gt; future = thread.submit(new Callable&lt;String&gt;(){
+
+             @Override
+             public String call() throws Exception {
+                Thread. sleep(2000);
+                 return "hello" ;
+            }
+
+        });
+        System. out.println("等待返回...." );
+        System. out.println("返回的结果是" +future.get());
+    }
+}
+</code></pre>
+
+<p><strong>说明：用submit和execute提交任务的区别就是submit可以有返回值而execute没有</strong></p>
+
+<p>CompletionService用于提交一组有返回值的任务</p>
+
+<pre><code> CompletionService&lt;T&gt; completions = new ExecutorCompletionService&lt;T&gt;(thread1);
+     其中：泛型T用于指定返回值的类型
+
+     范例
+    ExecutorService thread1 = Executors.newFixedThreadPool(10);
+    CompletionService&lt;Integer&gt; completions = new ExecutorCompletionService&lt;Integer&gt;(thread1);
+
+     for (int i = 0; i &lt; 10; i++) {
+         final int value = i;
+         completions.submit(new Callable&lt;Integer&gt;() {
+
+             @Override
+             public Integer call() throws Exception {
+                Thread. sleep(new Random().nextInt(5000));
+                 return value;
+            }
+
+        });
+    }
+
+    System. out.println("等待结果....." );
+     for(int i=0;i&lt;10;i++){
+         //take()方法用于获取最先完成的任务所返回的Future对象
+        System. out.println(completions.take().get());
+    }
+
+</code></pre>
+
+<h4>
+<a id="7用lock解决线程安全问题" class="anchor" href="#7%E7%94%A8lock%E8%A7%A3%E5%86%B3%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>7.用Lock解决线程安全问题</h4>
+
+<pre><code> Lock lock = new ReentrantLock()
+     synchronized(对象)｛  
+          lock.lock();                     
+          try{code}    
+          finally{lock.unlock;}                                                                
+     ｝                                                        
+</code></pre>
+
+<p>说明：为了防止在执行代码时出现错误造成锁不能被释放导致其他线程不能执行，所以要将code放入try{}中，同时必须要保证要同步的线程用的是同一把锁(即同一个锁对象)</p>
+
+<p>（1）锁分为读锁和写锁，多个读锁不互斥，读锁与写锁互斥，写锁与写锁互斥
+     创建可读写锁对象</p>
+
+<pre><code>  ReadWriteLock lock = new ReentrantReadWriteLock();
+         获取读锁
+         lock.readLock().lock();
+         释放读锁
+         lock.readLock().unlock();
+         获取写锁
+         lock.writeLock().lock();
+         释放写锁
+         lock.readLock().lock();
+</code></pre>
+
+<p>读锁和写锁的获取与释放必须相对应的出现</p>
+
+<p>（2）Condition对象可以用于唤醒和等待线程，相当于是wait()和notify();</p>
+
+<pre><code>     创建Condition对象
+     Condition condition = lock.newCondition();
+     停止线程
+     condition.await();
+     唤醒线程(必须有其他线程调用该方法才能唤醒由该condition对象停止的线程)
+     condition.signal();
+</code></pre>
+
+<p><strong>说明：Condition对象与wait()和notify()不同之处：可以创建不同的Condition对象用于唤醒指定的线程</strong></p>
+
+<p>（3）Semaphore类
+     用于控制可以并发执行的线程数，只有获取到Semaphore中的'灯'之后线程才能执行，如果Semaphore中的灯已经没有了，则线程就会进入等待状态在线程执行完之后必须要释放'灯'，如果不释放则其他线程就永远被阻塞不能运行，如果设置成一个线程可以运行就相当于是互斥锁</p>
+
+<pre><code>     实例：
+public class ThreadPoolTest {
+    public static void main(String[] args) {
+         // 定义一个可以同时执行3个线程任务的线程池
+        ExecutorService threadPool = Executors.newFixedThreadPool(10);
+
+         //定义Semaphore对象，指定可以同时运行的线程数
+         final Semaphore semaphore = new Semaphore(3);
+
+         //定义Semaphore对象，指定可以同时运行的线程数，等待者获得锁是先到先得
+         //final Semaphore semaphore = new Semaphore(3,true);
+
+
+         // 往线程池中添加任务
+         for (int task = 0; task &lt; 10; task++) {
+             final int j = task;
+
+            threadPool.execute((new Runnable() {
+
+                 @Override
+                 public void run() {
+                     try {
+                         //获取执行权
+                        semaphore.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                     for (int i = 0; i &lt; 10; i++) {
+                        System. out.println(Thread.currentThread().getName()
+                                + " is loop of " + i + " is task of " + j);                       
+                    }
+                     //释放执行权以让其他线程可以运行
+                    semaphore.release();
+                }
+            }));
+        }
+    }
+}
+
+</code></pre>
+
+<p>（4）CyclicBarrier类
+    该类用于统一集合的运行时间，即所有集合必须都执行到同一代码时线程才能继续往下执行，否者则在原地等待</p>
+
+<pre><code> 创建CyclicBarrier对象,要有3个线程同时到达时线程才能继续往下执行
+     CyclicBarrier cb = new CyclicBarrier(3);
+     //线程等待代码
+     cb.await();
+</code></pre>
+
+<p>（5）CountDownLatch类
+     该类用于设定线程的等待执行时间，即只有CountDownLatch中的计数器减为0时线程才能往下执行。</p>
+
+<pre><code>  创建CountDownLatch对象
+     CountDownLatch cd = new CountDownLatch(初始时间);
+     线程等待，直到计数器减为0
+     cd.await();
+</code></pre>
+
+<p>（6）Exchanger类
+     该类用于在两个线程之间交换数据，要交换数据的两个类必须使用同一Exchanger对象</p>
+
+<pre><code>创建Exchanger对象
+ Exchanger e = new Exchanger();
+ //交换数据
+ e.exchange(数据);
+</code></pre>
+
+<p>说明：如果两个线程到达交换点的时间不同则先到达的线程会进入等待状态直到另外一个线程也到达然后再进行数据的交换，然后继续执行格子的任务   </p>
+
+<p>（7）阻塞队列(ArrayBlockingQueue)
+     该类是一个阻塞式队列，其容量是固定的，内部由一个数组支持，当队列中的控件存储满了之后，再往该队列中存储数据根据不同的存储的方法会返回不同的值，有一种是会发生阻塞直到队列有空为止，当要从该队列中取出数据时根据不同的取数据的方法也会出现不同的结果，有一种也是会发生阻塞直到队列中有数据为止。(其他的存取方法看JDK)。存取数据时按照先进先出(FIFO)的方法。</p>
+
+<pre><code>   创建ArrayBlockingQueue对象
+     ArrayBlockingQueue&lt;T&gt; ab = new ArrayBlockingQueue&lt;T&gt;(容量);
+     ab.put(数据)//阻塞式
+     ab.take()//阻塞式
+</code></pre>
+
+<p>（8）当在多线程中要操作Set，Map等数据结构时最好使用java.util.concurrent中的Set和Map，因为其中的类都是多线程安全的（后台实现原理就是给一个Set或Map对象的每一个方法上都加上synchrodu.comnized关键字，使其成为互斥的）。</p>
+
+<ul>
+<li>CopyOnArrayList类允许用迭代器迭代列表中的值时对列表中的值进行修改，且是线程安全的，而普通的ArrayList则不允许。</li>
+<li>HashSet的底层实现其实就是用的HashMap，只不过只是用到了键而不用值。</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/thlcly/java-thread">Aaron.GitHub.io</a> is maintained by <a href="https://github.com/thlcly">thlcly</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
   </body>
 </html>
