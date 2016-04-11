@@ -80,16 +80,16 @@
 
 
 
-<meta name="description" content="Java线程详解This is my understanding for java thread">
+<meta name="description" content="This is my understanding for java thread">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Monkey Coder">
-<meta property="og:url" content="http://thlcly.xyz/2016/04/02/线程提高/index.html">
+<meta property="og:title" content="Java线程详解">
+<meta property="og:url" content="http://thlcly.xyz/2016/04/11/线程提高/index.html">
 <meta property="og:site_name" content="Monkey Coder">
-<meta property="og:description" content="Java线程详解This is my understanding for java thread">
-<meta property="og:updated_time" content="2016-04-02T08:31:06.000Z">
+<meta property="og:description" content="This is my understanding for java thread">
+<meta property="og:updated_time" content="2016-04-11T07:01:21.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Monkey Coder">
-<meta name="twitter:description" content="Java线程详解This is my understanding for java thread">
+<meta name="twitter:title" content="Java线程详解">
+<meta name="twitter:description" content="This is my understanding for java thread">
 
 
 
@@ -107,7 +107,7 @@
   };
 </script>
 
-  <title>  | Monkey Coder </title>
+  <title> Java线程详解 | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -227,7 +227,7 @@
             
             
               
-                
+                Java线程详解
               
             
           </h1>
@@ -239,8 +239,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-02T16:31:06+08:00" content="2016-04-02">
-              2016-04-02
+            <time itemprop="dateCreated" datetime="2016-04-11T15:01:21+08:00" content="2016-04-11">
+              2016-04-11
             </time>
           </span>
 
@@ -267,7 +267,7 @@
       
 
       
-        <h1 id="Java线程详解">Java线程详解</h1><p>This is my understanding for java thread<br><a id="more"></a></p>
+        <p>This is my understanding for java thread<br><a id="more"></a></p>
 <h4 id="1-_线程，进程，程序的区别">1. 线程，进程，程序的区别</h4><ul>
 <li>程序：指静态的程序，就是存放在硬盘上的可执行代码</li>
 <li>进程：正在内存中运行的程序，其包括改程序运行所要的内存空间，CPU执行权等一系列的资源，一个程序可以有多个进程</li>
@@ -485,7 +485,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java线程详解"><span class="nav-number">1.</span> <span class="nav-text">Java线程详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-_线程，进程，程序的区别"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">1. 线程，进程，程序的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-创建线程的方式"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">2.创建线程的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-定时器"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">3.定时器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-线程安全的问题"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">4.线程安全的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-线程池"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">5.线程池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-获取线程任务执行后的返回值"><span class="nav-number">1.0.0.6.</span> <span class="nav-text">6.获取线程任务执行后的返回值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-用Lock解决线程安全问题"><span class="nav-number">1.0.0.7.</span> <span class="nav-text">7.用Lock解决线程安全问题</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-_线程，进程，程序的区别"><span class="nav-number">1.</span> <span class="nav-text">1. 线程，进程，程序的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-创建线程的方式"><span class="nav-number">2.</span> <span class="nav-text">2.创建线程的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-定时器"><span class="nav-number">3.</span> <span class="nav-text">3.定时器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-线程安全的问题"><span class="nav-number">4.</span> <span class="nav-text">4.线程安全的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-线程池"><span class="nav-number">5.</span> <span class="nav-text">5.线程池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-获取线程任务执行后的返回值"><span class="nav-number">6.</span> <span class="nav-text">6.获取线程任务执行后的返回值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-用Lock解决线程安全问题"><span class="nav-number">7.</span> <span class="nav-text">7.用Lock解决线程安全问题</span></a></li></ol></div>
             
           </div>
         </section>
