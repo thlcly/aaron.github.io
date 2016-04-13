@@ -239,6 +239,169 @@
             
               
                 
+                <a class="post-title-link" href="/2016/04/13/java8_lambda_学习笔记/" itemprop="url">
+                  Java8 Lambda 学习笔记
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-04-13T14:05:29+08:00" content="2016-04-13">
+              2016-04-13
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>This is a continuous updating learning notes for <em>Java8 Lambda</em></p>
+<h3 id="1-_函数接口">1. 函数接口</h3><ul>
+<li>函数接口是只有一个抽象方法的接口， 用作lambda表达式的类型</li>
+<li>如果要将lambda表达式定义成一个接口类型，则要将lambda表达式的类型和该接口中的唯一一个<strong>抽象方法的签名</strong>保持一致</li>
+</ul>
+<h5 id="1-1_jdk提供的常用的函数接口">1.1 jdk提供的常用的函数接口</h5><table>
+<thead>
+<tr>
+<th>接口</th>
+<th style="text-align:center">参数</th>
+<th style="text-align:center">返回类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Predicate&lt;T&gt;</td>
+<td style="text-align:center">T</td>
+<td style="text-align:center">boolean</td>
+</tr>
+<tr>
+<td>Consumer&lt;T&gt;</td>
+<td style="text-align:center">T</td>
+<td style="text-align:center">void</td>
+</tr>
+<tr>
+<td>Function&lt;T&gt;</td>
+<td style="text-align:center">T</td>
+<td style="text-align:center">R</td>
+</tr>
+<tr>
+<td>Supplier&lt;T&gt;</td>
+<td style="text-align:center">None</td>
+<td style="text-align:center">T</td>
+</tr>
+<tr>
+<td>UnaryOperator&lt;T&gt;</td>
+<td style="text-align:center">T</td>
+<td style="text-align:center">T</td>
+</tr>
+<tr>
+<td>BinaryOperator&lt;T&gt;</td>
+<td style="text-align:center">(T,T)</td>
+<td style="text-align:center">T</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-_惰性求值方法/及早求值方法">2. 惰性求值方法/及早求值方法</h3><ul>
+<li>只描述Stream最终不产生新的集合的方法叫做<strong>惰性求值方法</strong>, 例如filter方法</li>
+<li>最终会从Stream产生值的方法叫做<strong>及早求值方法</strong>, 例如count方法</li>
+</ul>
+<p>注意: 判断一个操作是惰性求值还是及早求值只需要看它的返回值, <strong>Stream-&gt;惰性求值, void/另一个具体的值-&gt;及早求值 </strong></p>
+
+          
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/04/11/线程提高/" itemprop="url">
                   Java线程详解
                 </a>
@@ -476,7 +639,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
