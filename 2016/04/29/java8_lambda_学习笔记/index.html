@@ -83,10 +83,10 @@
 <meta name="description" content="This is a continuous updating learning notes for Java8 Lambda">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java8 Lambda 学习笔记">
-<meta property="og:url" content="http://thlcly.xyz/2016/04/13/java8_lambda_学习笔记/index.html">
+<meta property="og:url" content="http://thlcly.xyz/2016/04/29/java8_lambda_学习笔记/index.html">
 <meta property="og:site_name" content="Monkey Coder">
 <meta property="og:description" content="This is a continuous updating learning notes for Java8 Lambda">
-<meta property="og:updated_time" content="2016-04-13T06:18:57.000Z">
+<meta property="og:updated_time" content="2016-04-29T06:53:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java8 Lambda 学习笔记">
 <meta name="twitter:description" content="This is a continuous updating learning notes for Java8 Lambda">
@@ -249,8 +249,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-04-13T14:18:58+08:00" content="2016-04-13">
-              2016-04-13
+            <time itemprop="dateCreated" datetime="2016-04-29T14:53:50+08:00" content="2016-04-29">
+              2016-04-29
             </time>
           </span>
 
@@ -298,7 +298,7 @@
       
         <p>This is a continuous updating learning notes for <em>Java8 Lambda</em><br><a id="more"></a></p>
 <h3 id="1-_函数接口">1. 函数接口</h3><ul>
-<li>函数接口是只有一个抽象方法的接口， 用作lambda表达式的类型</li>
+<li>函数接口是只有一个抽象方法的接口(除了隐含的Object对象的公共方法)， 用作lambda表达式的类型</li>
 <li>如果要将lambda表达式定义成一个接口类型，则要将lambda表达式的类型和该接口中的唯一一个<strong>抽象方法的签名</strong>保持一致</li>
 </ul>
 <h5 id="1-1_jdk提供的常用的函数接口">1.1 jdk提供的常用的函数接口</h5><table>
@@ -347,6 +347,10 @@
 <li>最终会从Stream产生值的方法叫做<strong>及早求值方法</strong>, 例如count方法</li>
 </ul>
 <p>注意: 判断一个操作是惰性求值还是及早求值只需要看它的返回值, <strong>Stream-&gt;惰性求值, void/另一个具体的值-&gt;及早求值 </strong></p>
+<ul>
+<li>Stream中的max和min方法用于获取<strong>指定比较方式</strong>下的数据中的最大值和最小值</li>
+</ul>
+<p><em>注意: min和max的参数是Comparator,jdk1.8中, Comparator提供了comparing方法用来<strong>指定比较大小的数据</strong></em><br>eg:<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Track&gt; tracks = Arrays.asList(<span class="keyword">new</span> Track(<span class="string">"Bakai"</span>, <span class="number">524</span>),</span><br><span class="line">                                   <span class="keyword">new</span> Track(<span class="string">"Violets for your furs"</span>, <span class="number">378</span>),</span><br><span class="line">                                   <span class="keyword">new</span> Track(<span class="string">"Time was"</span>, <span class="number">451</span>));</span><br><span class="line"></span><br><span class="line">Track shortestTrack = tracks.stream().min(Comparator.comparing(track-&gt;track.getLength())).get();</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -370,17 +374,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/13/java_线程提高/" rel="next" title="Java线程详解">
-                <i class="fa fa-chevron-left"></i> Java线程详解
+              <a href="/2016/04/27/java_注解学习笔记/" rel="next" title="java注解学习笔记">
+                <i class="fa fa-chevron-left"></i> java注解学习笔记
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/04/27/java_注解学习笔记/" rel="prev" title="java注解学习笔记">
-                java注解学习笔记 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
