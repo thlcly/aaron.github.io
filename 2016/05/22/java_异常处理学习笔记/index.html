@@ -86,7 +86,7 @@
 <meta property="og:url" content="http://thlcly.xyz/2016/05/22/java_异常处理学习笔记/index.html">
 <meta property="og:site_name" content="Monkey Coder">
 <meta property="og:description" content="This is my understanding for java exception handler">
-<meta property="og:updated_time" content="2016-05-21T19:00:06.000Z">
+<meta property="og:updated_time" content="2016-05-21T19:07:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java异常">
 <meta name="twitter:description" content="This is my understanding for java exception handler">
@@ -249,7 +249,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-05-22T03:00:06+08:00" content="2016-05-22">
+            <time itemprop="dateCreated" datetime="2016-05-22T03:07:49+08:00" content="2016-05-22">
               2016-05-22
             </time>
           </span>
@@ -328,14 +328,9 @@
 <li><p>eg:</p>
 </li>
 </ul>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//代码6-3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">	1. 在catch中对特殊情况进行处理, 为了处理特殊情况故意抛出了一个异常, 使代码结构, 业务逻辑混乱	</span><br><span class="line">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	<span class="comment">// 查找不到MealExpenses对象就抛出异常(或者返回一个null, 在调用处报错)</span></span><br><span class="line">    MealExpenses expenses = expenseReportDAO.getMeals(employee.getID());</span><br><span class="line">    m_total += expenses.getTotal();</span><br><span class="line">&#125; <span class="keyword">catch</span>(MealExpensesNotFound e) &#123;</span><br><span class="line">	<span class="comment">// 使用异常对特殊情况进行处理, 查找不到MealExpenses对象就使用默认值</span></span><br><span class="line">    m_total += getMealPerDiem();</span><br><span class="line">&#125;</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">可以定义一个特殊情况的类来避免在<span class="keyword">catch</span>中进行业务逻辑的处理</span><br></pre></td></tr></table></figure>
-<p>//代码6-4</p>
-<p>/**</p>
-<pre><code><span class="number">1.</span> 引入一个MealExpenses的子类PerDiemMealExpenses用于特殊情况的处理, 如果查找不到
-MealExpenses对象, 就返回一个PerDiemMealExpenses对象用于默认值的处理
-</code></pre><p>*/</p>
-<p>MealExpenses expenses = expenseReportDAO.getMeals(employee.getID());<br>m_total += expenses.getTotal();</p>
-<p>//这里引入一个新的特殊情况的类<br>public class PerDiemMealExpenses implements MealExpenses {<br>    public int getTotal() {<br>        // return the per diem default<br>    }<br>}<br>```</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//代码6-3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">	1. 在catch中对特殊情况进行处理, 为了处理特殊情况故意抛出了一个异常, 使代码结构, 业务逻辑混乱	</span><br><span class="line">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	<span class="comment">// 查找不到MealExpenses对象就抛出异常(或者返回一个null, 在调用处报错)</span></span><br><span class="line">    MealExpenses expenses = expenseReportDAO.getMeals(employee.getID());</span><br><span class="line">    m_total += expenses.getTotal();</span><br><span class="line">&#125; <span class="keyword">catch</span>(MealExpensesNotFound e) &#123;</span><br><span class="line">	<span class="comment">// 使用异常对特殊情况进行处理, 查找不到MealExpenses对象就使用默认值</span></span><br><span class="line">    m_total += getMealPerDiem();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以定义一个特殊情况的类来避免在catch中进行业务逻辑的处理</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//代码6-4</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">	1. 引入一个MealExpenses的子类PerDiemMealExpenses用于特殊情况的处理, 如果查找不到</span><br><span class="line">	MealExpenses对象, 就返回一个PerDiemMealExpenses对象用于默认值的处理</span><br><span class="line">*/</span></span><br><span class="line"></span><br><span class="line">MealExpenses expenses = expenseReportDAO.getMeals(employee.getID());</span><br><span class="line">m_total += expenses.getTotal();</span><br><span class="line"></span><br><span class="line"><span class="comment">//这里引入一个新的特殊情况的类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PerDiemMealExpenses</span> <span class="keyword">implements</span> <span class="title">MealExpenses</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> getTotal() &#123;</span><br><span class="line">        <span class="comment">// return the per diem default</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="4-_不要返回null">4. 不要返回null</h3><blockquote>
 <p>如果你的代码中有返回Null的情况，那么在代码的任何地方都可能抛出NullPointerException而导致系统崩溃退出，你的代码中也可能会存在一大堆的判断「一个对象是否为Null」的代码</p>
 </blockquote>
@@ -345,7 +340,10 @@ MealExpenses对象, 就返回一个PerDiemMealExpenses对象用于默认值的�
 <li><p>在java8中提供了Optional<t>类型来实现null的处理, 对于集合来说就算没有结果也应该返回一个空集合<br>而不是null</t></p>
 </li>
 </ul>
-<h2 id="参考">参考</h2><h3 id="1-_如何优雅地进行错误处理">1. <a href="http://www.kknotes.com/blog/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%9C%B0%E8%BF%9B%E8%A1%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%EF%BC%88clean-code%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%85%AD%EF%BC%89/?hmsr=toutiao.io&amp;utm_medium=toutiao.io&amp;utm_source=toutiao.io" target="_blank" rel="external">如何优雅地进行错误处理</a></h3>
+<h3 id="参考">参考</h3><blockquote>
+<p><a href="http://www.kknotes.com/blog/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%9C%B0%E8%BF%9B%E8%A1%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%EF%BC%88clean-code%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%85%AD%EF%BC%89/?hmsr=toutiao.io&amp;utm_medium=toutiao.io&amp;utm_source=toutiao.io" target="_blank" rel="external">如何优雅地进行错误处理</a></p>
+</blockquote>
+
       
     </div>
     
@@ -503,7 +501,7 @@ MealExpenses对象, 就返回一个PerDiemMealExpenses对象用于默认值的�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_异常的分类"><span class="nav-number">1.</span> <span class="nav-text">1. 异常的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-_对异常进行封装"><span class="nav-number">2.</span> <span class="nav-text">2. 对异常进行封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-_不要在异常处理的代码中进行业务流程的处理"><span class="nav-number">3.</span> <span class="nav-text">3. 不要在异常处理的代码中进行业务流程的处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-_不要返回null"><span class="nav-number">4.</span> <span class="nav-text">4. 不要返回null</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number"></span> <span class="nav-text">参考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_如何优雅地进行错误处理"><span class="nav-number">1.</span> <span class="nav-text">1. 如何优雅地进行错误处理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_异常的分类"><span class="nav-number">1.</span> <span class="nav-text">1. 异常的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-_对异常进行封装"><span class="nav-number">2.</span> <span class="nav-text">2. 对异常进行封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-_不要在异常处理的代码中进行业务流程的处理"><span class="nav-number">3.</span> <span class="nav-text">3. 不要在异常处理的代码中进行业务流程的处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-_不要返回null"><span class="nav-number">4.</span> <span class="nav-text">4. 不要返回null</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
           </div>
         </section>
