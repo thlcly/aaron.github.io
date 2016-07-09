@@ -80,28 +80,31 @@
 
 
 
-<meta name="description" content="Spring MVC 学习笔记1. 注册dispatcherServlet方法
+<meta name="description" content="This is a continuous updating learning notes for Spring MVC
+1. 注册dispatcherServlet方法
 使用web.xml进行配置
 servlet3.0之后可以利用代码进行配置eg:
 
-1234567891011121314151617181920212223242526web.xml方式:&amp;lt;web-app&amp;gt;    &amp;lt;servlet&amp;gt;        &amp;lt;servlet-name&amp;gt;exam">
+1234567891011121314151617181920212223242526web.xml方式:&amp;lt;web-app&amp;gt;    &amp;l">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Monkey Coder">
-<meta property="og:url" content="http://thlcly.xyz/2016/07/09/Spring MVC 学习笔记/index.html">
+<meta property="og:title" content="Spring MVC 学习笔记">
+<meta property="og:url" content="http://thlcly.xyz/2016/07/09/title: Spring MVC 学习笔记/index.html">
 <meta property="og:site_name" content="Monkey Coder">
-<meta property="og:description" content="Spring MVC 学习笔记1. 注册dispatcherServlet方法
+<meta property="og:description" content="This is a continuous updating learning notes for Spring MVC
+1. 注册dispatcherServlet方法
 使用web.xml进行配置
 servlet3.0之后可以利用代码进行配置eg:
 
-1234567891011121314151617181920212223242526web.xml方式:&amp;lt;web-app&amp;gt;    &amp;lt;servlet&amp;gt;        &amp;lt;servlet-name&amp;gt;exam">
-<meta property="og:updated_time" content="2016-07-09T03:29:25.000Z">
+1234567891011121314151617181920212223242526web.xml方式:&amp;lt;web-app&amp;gt;    &amp;l">
+<meta property="og:updated_time" content="2016-07-09T03:31:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Monkey Coder">
-<meta name="twitter:description" content="Spring MVC 学习笔记1. 注册dispatcherServlet方法
+<meta name="twitter:title" content="Spring MVC 学习笔记">
+<meta name="twitter:description" content="This is a continuous updating learning notes for Spring MVC
+1. 注册dispatcherServlet方法
 使用web.xml进行配置
 servlet3.0之后可以利用代码进行配置eg:
 
-1234567891011121314151617181920212223242526web.xml方式:&amp;lt;web-app&amp;gt;    &amp;lt;servlet&amp;gt;        &amp;lt;servlet-name&amp;gt;exam">
+1234567891011121314151617181920212223242526web.xml方式:&amp;lt;web-app&amp;gt;    &amp;l">
 
 
 
@@ -119,7 +122,7 @@ servlet3.0之后可以利用代码进行配置eg:
   };
 </script>
 
-  <title>  | Monkey Coder </title>
+  <title> Spring MVC 学习笔记 | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -249,7 +252,7 @@ servlet3.0之后可以利用代码进行配置eg:
             
             
               
-                
+                Spring MVC 学习笔记
               
             
           </h1>
@@ -261,11 +264,30 @@ servlet3.0之后可以利用代码进行配置eg:
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-09T11:29:25+08:00" content="2016-07-09">
+            <time itemprop="dateCreated" datetime="2016-07-09T11:52:31+08:00" content="2016-07-09">
               2016-07-09
             </time>
           </span>
 
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
           
 
           
@@ -289,7 +311,8 @@ servlet3.0之后可以利用代码进行配置eg:
       
 
       
-        <h2 id="Spring_MVC_学习笔记">Spring MVC 学习笔记</h2><h3 id="1-_注册dispatcherServlet方法">1. 注册<code>dispatcherServlet</code>方法</h3><ul>
+        <p>This is a continuous updating learning notes for <em>Spring MVC</em></p>
+<h3 id="1-_注册dispatcherServlet方法">1. 注册<code>dispatcherServlet</code>方法</h3><ul>
 <li>使用web.xml进行配置</li>
 <li>servlet3.0之后可以利用代码进行配置<br>eg:</li>
 </ul>
@@ -311,12 +334,12 @@ servlet3.0之后可以利用代码进行配置eg:
 <li><p>继承自抽象类WebApplicationObjectSupport<br>说明: 类似方法3,调用getWebApplicationContext()获取WebApplicationContext</p>
 </li>
 <li><p>实现接口ApplicationContextAware<br>说明: 实现该接口的setApplicationContext(ApplicationContext context)方法,并保存ApplicationContext 对象.Spring初始化时，会通过该方法将ApplicationContext对象注入.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassA</span> <span class="keyword">implements</span> <span class="title">ApplicationContextAware</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> ApplicationContext context;</span><br><span class="line"></span><br><span class="line">  <span class="annotation">@override</span></span><br><span class="line">  <span class="function">pubic <span class="keyword">void</span> <span class="title">setApplicationContext</span> <span class="params">(ApplicationContext context)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.context = context;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code><span class="comment"><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassA</span> <span class="keyword">implements</span> <span class="title">ApplicationContextAware</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">    <span class="keyword">private</span> ApplicationContext context;</span><br><span class="line">		</span><br><span class="line">    <span class="annotation">@override</span></span><br><span class="line">    <span class="function">pubic <span class="keyword">void</span> <span class="title">setApplicationContext</span> <span class="params">(ApplicationContext context)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.context = context;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></span>
+</code></pre></li>
 </ol>
-<h3 id="参考:_ApplicationContext和WebApplicationContext">参考: <a href="http://blog.csdn.net/ocean1010/article/details/6160175" target="_blank" rel="external">ApplicationContext和WebApplicationContext</a></h3></li>
+</li>
 </ul>
-<h3 id="3-_DispatcherServlet的默认配置">3. DispatcherServlet的默认配置</h3><ul>
+<h3 id="参考:_ApplicationContext和WebApplicationContext">参考: <a href="http://blog.csdn.net/ocean1010/article/details/6160175" target="_blank" rel="external">ApplicationContext和WebApplicationContext</a></h3><h3 id="3-_DispatcherServlet的默认配置">3. DispatcherServlet的默认配置</h3><ul>
 <li>DispatcherServlet的默认配置在DispatcherServlet.properties定义, 在org.springframework.web.servlet包中</li>
 </ul>
 <p>###　4. DispatcherServlet处理请求的顺序</p>
@@ -325,10 +348,35 @@ servlet3.0之后可以利用代码进行配置eg:
 <li><code>The locale resolver</code>(用于国际化)被绑定到请求过程中, 可以不需要</li>
 <li><code>The theme resolver</code>(用于应用的主题)被绑定到请求过程中, 可以不需要</li>
 <li>如果指定了<code>multipart file resolver</code>且请求中包含<code>multiparts</code>,请求将被包在 <code>MultipartHttpServletRequest</code>中</li>
-<li>需找处理这次请求的合适方法, 如果找到了则调用执行链进行处理(preprocessors -&gt; controllers -&gt; postprocessors)生成待渲染的模型</li>
+<li>需找处理这次请求的合适方法, 如果找到了则调用执行链进行处理(<code>preprocessors</code> -&gt; <code>controllers</code> -&gt; <code>postprocessors</code>)生成待渲染的模型</li>
 <li>返回模型, 渲染视图, 也有可能没有模型返回, 因为有可能是<code>preprocessor</code>或者 <code>postprocessor</code>拦截了请求</li>
 <li><code>Handler exception resolvers</code> 用于处理请求出错时返回的视图</li>
-<li>DispatcherServlet也支持Last-Modify, 只要Controller方法实现LastModify接口实现getLastModified方法就可以了, 具体参考<a href="http://www.iteye.com/topic/1121788" target="_blank" rel="external">http://www.iteye.com/topic/1121788</a></li>
+<li><code>DispatcherServlet</code>也支持<code>Last-Modify</code>, 只要<code>Controller</code>方法实现<code>LastModify</code>接口实现<code>getLastModified</code>方法就可以了, 具体参考<a href="http://www.iteye.com/topic/1121788" target="_blank" rel="external">DispatcherServlet实现Last-Modify</a></li>
+<li><p>添加DispatcherServlet的初始化参数(init-param)</p>
+<p>  |可选参数|含义|<br>  |:——:|:——-:|<br>  |contextClass|WebApplication的实现类, 即spring mvc的上下文对象|<br>  |contextConfigLocation|spring mvc的配置文件, 该值会被传入到WebApplication的实现类中, 支持配置多个配置文件(以逗号分隔), 如果配置文件之间存在重复定义的bean, 则以最后的覆盖之前的|<br>  |namespace|WebApplication的命名空间, 默认是[servlet-name]-servlet|</p>
+</li>
+</ul>
+<h3 id="5-_控制器(Controller)的实现">5. 控制器(Controller)的实现</h3><ul>
+<li>使用@Controller注解定义一个控制器, 表明一个class是作为控制器的角色而存在的</li>
+<li>DispatcherServlet会扫描所有被@Controller注解的类, 检测类中通过@RequestMapping注解的方法</li>
+<li>如果是使用xml的项目需要在配置文件开启对注解的自动检测(类型spring boot的项目不用)</li>
+<li>@RequestMapping用于将url映射到类上或者类中的方法上, 如果没有指定使用哪种请求方法进行接收, 则默认任何方法都可以进行接收</li>
+<li><p>URI模版</p>
+<ol>
+<li><code>/owners/{ownerId}</code>, 可以使用<code>@PathVariable String ownerId</code>, 将其与URI模版中的参数绑定起来</li>
+<li>@PathVariable中指定URI模版中相关联的参数, 如果参数名称和URI中的一致则可以省略</li>
+<li>@PathVariable注解被应用于Map<string, string="">类型的参数上时，框架会使用所有URI模板变量来填充这个map</string,></li>
+<li><p>@PathVariable可以被应用于所有简单类型的参数上, 比如int、long、Date等类型.Spring会自动地帮你把参数转化成合适的类型, 如果转换失败, 就抛出一个TypeMismatchException. 如果你需要处理其他数据类型的转换, 也可以注册自己的类.</p>
+<p> 参考:</p>
+<blockquote>
+<p><a href="http://docs.spring.io/spring-framework/docs/current/spring-framework-reference/html/mvc.html#mvc-ann-webdatabinder" target="_blank" rel="external">自定义参数转换-WebDataBinder</a><br><a href="http://docs.spring.io/spring-framework/docs/current/spring-framework-reference/html/mvc.html#mvc-ann-typeconversion" target="_blank" rel="external">自定义参数转换-Type Conversion</a></p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>@RequestMapping注解支持你在URI模板变量中使用正则表达式。语法是{varName:regex}，其中第一部分定义了变量名，第二部分就是你所要应用的正则表达式. 比如下面的代码样例</p>
+  <figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@RequestMapping</span>(<span class="string">"/spring-web/&#123;symbolicName:[a-z-]+&#125;-&#123;version:\\d\\.\\d\\.\\d&#125;&#123;extension:\\.[a-z]+&#125;"</span>)</span><br><span class="line">   public void <span class="function">handle</span>(<span class="variable">@PathVariable</span> String version, <span class="variable">@PathVariable</span> String extension) &#123;</span><br><span class="line">       <span class="comment">// 代码部分省略...</span></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 
       
@@ -353,13 +401,17 @@ servlet3.0之后可以利用代码进行配置eg:
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/22/java_异常处理学习笔记/" rel="next" title="java异常">
-                <i class="fa fa-chevron-left"></i> java异常
+              <a href="/2016/07/09/Express 学习笔记/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/09/NPM学习笔记/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -427,7 +479,7 @@ servlet3.0之后可以利用代码进行配置eg:
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -435,7 +487,7 @@ servlet3.0之后可以利用代码进行配置eg:
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -488,7 +540,7 @@ servlet3.0之后可以利用代码进行配置eg:
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring_MVC_学习笔记"><span class="nav-number">1.</span> <span class="nav-text">Spring MVC 学习笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_注册dispatcherServlet方法"><span class="nav-number">1.1.</span> <span class="nav-text">1. 注册dispatcherServlet方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-_ApplicationContext_和_WebApplicationContext"><span class="nav-number">2.</span> <span class="nav-text">2. ApplicationContext 和 WebApplicationContext</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考:_ApplicationContext和WebApplicationContext"><span class="nav-number">2.1.</span> <span class="nav-text">参考: ApplicationContext和WebApplicationContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-_DispatcherServlet的默认配置"><span class="nav-number">2.2.</span> <span class="nav-text">3. DispatcherServlet的默认配置</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_注册dispatcherServlet方法"><span class="nav-number">1.</span> <span class="nav-text">1. 注册dispatcherServlet方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-_ApplicationContext_和_WebApplicationContext"><span class="nav-number"></span> <span class="nav-text">2. ApplicationContext 和 WebApplicationContext</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考:_ApplicationContext和WebApplicationContext"><span class="nav-number">1.</span> <span class="nav-text">参考: ApplicationContext和WebApplicationContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-_DispatcherServlet的默认配置"><span class="nav-number">2.</span> <span class="nav-text">3. DispatcherServlet的默认配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-_控制器(Controller)的实现"><span class="nav-number">3.</span> <span class="nav-text">5. 控制器(Controller)的实现</span></a></li></ol></div>
             
           </div>
         </section>
