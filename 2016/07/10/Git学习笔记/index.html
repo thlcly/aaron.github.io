@@ -82,13 +82,13 @@
 
 <meta name="description" content="This is a continuous updating learning notes for Git">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Git常用配置和命令">
-<meta property="og:url" content="http://thlcly.xyz/2016/07/09/Git常用配置和命令/index.html">
+<meta property="og:title" content="Git学习笔记">
+<meta property="og:url" content="http://thlcly.xyz/2016/07/10/Git学习笔记/index.html">
 <meta property="og:site_name" content="Monkey Coder">
 <meta property="og:description" content="This is a continuous updating learning notes for Git">
-<meta property="og:updated_time" content="2016-07-09T04:16:20.000Z">
+<meta property="og:updated_time" content="2016-07-10T04:18:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Git常用配置和命令">
+<meta name="twitter:title" content="Git学习笔记">
 <meta name="twitter:description" content="This is a continuous updating learning notes for Git">
 
 
@@ -107,7 +107,7 @@
   };
 </script>
 
-  <title> Git常用配置和命令 | Monkey Coder </title>
+  <title> Git学习笔记 | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -237,7 +237,7 @@
             
             
               
-                Git常用配置和命令
+                Git学习笔记
               
             
           </h1>
@@ -249,8 +249,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-09T12:16:20+08:00" content="2016-07-09">
-              2016-07-09
+            <time itemprop="dateCreated" datetime="2016-07-10T12:18:32+08:00" content="2016-07-10">
+              2016-07-10
             </time>
           </span>
 
@@ -279,8 +279,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/09/Git常用配置和命令/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/09/Git常用配置和命令/" itemprop="commentsCount"></span>
+                <a href="/2016/07/10/Git学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/10/Git学习笔记/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -303,8 +303,9 @@
       
 
       
-        <p>This is a continuous updating learning notes for <em>Git</em><br><a id="more"></a></p>
-<h3 id="1-_git_config配置">1. git config配置</h3><ul>
+        <p>This is a continuous updating learning notes for <em>Git</em></p>
+<a id="more"></a>
+<h3 id="1-_git_config配置">1. <code>git config</code>配置</h3><ul>
 <li><p>开启git的大小写敏感</p>
 <p>  <code>git config --global core.ignorecase false</code></p>
 </li>
@@ -313,8 +314,14 @@
 </li>
 <li><p>git配置log信息样式</p>
 <p>  <code>git log --graph --pretty=format:&#39;\&#39;&#39;%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset&#39;\&#39;&#39; --abbrev-commit --date=relative</code></p>
+<h3 id="2-_git_init命令">2. <code>git init</code>命令</h3><p><code>git init</code>命令主要是创建了4个文件夹</p>
 </li>
+<li>.git</li>
+<li>.git/refs/heads, .git/refs/tags: 存储了本地分支, tag, 如果关联的远程, 则还会有一个remotes文件夹, 用于存放远程分支</li>
+<li>.git/objects: 存储了所有的数据内容</li>
+<li>.git/HEAD(文件): 指向当前分支</li>
 </ul>
+<h1 id="参考">参考</h1><p><a href="https://zhuanlan.zhihu.com/p/21486693?hmsr=toutiao.io" target="_blank" rel="external">git分治之道, 详细说明了git的底层实现</a></p>
 
       
     </div>
@@ -338,17 +345,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/09/Java8学习笔记/" rel="next" title="Java8学习笔记">
-                <i class="fa fa-chevron-left"></i> Java8学习笔记
+              <a href="/2016/07/09/java_线程提高/" rel="next" title="Java线程详解">
+                <i class="fa fa-chevron-left"></i> Java线程详解
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/09/java_线程提高/" rel="prev" title="Java线程详解">
-                Java线程详解 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -374,8 +377,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/09/Git常用配置和命令/"
-           data-title="Git常用配置和命令" data-url="http://thlcly.xyz/2016/07/09/Git常用配置和命令/">
+      <div class="ds-thread" data-thread-key="2016/07/10/Git学习笔记/"
+           data-title="Git学习笔记" data-url="http://thlcly.xyz/2016/07/10/Git学习笔记/">
       </div>
     
   </div>
@@ -481,7 +484,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_git_config配置"><span class="nav-number">1.</span> <span class="nav-text">1. git config配置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_git_config配置"><span class="nav-number">1.</span> <span class="nav-text">1. git config配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-_git_init命令"><span class="nav-number">2.</span> <span class="nav-text">2. git init命令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number"></span> <span class="nav-text">参考</span></a></div>
             
           </div>
         </section>
