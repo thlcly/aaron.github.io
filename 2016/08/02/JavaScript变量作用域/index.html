@@ -86,7 +86,7 @@
 <meta property="og:url" content="http://thlcly.xyz/2016/08/02/JavaScript变量作用域/index.html">
 <meta property="og:site_name" content="Monkey Coder">
 <meta property="og:description" content="This is a continuous updating learning notes for JavaScript">
-<meta property="og:updated_time" content="2016-08-02T04:16:15.000Z">
+<meta property="og:updated_time" content="2016-08-02T04:18:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript变量作用域">
 <meta name="twitter:description" content="This is a continuous updating learning notes for JavaScript">
@@ -249,7 +249,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-08-02T12:16:15+08:00" content="2016-08-02">
+            <time itemprop="dateCreated" datetime="2016-08-02T12:18:01+08:00" content="2016-08-02">
               2016-08-02
             </time>
           </span>
@@ -322,6 +322,9 @@
 <h3 id="6-_全局变量都是window对象的属性">6. 全局变量都是window对象的属性</h3><p>eg:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">100</span> ;</span><br><span class="line">    alert( <span class="built_in">window</span>.x );<span class="comment">//弹出100</span></span><br><span class="line">    alert(x);</span><br><span class="line"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>上诉代码相当于下面的代码</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span><br><span class="line">    <span class="built_in">window</span>.x = <span class="number">100</span>;</span><br><span class="line">    alert( <span class="built_in">window</span>.x );</span><br><span class="line">    alert(x)</span><br><span class="line"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2><blockquote>
+<p><a href="http://www.cnblogs.com/rainman/archive/2009/04/28/1445687.html#m3" target="_blank" rel="external">深入理解JavaScript的变量作用域</a></p>
+</blockquote>
 
       
     </div>
@@ -484,7 +487,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_作用域链"><span class="nav-number">1.</span> <span class="nav-text">1. 作用域链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-_函数体内部,_局部变量的优先级比同名的全局变量高"><span class="nav-number">2.</span> <span class="nav-text">2. 函数体内部, 局部变量的优先级比同名的全局变量高</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-_JavaScript没有块级作用域"><span class="nav-number">3.</span> <span class="nav-text">3. JavaScript没有块级作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-_函数中声明的变量在整个函数中都有定义"><span class="nav-number">4.</span> <span class="nav-text">4. 函数中声明的变量在整个函数中都有定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-_未使用var关键字定义的变量都是全局变量"><span class="nav-number">5.</span> <span class="nav-text">5. 未使用var关键字定义的变量都是全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-_全局变量都是window对象的属性"><span class="nav-number">6.</span> <span class="nav-text">6. 全局变量都是window对象的属性</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_作用域链"><span class="nav-number">1.</span> <span class="nav-text">1. 作用域链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-_函数体内部,_局部变量的优先级比同名的全局变量高"><span class="nav-number">2.</span> <span class="nav-text">2. 函数体内部, 局部变量的优先级比同名的全局变量高</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-_JavaScript没有块级作用域"><span class="nav-number">3.</span> <span class="nav-text">3. JavaScript没有块级作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-_函数中声明的变量在整个函数中都有定义"><span class="nav-number">4.</span> <span class="nav-text">4. 函数中声明的变量在整个函数中都有定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-_未使用var关键字定义的变量都是全局变量"><span class="nav-number">5.</span> <span class="nav-text">5. 未使用var关键字定义的变量都是全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-_全局变量都是window对象的属性"><span class="nav-number">6.</span> <span class="nav-text">6. 全局变量都是window对象的属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number"></span> <span class="nav-text">参考</span></a></div>
             
           </div>
         </section>
