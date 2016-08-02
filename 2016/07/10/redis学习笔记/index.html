@@ -80,16 +80,16 @@
 
 
 
-<meta name="description" content="This is a continuous updating learning notes for ClassLoader">
+<meta name="description" content="This is a continuous updating learning notes for redis">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ClassLoader 学习笔记">
-<meta property="og:url" content="http://thlcly.xyz/2016/07/09/ClassLoader/index.html">
+<meta property="og:title" content="redis学习笔记">
+<meta property="og:url" content="http://thlcly.xyz/2016/07/10/redis学习笔记/index.html">
 <meta property="og:site_name" content="Monkey Coder">
-<meta property="og:description" content="This is a continuous updating learning notes for ClassLoader">
-<meta property="og:updated_time" content="2016-07-09T03:59:02.000Z">
+<meta property="og:description" content="This is a continuous updating learning notes for redis">
+<meta property="og:updated_time" content="2016-07-10T08:46:55.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ClassLoader 学习笔记">
-<meta name="twitter:description" content="This is a continuous updating learning notes for ClassLoader">
+<meta name="twitter:title" content="redis学习笔记">
+<meta name="twitter:description" content="This is a continuous updating learning notes for redis">
 
 
 
@@ -107,7 +107,7 @@
   };
 </script>
 
-  <title> ClassLoader 学习笔记 | Monkey Coder </title>
+  <title> redis学习笔记 | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -237,7 +237,7 @@
             
             
               
-                ClassLoader 学习笔记
+                redis学习笔记
               
             
           </h1>
@@ -249,8 +249,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-09T11:59:02+08:00" content="2016-07-09">
-              2016-07-09
+            <time itemprop="dateCreated" datetime="2016-07-10T16:46:55+08:00" content="2016-07-10">
+              2016-07-10
             </time>
           </span>
 
@@ -263,8 +263,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/NodeJs/" itemprop="url" rel="index">
+                    <span itemprop="name">NodeJs</span>
                   </a>
                 </span>
 
@@ -279,8 +279,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/09/ClassLoader/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/09/ClassLoader/" itemprop="commentsCount"></span>
+                <a href="/2016/07/10/redis学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/10/redis学习笔记/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -303,38 +303,9 @@
       
 
       
-        <p>This is a continuous updating learning notes for <em>ClassLoader</em><br><a id="more"></a></p>
-<p>####1. 什么是classloader？</p>
-<ul>
-<li>ClassLoader就是用来动态加载class文件到内存中的类</li>
-</ul>
-<p>####2. Java提供的默认的三个ClassLoader</p>
-<ul>
-<li>BootStrap ClassLoader: 启动类加载器，负责加载jdk中的核心类库，如rt.jar，resources.jar，charsets.jar等，可以通过下面的程序获得该类加载器从哪些地方加载了相关的jar或者class文件</li>
-</ul>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">URL<span class="matrix">[]</span> urls = sun.misc.Launcher.getBootstrapClassPath().getURLs();  </span><br><span class="line"><span class="keyword">for</span> (int <span class="built_in">i</span> = <span class="number">0</span>; <span class="built_in">i</span> &lt; urls.<span class="built_in">length</span>; <span class="built_in">i</span>++) <span class="cell">&#123;  </span><br><span class="line">    System.out.println(urls[i].toExternalForm());  </span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/<span class="regexp">/ mac os x</span><br><span class="line"></span><br><span class="line">file:/</span><span class="constant">Library</span>/<span class="constant">Java</span>/<span class="constant">JavaVirtualMachines</span>/jdk1.<span class="number">8.0_60</span>.jdk/<span class="constant">Contents</span>/<span class="constant">Home</span>/jre/<span class="class"><span class="keyword">lib</span>/<span class="title">resources</span>.<span class="title">jar</span></span></span><br><span class="line"><span class="symbol">file:</span>/<span class="constant">Library</span>/<span class="constant">Java</span>/<span class="constant">JavaVirtualMachines</span>/jdk1.<span class="number">8.0_60</span>.jdk/<span class="constant">Contents</span>/<span class="constant">Home</span>/jre/<span class="class"><span class="keyword">lib</span>/<span class="title">rt</span>.<span class="title">jar</span></span></span><br><span class="line"><span class="symbol">file:</span>/<span class="constant">Library</span>/<span class="constant">Java</span>/<span class="constant">JavaVirtualMachines</span>/jdk1.<span class="number">8.0_60</span>.jdk/<span class="constant">Contents</span>/<span class="constant">Home</span>/jre/<span class="class"><span class="keyword">lib</span>/<span class="title">sunrsasign</span>.<span class="title">jar</span></span></span><br><span class="line"><span class="symbol">file:</span>/<span class="constant">Library</span>/<span class="constant">Java</span>/<span class="constant">JavaVirtualMachines</span>/jdk1.<span class="number">8.0_60</span>.jdk/<span class="constant">Contents</span>/<span class="constant">Home</span>/jre/<span class="class"><span class="keyword">lib</span>/<span class="title">jsse</span>.<span class="title">jar</span></span></span><br><span class="line"><span class="symbol">file:</span>/<span class="constant">Library</span>/<span class="constant">Java</span>/<span class="constant">JavaVirtualMachines</span>/jdk1.<span class="number">8.0_60</span>.jdk/<span class="constant">Contents</span>/<span class="constant">Home</span>/jre/<span class="class"><span class="keyword">lib</span>/<span class="title">jce</span>.<span class="title">jar</span></span></span><br><span class="line"><span class="symbol">file:</span>/<span class="constant">Library</span>/<span class="constant">Java</span>/<span class="constant">JavaVirtualMachines</span>/jdk1.<span class="number">8.0_60</span>.jdk/<span class="constant">Contents</span>/<span class="constant">Home</span>/jre/<span class="class"><span class="keyword">lib</span>/<span class="title">charsets</span>.<span class="title">jar</span></span></span><br><span class="line"><span class="symbol">file:</span>/<span class="constant">Library</span>/<span class="constant">Java</span>/<span class="constant">JavaVirtualMachines</span>/jdk1.<span class="number">8.0_60</span>.jdk/<span class="constant">Contents</span>/<span class="constant">Home</span>/jre/<span class="class"><span class="keyword">lib</span>/<span class="title">jfr</span>.<span class="title">jar</span></span></span><br><span class="line"><span class="symbol">file:</span>/<span class="constant">Library</span>/<span class="constant">Java</span>/<span class="constant">JavaVirtualMachines</span>/jdk1.<span class="number">8.0_60</span>.jdk/<span class="constant">Contents</span>/<span class="constant">Home</span>/jre/classes</span><br></pre></td></tr></table></figure>
-<p><strong>其实上述结果也是通过查找sun.boot.class.path这个系统属性所得知的。</strong></p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">System</span><span class="class">.out</span><span class="class">.println</span>(<span class="tag">System</span><span class="class">.getProperty</span>("<span class="tag">sun</span><span class="class">.boot</span><span class="class">.class</span><span class="class">.path</span>"));</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>Extension ClassLoader: 扩展类加载器，负责加载Java的扩展类库，默认加载<code>JAVA_HOME/jre/lib/ext/</code>目下的所有jar。</p>
-</li>
-<li><p>App ClassLoader: 系统类加载器，负责加载应用程序<strong>classpath目录</strong>下的所有jar和class文件。</p>
-</li>
-</ul>
-<h4 id="3-_ClassLoader加载类的原理">3. ClassLoader加载类的原理</h4><ul>
-<li><p>ClassLoader使用的是双亲委托模型来搜索类的，<strong>每个ClassLoader实例都有一个父类加载器的引用（不是继承的关系，是一个包含的关系）</strong>，虚拟机内置的类加载器<strong>（Bootstrap ClassLoader）本身没有父类加载器，但可以用作其它ClassLoader实例的的父类加载器</strong>。<em>当一个ClassLoader实例需要加载某个类时，它会试图亲自搜索某个类之前，先把这个任务委托给它的父类加载器，这个过程是由上至下依次检查的，首先由最顶层的类加载器Bootstrap ClassLoader试图加载，如果没加载到，则把任务转交给Extension ClassLoader试图加载，如果也没加载到，则转交给App ClassLoader 进行加载，如果它也没有加载得到的话，则返回给委托的发起者，由它到指定的文件系统或网络等URL中加载该类</em>。如果它们都没有加载到这个类时，则抛出ClassNotFoundException异常。否则将这个找到的类生成一个类的定义，并将它加载到内存当中，最后返回这个类在内存中的Class实例对象。</p>
-</li>
-<li><p>使用双亲委托模型的原因: 这样<strong>可以避免重复加载，当父亲已经加载了该类的时候，就没有必要子ClassLoader再加载一次</strong>。考虑到安全因素，我们试想一下，如果不使用这种委托模式，那我们就可以随时使用自定义的String来动态替代java核心api中定义的类型，这样会存在非常大的安全隐患，而双亲委托的方式，就可以避免这种情况，因为String已经在启动时就被引导类加载器（Bootstrcp ClassLoader）加载，所以用户自定义的ClassLoader永远也无法加载一个自己写的String，除非你改变JDK中ClassLoader搜索类的默认算法。</p>
-</li>
-<li><p>JVM判断两个class是否相同的原理: JVM在判定两个class是否相同时，<strong>不仅要判断两个类名是否相同，而且要判断是否由同一个类加载器实例加载</strong>的。只有两者同时满足的情况下，JVM才认为这两个class是相同的。就算两个class是同一份class字节码，如果被两个不同的ClassLoader实例所加载，JVM也会认为它们是两个不同class。</p>
-</li>
-</ul>
-<h4 id="4-_参考资料">4. 参考资料</h4><ul>
-<li><a href="http://blog.csdn.net/xyang81/article/details/7292380" target="_blank" rel="external">csdn</a></li>
-</ul>
-
+        <p>This is a continuous updating learning notes for <em>redis</em></p>
+<a id="more"></a>
+<h3 id="1-">1.</h3>
       
     </div>
     
@@ -357,7 +328,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/09/Express 学习笔记/" rel="next" title="Express 学习笔记">
+              <a href="/2016/07/10/Express 学习笔记/" rel="next" title="Express 学习笔记">
                 <i class="fa fa-chevron-left"></i> Express 学习笔记
               </a>
             
@@ -365,8 +336,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/07/09/HTTP协议学习笔记/" rel="prev" title="HTTP协议学习笔记">
-                HTTP协议学习笔记 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/07/21/Spring MVC 学习笔记/" rel="prev" title="Spring MVC 学习笔记">
+                Spring MVC 学习笔记 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -393,8 +364,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/09/ClassLoader/"
-           data-title="ClassLoader 学习笔记" data-url="http://thlcly.xyz/2016/07/09/ClassLoader/">
+      <div class="ds-thread" data-thread-key="2016/07/10/redis学习笔记/"
+           data-title="redis学习笔记" data-url="http://thlcly.xyz/2016/07/10/redis学习笔记/">
       </div>
     
   </div>
@@ -439,7 +410,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -447,7 +418,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -500,7 +471,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-_ClassLoader加载类的原理"><span class="nav-number">1.</span> <span class="nav-text">3. ClassLoader加载类的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-_参考资料"><span class="nav-number">2.</span> <span class="nav-text">4. 参考资料</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-"><span class="nav-number">1.</span> <span class="nav-text">1.</span></a></li></ol></div>
             
           </div>
         </section>

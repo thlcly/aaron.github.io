@@ -83,10 +83,10 @@
 <meta name="description" content="This is a continuous updating learning notes for Spring MVC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring MVC 学习笔记">
-<meta property="og:url" content="http://thlcly.xyz/2016/07/09/Spring MVC 学习笔记/index.html">
+<meta property="og:url" content="http://thlcly.xyz/2016/07/21/Spring MVC 学习笔记/index.html">
 <meta property="og:site_name" content="Monkey Coder">
 <meta property="og:description" content="This is a continuous updating learning notes for Spring MVC">
-<meta property="og:updated_time" content="2016-07-09T03:57:22.000Z">
+<meta property="og:updated_time" content="2016-07-21T10:27:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring MVC 学习笔记">
 <meta name="twitter:description" content="This is a continuous updating learning notes for Spring MVC">
@@ -249,8 +249,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-09T11:57:22+08:00" content="2016-07-09">
-              2016-07-09
+            <time itemprop="dateCreated" datetime="2016-07-21T18:27:51+08:00" content="2016-07-21">
+              2016-07-21
             </time>
           </span>
 
@@ -279,8 +279,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/09/Spring MVC 学习笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/09/Spring MVC 学习笔记/" itemprop="commentsCount"></span>
+                <a href="/2016/07/21/Spring MVC 学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/21/Spring MVC 学习笔记/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -369,8 +369,85 @@
 <li><p>@RequestMapping注解支持你在URI模板变量中使用正则表达式。语法是{varName:regex}，其中第一部分定义了变量名，第二部分就是你所要应用的正则表达式. 比如下面的代码样例</p>
   <figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@RequestMapping</span>(<span class="string">"/spring-web/&#123;symbolicName:[a-z-]+&#125;-&#123;version:\\d\\.\\d\\.\\d&#125;&#123;extension:\\.[a-z]+&#125;"</span>)</span><br><span class="line">   public void <span class="function">handle</span>(<span class="variable">@PathVariable</span> String version, <span class="variable">@PathVariable</span> String extension) &#123;</span><br><span class="line">       <span class="comment">// 代码部分省略...</span></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>路径样式的匹配</p>
+<ol>
+<li>URI模板变量的数目和通配符数量的总和最少的那个路径模板更准确. 举个例子, <code>/hotels/{hotel}/*</code>这个路径拥有一个URI变量和一个通配符, 而<code>/hotels/{hotel}/**</code>这个路径则拥有一个URI变量和两个通配符, 因此, 我们认为前者是更准确的路径模板.</li>
+<li>如果两个模板的URI模板数量和通配符数量总和一致, 则路径更长的那个模板更准确. 举个例子, <code>/foo/bar*</code>就被认为比<code>/foo/*</code>更准确, 因为前者的路径更长.</li>
+<li>如果两个模板的数量和长度均一致, 则那个具有更少通配符的模板是更加准确的. 比如, <code>/hotels/{hotel}</code>就比<code>/hotels/*</code>更精确</li>
+</ol>
+</li>
+<li><p>矩阵变量</p>
+<ol>
+<li>矩阵变量: 矩阵变量可以在任何路径段落中出现, 每对矩阵变量之间使用一个分号”;”隔开. 比如这样的URI: <code>&quot;/cars;color=red;year=2012&quot;</code>. 多个值可以用逗号隔开<code>&quot;color=red,green,blue&quot;</code>, 或者重复变量名多次<code>&quot;color=red;color=green;color=blue&quot;</code></li>
+<li><p>获取矩阵变量的值</p>
+<p>eg1: </p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// GET /pets/42;q=11;r=22</span></span><br><span class="line"></span><br><span class="line"><span class="variable">@RequestMapping</span>(path = <span class="string">"/pets/&#123;petId&#125;"</span>, method = RequestMethod.GET)</span><br><span class="line">public void <span class="function">findPet</span>(<span class="variable">@PathVariable</span> String petId, <span class="variable">@MatrixVariable</span> int q) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// petId == 42</span></span><br><span class="line">    <span class="comment">// q == 11</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
 </ul>
+<pre><code><span class="attribute">eg2</span>: <span class="string">由于任意路径段落中都可以含有矩阵变量, 在某些场景下, 需要用更精确的信息来指定一个矩阵变量的位置</span>
 
+<span class="xml"><span class="comment"><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// GET /owners/42;q=11/pets/21;q=22</span></span><br><span class="line"></span><br><span class="line"><span class="variable">@RequestMapping</span>(path = <span class="string">"/owners/&#123;ownerId&#125;/pets/&#123;petId&#125;"</span>, method = RequestMethod.GET)</span><br><span class="line">public void <span class="function">findPet</span>(</span><br><span class="line">    <span class="variable">@MatrixVariable</span>(name=<span class="string">"q"</span>, pathVar=<span class="string">"ownerId"</span>) int q1,</span><br><span class="line">    <span class="variable">@MatrixVariable</span>(name=<span class="string">"q"</span>, pathVar=<span class="string">"petId"</span>) int q2) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// q1 == 11</span></span><br><span class="line">    <span class="comment">// q2 == 22</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
+
+
+eg3: 可以声明一个矩阵变量不是必须出现的，并给它赋一个默认值
+
+<span class="comment"><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// GET /pets/42</span></span><br><span class="line"></span><br><span class="line"><span class="variable">@RequestMapping</span>(path = <span class="string">"/pets/&#123;petId&#125;"</span>, method = RequestMethod.GET)</span><br><span class="line">public void <span class="function">findPet</span>(<span class="variable">@MatrixVariable</span>(required=false, defaultValue=<span class="string">"1"</span>) int q) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// q == 1</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
+
+
+eg4: 通过一个Map来存储所有的矩阵变量
+
+<span class="comment"><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// GET /owners/42;q=11;r=12/pets/21;q=22;s=23</span></span><br><span class="line"></span><br><span class="line"><span class="variable">@RequestMapping</span>(path = <span class="string">"/owners/&#123;ownerId&#125;/pets/&#123;petId&#125;"</span>, method = RequestMethod.GET)</span><br><span class="line">public void <span class="function">findPet</span>(</span><br><span class="line">    <span class="variable">@MatrixVariable</span> Map&lt;String, String&gt; matrixVars,</span><br><span class="line">    <span class="variable">@MatrixVariable</span>(pathVar=<span class="string">"petId"</span>) Map&lt;String, String&gt; petMatrixVars) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// matrixVars: ["q" : [11,22], "r" : 12, "s" : 23]</span></span><br><span class="line">    <span class="comment">// petMatrixVars: ["q" : 11, "s" : 23]</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span></span>
+</code></pre><ul>
+<li><p>可消费的媒体类型</p>
+<ol>
+<li><p>可以指定一组可消费的媒体类型, 缩小映射的范围. 这样只有当请求头中 Content-Type 的值与指定可消费的媒体类型中有相同的时候, 请求才会被匹配</p>
+<p> eg: </p>
+ <figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Controller</span></span><br><span class="line"><span class="variable">@RequestMapping</span>(path = <span class="string">"/pets"</span>, method = RequestMethod.POST, consumes=<span class="string">"application/json"</span>)</span><br><span class="line">public void <span class="function">addPet</span>(<span class="variable">@RequestBody</span> Pet pet, Model model) &#123;</span><br><span class="line">    <span class="comment">// 方法实现省略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+<pre><code><span class="number">2</span>. 指定可消费媒体类型的表达式中还可以使用否定, 比如使用 <span class="escape">`!</span>text/plain<span class="escape">` </span>来匹配所有请求头 Content-Type 中不含 text/plain 的请求. 同时, 在<span class="escape">`M</span>ediaType<span class="escape">`类</span>中还定义了一些常量，比如<span class="escape">`A</span>PPLICATION_JSON_VALUE<span class="escape">`、</span><span class="escape">`A</span>PPLICATION_JSON_UTF8_VALUE<span class="escape">`等</span>
+</code></pre><ul>
+<li><p>可生产的消费类型</p>
+<ol>
+<li><p>可以指定一组可生产的媒体类型, 缩小映射的范围. 这样只有当请求头中 Accept 的值与指定可生产的媒体类型中有相同的时候, 请求才会被匹配. 使用 produces 条件可以确保用于生成响应（response）的内容与指定的可生产的媒体类型是相同的</p>
+<p> eg:</p>
+ <figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Controller</span></span><br><span class="line"><span class="variable">@RequestMapping</span>(path = <span class="string">"/pets/&#123;petId&#125;"</span>, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)</span><br><span class="line"><span class="variable">@ResponseBody</span></span><br><span class="line">public Pet <span class="function">getPet</span>(<span class="variable">@PathVariable</span> String petId, Model model) &#123;</span><br><span class="line">    <span class="comment">// 方法实现省略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+<pre><code><span class="number">2.</span> 与 consumes 条件类似, 可生产的媒体类型表达式也可以使用否定. 比如, 可以使用 !<span class="type">text</span>/plain 来匹配所有请求头 Accept 中不含 <span class="type">text</span>/plain 的请求
+</code></pre><ul>
+<li><p>请求参数与请求头的值</p>
+<ol>
+<li><p>可以筛选请求参数的条件来缩小请求匹配范围, 比如”myParam”、”!myParam”及”myParam=myValue”等. 前两个条件用于筛选存在/不存在某些请求参数的请求，第三个条件筛选具有特定参数值的请求</p>
+<p> eg: </p>
+ <figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Controller</span></span><br><span class="line"><span class="variable">@RequestMapping</span>(<span class="string">"/owners/&#123;ownerId&#125;"</span>)</span><br><span class="line">public class RelativePathUriTemplateController &#123;</span><br><span class="line"></span><br><span class="line">	    <span class="variable">@RequestMapping</span>(path = <span class="string">"/pets/&#123;petId&#125;"</span>, method = RequestMethod.GET, params=<span class="string">"myParam=myValue"</span>)</span><br><span class="line">	    public void <span class="function">findPet</span>(<span class="variable">@PathVariable</span> String ownerId, <span class="variable">@PathVariable</span> String petId, Model model) &#123;</span><br><span class="line">	        <span class="comment">// 实际实现省略</span></span><br><span class="line">	    &#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+<pre><code><span class="tag">2</span>. 可以用相同的条件来筛选请求头的出现与否, 或者筛选出一个具有特定值的请求头
+
+    <span class="tag">eg</span>:
+
+    ```
+    @<span class="tag">Controller</span>
+    @<span class="tag">RequestMapping</span>(<span class="string">"/owners/{ownerId}"</span>)
+    <span class="tag">public</span> <span class="tag">class</span> <span class="tag">RelativePathUriTemplateController</span> {
+
+            <span class="variable">@RequestMapping</span>(path = <span class="string">"/pets"</span>, method = RequestMethod.GET, headers=<span class="string">"myHeader=myValue"</span>)
+            public void <span class="function">findPet</span>(<span class="variable">@PathVariable</span> String ownerId, <span class="variable">@PathVariable</span> String petId, Model model) {
+                <span class="comment">// 方法体实现省略</span>
+            }
+
+    }
+    ``` 
+</code></pre>
       
     </div>
     
@@ -393,16 +470,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/22/java_异常处理学习笔记/" rel="next" title="java异常">
-                <i class="fa fa-chevron-left"></i> java异常
+              <a href="/2016/07/10/redis学习笔记/" rel="next" title="redis学习笔记">
+                <i class="fa fa-chevron-left"></i> redis学习笔记
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/07/09/Express 学习笔记/" rel="prev" title="Express 学习笔记">
-                Express 学习笔记 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/07/22/Scala Cookbook学习笔记/" rel="prev" title="Scala Cookbook学习笔记">
+                Scala Cookbook学习笔记 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -429,8 +506,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/09/Spring MVC 学习笔记/"
-           data-title="Spring MVC 学习笔记" data-url="http://thlcly.xyz/2016/07/09/Spring MVC 学习笔记/">
+      <div class="ds-thread" data-thread-key="2016/07/21/Spring MVC 学习笔记/"
+           data-title="Spring MVC 学习笔记" data-url="http://thlcly.xyz/2016/07/21/Spring MVC 学习笔记/">
       </div>
     
   </div>
@@ -475,7 +552,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -483,7 +560,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
