@@ -239,6 +239,226 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/04/Thymeleaf遇到的坑总结/" itemprop="url">
+                  Untitled
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-08-04T18:44:47+08:00" content="2016-08-04">
+              2016-08-04
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/04/Thymeleaf遇到的坑总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/04/Thymeleaf遇到的坑总结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Thymeleaf中遇到的坑">Thymeleaf中遇到的坑</h1><h3 id="1-_Thymeleaf_2中关闭标签的强校验">1. Thymeleaf 2中关闭标签的强校验</h3><h4 id="1-1_Tymeleaf标签强校验引出的问题">1.1 Tymeleaf标签强校验引出的问题</h4><ul>
+<li>每一个html标签必须闭合</li>
+<li>如果页面中存在js代码, 则js代码不能出现(&lt;,&gt;…)等一些操作符, 因为这个标签和xml的标签存在冲突</li>
+<li>如果使用了前端模版, 则模版中也不能出现上述的一些标签</li>
+</ul>
+<h4 id="1-2_对于js代码的转义">1.2 对于js代码的转义</h4><p>如果只是js代码中要包含一些操作符而导致thymeleaf页面不能编译通过, 可以使用xml注释语法进行过滤<br>eg:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">使用xml的注释使代码不被解析</span><br><span class="line"></span><br><span class="line">/*<span class="cdata">&lt;![CDATA[*/</span><br><span class="line">   for (var i = 0; i &lt; 10; i++) &#123;</span><br><span class="line">     console.info(i);</span><br><span class="line">   &#125;</span><br><span class="line">/*]]&gt;</span>*/</span><br></pre></td></tr></table></figure></p>
+<h4 id="1-3_如果是前端模版中存在不能被thymeleaf解析的内容,_那xml的注释方式就无能为力了,_只能关闭thymleaf的标签强校验了">1.3 如果是前端模版中存在不能被thymeleaf解析的内容, 那xml的注释方式就无能为力了, 只能关闭thymleaf的标签强校验了</h4><p><strong>思路</strong>: 查看thymeleaf的<a href="http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html" target="_blank" rel="external">官方文档</a>中提到, thymeleaf支持多种模式去解析页面, 大致可以分成两类, 一类是使用XML形式的(<code>XML</code>, <code>Valid XML</code>, <code>XHTML</code>, <code>Valid XHTML</code>, <code>HTML5</code>), 一类是不使用XML形式的(<code>Legacy HTML5</code>), 所以要关闭标签的强校验应该将thymeleaf的模式配置成<code>Legacy HTML5</code>的模式(以下使用spring boot工程进行讲解)</p>
+<ul>
+<li>在spring boot中配置tymeleaf使用的是<code>org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration</code>这个class, 所以要修改thymeleaf的默认的校验模式也从这个类下手</li>
+<li><p><code>ThymeleafAutoConfiguration</code>部分源码</p>
+  <figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这个是thymeleaf默认的模版解析类</span></span><br><span class="line"></span><br><span class="line"><span class="annotation">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> ThymeleafProperties properties;</span><br><span class="line"></span><br><span class="line">.....</span><br><span class="line"></span><br><span class="line"><span class="annotation">@Bean</span></span><br><span class="line"><span class="keyword">public</span> <span class="function">TemplateResolver <span class="title">defaultTemplateResolver</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	TemplateResolver resolver = <span class="keyword">new</span> TemplateResolver();</span><br><span class="line">	resolver.setResourceResolver(thymeleafResourceResolver());</span><br><span class="line">	resolver.setPrefix(<span class="keyword">this</span>.properties.getPrefix());</span><br><span class="line">	resolver.setSuffix(<span class="keyword">this</span>.properties.getSuffix());</span><br><span class="line">	resolver.setTemplateMode(<span class="keyword">this</span>.properties.getMode()); <span class="comment">// 关键代码: 配置解析模式</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="keyword">this</span>.properties.getEncoding() != <span class="keyword">null</span>) &#123;</span><br><span class="line">		resolver.setCharacterEncoding(<span class="keyword">this</span>.properties.getEncoding().name());</span><br><span class="line">	&#125;</span><br><span class="line">	resolver.setCacheable(<span class="keyword">this</span>.properties.isCache());</span><br><span class="line">	Integer order = <span class="keyword">this</span>.properties.getTemplateResolverOrder();</span><br><span class="line">	<span class="keyword">if</span> (order != <span class="keyword">null</span>) &#123;</span><br><span class="line">		resolver.setOrder(order);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> resolver;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>ThymeleafProperties</code>部分源码</p>
+  <figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">  @ConfigurationProperties(<span class="string">"spring.thymeleaf"</span>) <span class="comment">// spring-boot 配置文件application.properties中使用的属性前缀</span></span><br><span class="line"><span class="keyword">public</span> class ThymeleafProperties &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Charset DEFAULT_ENCODING = Charset.forName(<span class="string">"UTF-8"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> MimeType DEFAULT_CONTENT_TYPE = MimeType.valueOf(<span class="string">"text/html"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">String</span> DEFAULT_PREFIX = <span class="string">"classpath:/templates/"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">String</span> DEFAULT_SUFFIX = <span class="string">".html"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * Check that the templates location exists.</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">boolean</span> checkTemplateLocation = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * Prefix that gets prepended to view names when building a URL.</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">String</span> prefix = DEFAULT_PREFIX;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * Suffix that gets appended to view names when building a URL.</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">String</span> suffix = DEFAULT_SUFFIX;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * Template mode to be applied to templates. See also StandardTemplateModeHandlers.</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">String</span> mode = <span class="string">"HTML5"</span>; <span class="comment">// 默认要修改的就是这个属性</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * Template encoding.</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">private</span> Charset encoding = DEFAULT_ENCODING;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * Content-Type value.</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">private</span> MimeType contentType = DEFAULT_CONTENT_TYPE;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span><br><span class="line">	 * Enable template caching.</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">boolean</span> cache = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">	.....</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  所以要修改thymeleaf的默认模式, 就在application.properties中配置<code>spring.thymeleaf.mode=LEGACYHTML5</code></p>
+</li>
+<li><p>配置完成mode之后启动程序发现thymeleaf模版报错, 错误很明显, 就是少了一个jar, 将缺少的jar放入classpath中即可</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">groupId</span>&gt;</span>net.sourceforge.nekohtml<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>nekohtml<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="title">version</span>&gt;</span>1.9.21<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/03/Play学习笔记/" itemprop="url">
+                  Untitled
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-08-03T17:41:09+08:00" content="2016-08-03">
+              2016-08-03
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/03/Play学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/03/Play学习笔记/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Play学习笔记">Play学习笔记</h1><h3 id="1-_Play_enhancer">1. Play enhancer</h3><h4 id="1-1">1.1</h4>
+          
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/02/JavaScript变量作用域/" itemprop="url">
                   JavaScript变量作用域
                 </a>
@@ -1194,255 +1414,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/09/ThreadLocal/" itemprop="url">
-                  ThreadLocal学习笔记
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-09T12:09:17+08:00" content="2016-07-09">
-              2016-07-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/09/ThreadLocal/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/09/ThreadLocal/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>This is a continuous updating learning notes for <em>ThreadLocal</em><br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/07/09/ThreadLocal/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/09/Servlet学习笔记/" itemprop="url">
-                  Servlet学习笔记
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-09T12:08:42+08:00" content="2016-07-09">
-              2016-07-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java-Web/" itemprop="url" rel="index">
-                    <span itemprop="name">Java Web</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/09/Servlet学习笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/09/Servlet学习笔记/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>This is a continuous updating learning notes for <em>Servlet</em><br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/07/09/Servlet学习笔记/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1483,7 +1459,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
