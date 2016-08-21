@@ -253,7 +253,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-08-21T19:02:47+08:00" content="2016-08-21">
+            <time itemprop="dateCreated" datetime="2016-08-21T16:54:05+08:00" content="2016-08-21">
               2016-08-21
             </time>
           </span>
@@ -361,118 +361,6 @@
             
               
                 
-                <a class="post-title-link" href="/2016/08/07/Play学习笔记/" itemprop="url">
-                  Untitled
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-08-07T15:10:51+08:00" content="2016-08-07">
-              2016-08-07
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/07/Play学习笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/07/Play学习笔记/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Play学习笔记">Play学习笔记</h1><h2 id="1-_Play_enhancer">1. Play enhancer</h2><h4 id="1-1_Play_enhancer使用编译后增强技术自动为public访问级别的字段添加getter/setter方法(scala中字段的默认访问级别就是public),_同时在用到该字段的地方会自动用setter/getter方法进行替换">1.1 Play enhancer使用编译后增强技术自动为public访问级别的字段添加getter/setter方法(scala中字段的默认访问级别就是public), 同时在用到该字段的地方会自动用setter/getter方法进行替换</h4><h4 id="1-2_Play_enhancer缺点">1.2 Play enhancer缺点</h4><ul>
-<li>字节码增加技术是不透明, 在源代码中不存在自动生成的setter/getter方法, 所以当出错的时候, 很难定位到是哪里出现的问题</li>
-<li>在IDE中使用的时候可能会出现问题, 因为在IDE中编译代码的时候IDE并不会去执行play-enhancer插件</li>
-</ul>
-<h4 id="1-3_启动play-enhancer插件">1.3 启动play-enhancer插件</h4><ul>
-<li>在project/plugins.sbt文件中添加<code>addSbtPlugin(&quot;com.typesafe.sbt&quot; % &quot;sbt-play-enhancer&quot; % &quot;1.1.0&quot;)</code>, 这会使play-enhancer插件在所有的projects中生效</li>
-<li>如果想让某些项目不启用play-enhancer插件, 就在build.sbt中添加如下的代码  <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lazy val nonEnhancedProject = (project <span class="keyword">in</span> <span class="function"><span class="title">file</span><span class="params">(<span class="string">"non-enhanced"</span>)</span></span>)</span><br><span class="line"> .<span class="function"><span class="title">disablePlugins</span><span class="params">(PlayEnhancer)</span></span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="1-4_参考">1.4 参考</h4><blockquote>
-<p><a href="https://www.playframework.com/documentation/2.4.x/PlayEnhancer#motivation" target="_blank" rel="external">Play enhancer</a></p>
-</blockquote>
-<h2 id="2-_Handling_form_submission">2. Handling form submission</h2>
-          
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/08/04/Thymeleaf遇到的坑总结/" itemprop="url">
                   Thymeleaf中遇到的坑总结
                 </a>
@@ -487,7 +375,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-08-04T18:53:25+08:00" content="2016-08-04">
+            <time itemprop="dateCreated" datetime="2016-08-04T17:39:02+08:00" content="2016-08-04">
               2016-08-04
             </time>
           </span>
@@ -595,7 +483,119 @@
             
               
                 
-                <a class="post-title-link" href="/2016/08/03/JavaScript变量作用域/" itemprop="url">
+                <a class="post-title-link" href="/2016/08/03/Play学习笔记/" itemprop="url">
+                  Untitled
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-08-03T17:40:14+08:00" content="2016-08-03">
+              2016-08-03
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/03/Play学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/03/Play学习笔记/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Play学习笔记"><a href="#Play学习笔记" class="headerlink" title="Play学习笔记"></a>Play学习笔记</h1><h2 id="1-Play-enhancer"><a href="#1-Play-enhancer" class="headerlink" title="1. Play enhancer"></a>1. Play enhancer</h2><h4 id="1-1-Play-enhancer使用编译后增强技术自动为public访问级别的字段添加getter-setter方法-scala中字段的默认访问级别就是public-同时在用到该字段的地方会自动用setter-getter方法进行替换"><a href="#1-1-Play-enhancer使用编译后增强技术自动为public访问级别的字段添加getter-setter方法-scala中字段的默认访问级别就是public-同时在用到该字段的地方会自动用setter-getter方法进行替换" class="headerlink" title="1.1 Play enhancer使用编译后增强技术自动为public访问级别的字段添加getter/setter方法(scala中字段的默认访问级别就是public), 同时在用到该字段的地方会自动用setter/getter方法进行替换"></a>1.1 Play enhancer使用编译后增强技术自动为public访问级别的字段添加getter/setter方法(scala中字段的默认访问级别就是public), 同时在用到该字段的地方会自动用setter/getter方法进行替换</h4><h4 id="1-2-Play-enhancer缺点"><a href="#1-2-Play-enhancer缺点" class="headerlink" title="1.2 Play enhancer缺点"></a>1.2 Play enhancer缺点</h4><ul>
+<li>字节码增加技术是不透明, 在源代码中不存在自动生成的setter/getter方法, 所以当出错的时候, 很难定位到是哪里出现的问题</li>
+<li>在IDE中使用的时候可能会出现问题, 因为在IDE中编译代码的时候IDE并不会去执行play-enhancer插件</li>
+</ul>
+<h4 id="1-3-启动play-enhancer插件"><a href="#1-3-启动play-enhancer插件" class="headerlink" title="1.3 启动play-enhancer插件"></a>1.3 启动play-enhancer插件</h4><ul>
+<li>在project/plugins.sbt文件中添加<code>addSbtPlugin(&quot;com.typesafe.sbt&quot; % &quot;sbt-play-enhancer&quot; % &quot;1.1.0&quot;)</code>, 这会使play-enhancer插件在所有的projects中生效</li>
+<li>如果想让某些项目不启用play-enhancer插件, 就在build.sbt中添加如下的代码  <figure class="highlight fsharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> nonEnhancedProject = (project <span class="keyword">in</span> file(<span class="string">"non-enhanced"</span>))</div><div class="line"> .disablePlugins(PlayEnhancer)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="1-4-参考"><a href="#1-4-参考" class="headerlink" title="1.4 参考"></a>1.4 参考</h4><blockquote>
+<p><a href="https://www.playframework.com/documentation/2.4.x/PlayEnhancer#motivation" target="_blank" rel="external">Play enhancer</a></p>
+</blockquote>
+<h2 id="2-Handling-form-submission"><a href="#2-Handling-form-submission" class="headerlink" title="2. Handling form submission"></a>2. Handling form submission</h2>
+          
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/02/JavaScript变量作用域/" itemprop="url">
                   JavaScript变量作用域
                 </a>
               
@@ -609,8 +609,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-08-03T10:43:57+08:00" content="2016-08-03">
-              2016-08-03
+            <time itemprop="dateCreated" datetime="2016-08-02T11:47:19+08:00" content="2016-08-02">
+              2016-08-02
             </time>
           </span>
 
@@ -639,8 +639,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/03/JavaScript变量作用域/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/03/JavaScript变量作用域/" itemprop="commentsCount"></span>
+                <a href="/2016/08/02/JavaScript变量作用域/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/02/JavaScript变量作用域/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -666,7 +666,7 @@
         
           <p>This is a continuous updating learning notes for <em>JavaScript</em></p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/08/03/JavaScript变量作用域/#more" rel="contents">
+            <a class="btn" href="/2016/08/02/JavaScript变量作用域/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -731,7 +731,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-22T17:13:38+08:00" content="2016-07-22">
+            <time itemprop="dateCreated" datetime="2016-07-22T16:00:21+08:00" content="2016-07-22">
               2016-07-22
             </time>
           </span>
@@ -839,128 +839,6 @@
             
               
                 
-                <a class="post-title-link" href="/2016/07/21/Spring MVC 学习笔记/" itemprop="url">
-                  Spring MVC 学习笔记
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-21T18:27:51+08:00" content="2016-07-21">
-              2016-07-21
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/21/Spring MVC 学习笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/21/Spring MVC 学习笔记/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>This is a continuous updating learning notes for <em>Spring MVC</em><br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/07/21/Spring MVC 学习笔记/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/07/10/redis学习笔记/" itemprop="url">
                   redis学习笔记
                 </a>
@@ -975,7 +853,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-10T16:46:55+08:00" content="2016-07-10">
+            <time itemprop="dateCreated" datetime="2016-07-10T16:44:44+08:00" content="2016-07-10">
               2016-07-10
             </time>
           </span>
@@ -1083,7 +961,7 @@
             
               
                 
-                <a class="post-title-link" href="/2016/07/10/Express 学习笔记/" itemprop="url">
+                <a class="post-title-link" href="/2016/07/07/Express 学习笔记/" itemprop="url">
                   Express 学习笔记
                 </a>
               
@@ -1097,8 +975,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-10T16:46:27+08:00" content="2016-07-10">
-              2016-07-10
+            <time itemprop="dateCreated" datetime="2016-07-07T10:25:45+08:00" content="2016-07-07">
+              2016-07-07
             </time>
           </span>
 
@@ -1127,8 +1005,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/10/Express 学习笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/10/Express 学习笔记/" itemprop="commentsCount"></span>
+                <a href="/2016/07/07/Express 学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/07/Express 学习笔记/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1154,7 +1032,7 @@
         
           <p>This is a continuous updating learning notes for <em>Express</em></p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/07/10/Express 学习笔记/#more" rel="contents">
+            <a class="btn" href="/2016/07/07/Express 学习笔记/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1205,8 +1083,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/07/10/Git学习笔记/" itemprop="url">
-                  Git学习笔记
+                <a class="post-title-link" href="/2016/07/07/MYSQL学习笔记/" itemprop="url">
+                  Mysql学习笔记
                 </a>
               
             
@@ -1219,8 +1097,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-10T12:20:01+08:00" content="2016-07-10">
-              2016-07-10
+            <time itemprop="dateCreated" datetime="2016-07-07T10:25:38+08:00" content="2016-07-07">
+              2016-07-07
             </time>
           </span>
 
@@ -1233,8 +1111,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
+                  <a href="/categories/Mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">Mysql</span>
                   </a>
                 </span>
 
@@ -1249,8 +1127,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/10/Git学习笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/10/Git学习笔记/" itemprop="commentsCount"></span>
+                <a href="/2016/07/07/MYSQL学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/07/MYSQL学习笔记/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1274,9 +1152,9 @@
 
       
         
-          <p>This is a continuous updating learning notes for <em>Git</em></p>
+          <p>This is a continuous updating learning notes for <em>Mysql</em><br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/07/10/Git学习笔记/#more" rel="contents">
+            <a class="btn" href="/2016/07/07/MYSQL学习笔记/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1327,8 +1205,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/07/09/java_线程提高/" itemprop="url">
-                  Java线程详解
+                <a class="post-title-link" href="/2016/07/07/Spring MVC 学习笔记/" itemprop="url">
+                  Spring MVC 学习笔记
                 </a>
               
             
@@ -1341,8 +1219,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-09T18:05:47+08:00" content="2016-07-09">
-              2016-07-09
+            <time itemprop="dateCreated" datetime="2016-07-07T10:25:38+08:00" content="2016-07-07">
+              2016-07-07
             </time>
           </span>
 
@@ -1355,8 +1233,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
                   </a>
                 </span>
 
@@ -1371,8 +1249,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/09/java_线程提高/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/09/java_线程提高/" itemprop="commentsCount"></span>
+                <a href="/2016/07/07/Spring MVC 学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/07/Spring MVC 学习笔记/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1396,9 +1274,131 @@
 
       
         
-          <p>This is my understanding for java thread<br>
+          <p>This is a continuous updating learning notes for <em>Spring MVC</em><br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/07/09/java_线程提高/#more" rel="contents">
+            <a class="btn" href="/2016/07/07/Spring MVC 学习笔记/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/07/Servlet学习笔记/" itemprop="url">
+                  Servlet学习笔记
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-07-07T10:25:38+08:00" content="2016-07-07">
+              2016-07-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java-Web/" itemprop="url" rel="index">
+                    <span itemprop="name">Java Web</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/07/Servlet学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/07/Servlet学习笔记/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>This is a continuous updating learning notes for <em>Servlet</em><br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/07/07/Servlet学习笔记/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>

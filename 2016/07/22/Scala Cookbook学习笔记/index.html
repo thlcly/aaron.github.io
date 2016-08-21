@@ -249,7 +249,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-22T17:13:38+08:00" content="2016-07-22">
+            <time itemprop="dateCreated" datetime="2016-07-22T16:00:21+08:00" content="2016-07-22">
               2016-07-22
             </time>
           </span>
@@ -305,9 +305,9 @@
       
         <p>This is a continuous updating learning notes for <em>scala</em></p>
 <a id="more"></a>
-<h3 id="1-_为scala中的变量设置默认值">1. 为scala中的变量设置默认值</h3><p>eg:<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 给类中的变量设置默认值, 使用'_'的方法设置默认值只适用于类变量, </span></span><br><span class="line"><span class="comment">// 如果使用'_'进行初始化, 则必须指定变量的类型, 否则会报错, </span></span><br><span class="line"><span class="comment">// 因为不指定变量的类型scala不知道设置成什么值</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span>&#123;</span><br><span class="line">	<span class="variable"><span class="keyword">var</span> a</span>: <span class="typename">Short</span> = <span class="number">0</span></span><br><span class="line">	<span class="variable"><span class="keyword">var</span> b</span>: <span class="typename">Short</span> = _</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>eg: hack方法初始化变量的值<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> variable = initvalue<span class="class">.asInstanceOf</span>[initValueType]</span><br><span class="line">例如: </span><br><span class="line"><span class="tag">var</span> name = null<span class="class">.asInstanceOf</span>[String]</span><br><span class="line"><span class="tag">var</span> age = <span class="number">0</span><span class="class">.asInstanceOf</span>[Integer]</span><br></pre></td></tr></table></figure></p>
-<h3 id="2-_scala中没有’++’_和_‘–’_操作符,_只能使用’+=’,_‘-=’,_‘*=’,_‘/=’进行替代,_且只能用在var变量上,_不能使用在val常量上,_且这些都是方法">2. scala中没有’++’ 和 ‘–’ 操作符, 只能使用’+=’, ‘-=’, ‘*=’, ‘/=’进行替代, 且只能用在<code>var</code>变量上, 不能使用在<code>val</code>常量上, 且这些都是方法</h3><h3 id="3-_scala中实现约等于,">3. scala中实现约等于,</h3><p>eg:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> ~=(x: <span class="keyword">Double</span>, y: <span class="keyword">Double</span>, precision: <span class="keyword">Double</span>) = &#123;	<span class="keyword">if</span> ((x - y).<span class="keyword">abs</span> &lt; precision) <span class="keyword">true</span> <span class="keyword">else</span> <span class="keyword">false</span> </span><br><span class="line">&#125;</span><br><span class="line">~=(a, b, <span class="number">0.0001</span>) =&gt; <span class="keyword">true</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="1-为scala中的变量设置默认值"><a href="#1-为scala中的变量设置默认值" class="headerlink" title="1. 为scala中的变量设置默认值"></a>1. 为scala中的变量设置默认值</h3><p>eg:<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 给类中的变量设置默认值, 使用'_'的方法设置默认值只适用于类变量, </span></div><div class="line"><span class="comment">// 如果使用'_'进行初始化, 则必须指定变量的类型, 否则会报错, </span></div><div class="line"><span class="comment">// 因为不指定变量的类型scala不知道设置成什么值</span></div><div class="line">class Foo&#123;</div><div class="line">	<span class="selector-tag">var</span> <span class="selector-tag">a</span>: Short = <span class="number">0</span></div><div class="line">	<span class="selector-tag">var</span> <span class="selector-tag">b</span>: Short = _</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>eg: hack方法初始化变量的值<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">var</span> variable = initvalue<span class="selector-class">.asInstanceOf</span>[initValueType]</div><div class="line">例如: </div><div class="line"><span class="selector-tag">var</span> name = null<span class="selector-class">.asInstanceOf</span>[String]</div><div class="line"><span class="selector-tag">var</span> age = <span class="number">0</span><span class="selector-class">.asInstanceOf</span>[Integer]</div></pre></td></tr></table></figure></p>
+<h3 id="2-scala中没有’-’-和-‘–’-操作符-只能使用’-’-‘-’-‘-’-‘-’进行替代-且只能用在var变量上-不能使用在val常量上-且这些都是方法"><a href="#2-scala中没有’-’-和-‘–’-操作符-只能使用’-’-‘-’-‘-’-‘-’进行替代-且只能用在var变量上-不能使用在val常量上-且这些都是方法" class="headerlink" title="2. scala中没有’++’ 和 ‘–’ 操作符, 只能使用’+=’, ‘-=’, ‘*=’, ‘/=’进行替代, 且只能用在var变量上, 不能使用在val常量上, 且这些都是方法"></a>2. scala中没有’++’ 和 ‘–’ 操作符, 只能使用’+=’, ‘-=’, ‘*=’, ‘/=’进行替代, 且只能用在<code>var</code>变量上, 不能使用在<code>val</code>常量上, 且这些都是方法</h3><h3 id="3-scala中实现约等于"><a href="#3-scala中实现约等于" class="headerlink" title="3. scala中实现约等于,"></a>3. scala中实现约等于,</h3><p>eg:<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">def</span> ~=(x: <span class="keyword">Double</span>, y: <span class="keyword">Double</span>, precision: <span class="keyword">Double</span>) = &#123;	<span class="keyword">if</span> ((x - y).<span class="keyword">abs</span> &lt; precision) <span class="keyword">true</span> <span class="keyword">else</span> <span class="keyword">false</span> </div><div class="line">&#125;</div><div class="line">~=(a, b, <span class="number">0.0001</span>) =&gt; <span class="keyword">true</span></div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -331,15 +331,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/21/Spring MVC 学习笔记/" rel="next" title="Spring MVC 学习笔记">
-                <i class="fa fa-chevron-left"></i> Spring MVC 学习笔记
+              <a href="/2016/07/10/redis学习笔记/" rel="next" title="redis学习笔记">
+                <i class="fa fa-chevron-left"></i> redis学习笔记
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/08/03/JavaScript变量作用域/" rel="prev" title="JavaScript变量作用域">
+              <a href="/2016/08/02/JavaScript变量作用域/" rel="prev" title="JavaScript变量作用域">
                 JavaScript变量作用域 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -474,7 +474,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_为scala中的变量设置默认值"><span class="nav-number">1.</span> <span class="nav-text">1. 为scala中的变量设置默认值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-_scala中没有’++’_和_‘–’_操作符,_只能使用’+=’,_‘-=’,_‘*=’,_‘/=’进行替代,_且只能用在var变量上,_不能使用在val常量上,_且这些都是方法"><span class="nav-number">2.</span> <span class="nav-text">2. scala中没有’++’ 和 ‘–’ 操作符, 只能使用’+=’, ‘-=’, ‘*=’, ‘/=’进行替代, 且只能用在var变量上, 不能使用在val常量上, 且这些都是方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-_scala中实现约等于,"><span class="nav-number">3.</span> <span class="nav-text">3. scala中实现约等于,</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-为scala中的变量设置默认值"><span class="nav-number">1.</span> <span class="nav-text">1. 为scala中的变量设置默认值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-scala中没有’-’-和-‘–’-操作符-只能使用’-’-‘-’-‘-’-‘-’进行替代-且只能用在var变量上-不能使用在val常量上-且这些都是方法"><span class="nav-number">2.</span> <span class="nav-text">2. scala中没有’++’ 和 ‘–’ 操作符, 只能使用’+=’, ‘-=’, ‘*=’, ‘/=’进行替代, 且只能用在var变量上, 不能使用在val常量上, 且这些都是方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-scala中实现约等于"><span class="nav-number">3.</span> <span class="nav-text">3. scala中实现约等于,</span></a></li></ol></div>
             
           </div>
         </section>

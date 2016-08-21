@@ -304,22 +304,22 @@
 
       
         <p>  This is a continuous updating learning notes for <em>Java Annotation</em><br><a id="more"></a></p>
-<h3 id="1-_内置的java注解">1. 内置的java注解</h3><pre><code>-<span class="ruby"> <span class="variable">@Deprecated</span>
-</span>-<span class="ruby"> <span class="variable">@Override</span>
-</span>-<span class="ruby"> <span class="variable">@SuppressWarnings</span></span>
-</code></pre><h3 id="2-_内置java注解详解">2. 内置java注解详解</h3><pre><code>- @Deprecated
+<h3 id="1-内置的java注解"><a href="#1-内置的java注解" class="headerlink" title="1. 内置的java注解"></a>1. 内置的java注解</h3><pre><code>- @Deprecated
+- @Override
+- @SuppressWarnings
+</code></pre><h3 id="2-内置java注解详解"><a href="#2-内置java注解详解" class="headerlink" title="2. 内置java注解详解"></a>2. 内置java注解详解</h3><pre><code>- @Deprecated
     1. 可以用来标记类, 方法, 属性
     2. 如果上诉的三种元素不再使用, 使用@Deprecated注解
     3. 如果代码使用了@Deprecated注解的类, 方法或者属性, 编译器会进行警告
 
 eg:
 
-<span class="comment"><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Deprecated</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> &#123;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Deprecated</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> &#123;</span></div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
 
 当我们使用@Deprecated注解后,建议配合使用对应的@deprecated JavaDoc符号,并解释说明为什么这个类,方法或属性被弃用,已经替代方案是什么。
 
-<span class="comment"><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">@Deprecated</span></span><br><span class="line">/<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">  <span class="comment">@deprecated This class is full of bugs. Use MyNewComponent instead.</span></span><br><span class="line"><span class="keyword">*</span>/</span><br><span class="line">public class MyComponent &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Deprecated</span></div><div class="line"><span class="comment">/**</span></div><div class="line">  <span class="doctag">@deprecated</span> This class is full of bugs. Use MyNewComponent instead.</div><div class="line">*/</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyComponent</span> &#123;</span></div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
 - @Override
     1. 用来修饰对父类进行重写的方法。如果一个并非重写父类的方法使用这个注解,编译器将提示错误
@@ -328,7 +328,7 @@ eg:
 
 eg:
 
-<span class="comment"><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MySuperClass</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    public void doTheThing() &#123;</span><br><span class="line">        <span class="type">System</span>.out.println(<span class="string">"Do the thing"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MySubClass</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">MySuperClass</span>&#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    public void doTheThing() &#123;</span><br><span class="line">        <span class="type">System</span>.out.println(<span class="string">"Do it differently"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MySuperClass</span> </span>&#123;</div><div class="line"></div><div class="line">    public void doTheThing() &#123;</div><div class="line">        <span class="type">System</span>.out.println(<span class="string">"Do the thing"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MySubClass</span> <span class="keyword">extends</span> <span class="title">MySuperClass</span></span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    public void doTheThing() &#123;</div><div class="line">        <span class="type">System</span>.out.println(<span class="string">"Do it differently"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
 
 - @SuppressWarnings
@@ -341,10 +341,10 @@ eg:
 
 
 eg:
-<span class="comment"><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@SuppressWarnings</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">methodWithWarning</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
-</code></pre><h3 id="3-_创建自己的注解">3. 创建自己的注解</h3><pre><code>eg:
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SuppressWarnings</span></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">methodWithWarning</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><h3 id="3-创建自己的注解"><a href="#3-创建自己的注解" class="headerlink" title="3. 创建自己的注解"></a>3. 创建自己的注解</h3><pre><code>eg:
 
-<span class="comment"><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">interface</span> <span class="title">MyAnnotation</span> &#123;</span><br><span class="line">    <span class="function">String   <span class="title">value</span>(<span class="params"></span>)</span>;</span><br><span class="line">    <span class="function">String   <span class="title">name</span>(<span class="params"></span>)</span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span>      <span class="title">age</span>(<span class="params"></span>)</span>;</span><br><span class="line">    String[] newNames();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">interface</span> <span class="title">MyAnnotation</span> &#123;</div><div class="line">    <span class="function">String   <span class="title">value</span>(<span class="params"></span>)</span>;</div><div class="line">    <span class="function">String   <span class="title">name</span>(<span class="params"></span>)</span>;</div><div class="line">    <span class="function"><span class="keyword">int</span>      <span class="title">age</span>(<span class="params"></span>)</span>;</div><div class="line">    <span class="function">String[] <span class="title">newNames</span>(<span class="params"></span>)</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
 - `@interface`这个关键字用来告诉java编译器这是一个注解。
 - 注解元素的定义类似于接口的方法,这些元素有类型和名称,类型可以是:
@@ -354,43 +354,43 @@ eg:
     4. annotation
     5. 枚举
     6. 一维数组
-</code></pre><h3 id="4-_应用自己的注解">4. 应用自己的注解</h3><pre><code>eg:
+</code></pre><h3 id="4-应用自己的注解"><a href="#4-应用自己的注解" class="headerlink" title="4. 应用自己的注解"></a>4. 应用自己的注解</h3><pre><code>eg:
 
-<span class="comment"><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@MyAnnotation(</span><br><span class="line">    <span class="keyword">value</span>=<span class="string">"123"</span>,</span><br><span class="line">    name=<span class="string">"Jakob"</span>,</span><br><span class="line">    age=<span class="number">37</span>,</span><br><span class="line">    newNames=&#123;<span class="string">"Jenkov"</span>, <span class="string">"Peterson"</span>&#125;</span><br><span class="line">) <span class="comment">// 需要为所有的注解元素设置值，一个都不能少</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
-</code></pre><h3 id="5-_注解元素默认值">5. 注解元素默认值</h3><pre><code>eg:
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@MyAnnotation(</span></div><div class="line">    value=<span class="meta-string">"123"</span>,</div><div class="line">    name=<span class="meta-string">"Jakob"</span>,</div><div class="line">    age=37,</div><div class="line">    newNames=&#123;<span class="meta-string">"Jenkov"</span>, <span class="meta-string">"Peterson"</span>&#125;</div><div class="line">) <span class="comment">// 需要为所有的注解元素设置值，一个都不能少</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</div><div class="line"></div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><h3 id="5-注解元素默认值"><a href="#5-注解元素默认值" class="headerlink" title="5. 注解元素默认值"></a>5. 注解元素默认值</h3><pre><code>eg:
 
-<span class="comment"><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">interface</span> <span class="title">MyAnnotation</span> &#123;</span><br><span class="line">    <span class="function">String   <span class="title">value</span>(<span class="params"></span>) <span class="keyword">default</span> ""</span>; <span class="comment">// 使用时，可以不设置value的值, 默认使用""</span></span><br><span class="line">    <span class="function">String   <span class="title">name</span>(<span class="params"></span>)</span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span>      <span class="title">age</span>(<span class="params"></span>)</span>;</span><br><span class="line">    String[] newNames();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
-</code></pre><h3 id="6-_@Retention">6. @Retention</h3><pre><code>-<span class="ruby"> 控制注解是否写入<span class="class"><span class="keyword">class</span>文件</span>
-</span>-<span class="ruby"> 控制<span class="class"><span class="keyword">class</span>文件中的注解是否在运行时可见</span>
-</span>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">interface</span> <span class="title">MyAnnotation</span> &#123;</div><div class="line">    <span class="function">String   <span class="title">value</span>(<span class="params"></span>) <span class="keyword">default</span> ""</span>; <span class="comment">// 使用时，可以不设置value的值, 默认使用""</span></div><div class="line">    <span class="function">String   <span class="title">name</span>(<span class="params"></span>)</span>;</div><div class="line">    <span class="function"><span class="keyword">int</span>      <span class="title">age</span>(<span class="params"></span>)</span>;</div><div class="line">    <span class="function">String[] <span class="title">newNames</span>(<span class="params"></span>)</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><h3 id="6-Retention"><a href="#6-Retention" class="headerlink" title="6. @Retention"></a>6. @Retention</h3><pre><code>- 控制注解是否写入class文件
+- 控制class文件中的注解是否在运行时可见
+
 使用如下的策略进行注解可见性的控制:
--<span class="ruby"> <span class="constant">RetentionPolicy</span>.<span class="constant">SOURCE</span> 表明注解仅存在源码之中，不存在.<span class="keyword">class</span>文件，更不能运行时可见。常见的注解为<span class="variable">@Override</span>, <span class="variable">@SuppressWarnings</span>。
-</span>-<span class="ruby"> <span class="constant">RetentionPolicy</span>.<span class="constant">CLASS</span> 这是默认的注解保留策略。这种策略下，注解将存在与.<span class="keyword">class</span>文件，但是不能被运行时访问。通常这种注解策略用来处于一些<span class="string">`字节码级别`</span>的操作。
-</span>-<span class="ruby"> <span class="constant">RetentionPolicy</span>.<span class="constant">RUNTIME</span> 这种策略下可以被运行时访问到。通常情况下，我们都会<span class="string">`结合反射`</span>来做一些事情。
-</span>
+- RetentionPolicy.SOURCE 表明注解仅存在源码之中，不存在.class文件，更不能运行时可见。常见的注解为@Override, @SuppressWarnings。
+- RetentionPolicy.CLASS 这是默认的注解保留策略。这种策略下，注解将存在与.class文件，但是不能被运行时访问。通常这种注解策略用来处于一些`字节码级别`的操作。
+- RetentionPolicy.RUNTIME 这种策略下可以被运行时访问到。通常情况下，我们都会`结合反射`来做一些事情。
+
 eg:
 
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"><span class="keyword">import</span> java.lang.annotation.Retention;</span></span><br><span class="line"><span class="preprocessor"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span></span><br><span class="line"></span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@<span class="class"><span class="keyword">interface</span> <span class="title">MyAnnotation</span> </span>&#123;</span><br><span class="line">    String   value() <span class="keyword">default</span> <span class="string">""</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</code></pre><h3 id="7-_@Target">7. @Target</h3><pre><code>-<span class="ruby"> 设定自定义注解可以修饰哪些java元素
-</span>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import java<span class="selector-class">.lang</span><span class="selector-class">.annotation</span><span class="selector-class">.Retention</span>;</div><div class="line">import java<span class="selector-class">.lang</span><span class="selector-class">.annotation</span><span class="selector-class">.RetentionPolicy</span>;</div><div class="line"></div><div class="line"><span class="variable">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="variable">@interface</span> MyAnnotation &#123;</div><div class="line">    String   value() default "";</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><h3 id="7-Target"><a href="#7-Target" class="headerlink" title="7. @Target"></a>7. @Target</h3><pre><code>- 设定自定义注解可以修饰哪些java元素
+
 可以选择的参数值:
--<span class="ruby"> <span class="constant">ElementType</span>.<span class="constant">ANNOTATION_TYPE</span>（注：修饰注解）
-</span>-<span class="ruby"> <span class="constant">ElementType</span>.<span class="constant">CONSTRUCTOR</span>
-</span>-<span class="ruby"> <span class="constant">ElementType</span>.<span class="constant">FIELD</span>
-</span>-<span class="ruby"> <span class="constant">ElementType</span>.<span class="constant">LOCAL_VARIABLE</span>
-</span>-<span class="ruby"> <span class="constant">ElementType</span>.<span class="constant">METHOD</span>
-</span>-<span class="ruby"> <span class="constant">ElementType</span>.<span class="constant">PACKAGE</span>
-</span>-<span class="ruby"> <span class="constant">ElementType</span>.<span class="constant">PARAMETER</span>
-</span>-<span class="ruby"> <span class="constant">ElementType</span>.<span class="constant">TYPE</span>（注：任何类型，即上面的的类型都可以修饰）
-</span>
-eg:
-
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">import</span> <span class="tag">java</span><span class="class">.lang</span><span class="class">.annotation</span><span class="class">.ElementType</span>;</span><br><span class="line"><span class="tag">import</span> <span class="tag">java</span><span class="class">.lang</span><span class="class">.annotation</span><span class="class">.Target</span>;</span><br><span class="line"></span><br><span class="line"><span class="at_rule">@<span class="keyword">Target(&#123;ElementType.METHOD&#125;)</span></span><br><span class="line">public @interface MyAnnotation </span>&#123;</span><br><span class="line">    <span class="tag">String</span>   <span class="tag">value</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</code></pre><h3 id="8-_@Inherited">8. @Inherited</h3><pre><code>- 一个类和它的子类都包含某个注解
+- ElementType.ANNOTATION_TYPE（注：修饰注解）
+- ElementType.CONSTRUCTOR
+- ElementType.FIELD
+- ElementType.LOCAL_VARIABLE
+- ElementType.METHOD
+- ElementType.PACKAGE
+- ElementType.PARAMETER
+- ElementType.TYPE（注：任何类型，即上面的的类型都可以修饰）
 
 eg:
 
-<span class="comment"><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">java.lang.annotation.<span class="type">Inherited</span></span><br><span class="line"></span><br><span class="line"><span class="annotation">@Inherited</span></span><br><span class="line">public <span class="annotation">@interface</span> <span class="type">MyAnnotation</span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;  </span><br><span class="line"><span class="annotation">@MyAnnotation</span></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MySuperClass</span> &#123;</span> ... &#125;   </span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MySubClass</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">MySuperClass</span> &#123;</span> ... &#125;</span><br></pre></td></tr></table></figure></span>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import java<span class="selector-class">.lang</span><span class="selector-class">.annotation</span><span class="selector-class">.ElementType</span>;</div><div class="line">import java<span class="selector-class">.lang</span><span class="selector-class">.annotation</span><span class="selector-class">.Target</span>;</div><div class="line"></div><div class="line"><span class="variable">@Target</span>(&#123;ElementType.METHOD&#125;)</div><div class="line">public <span class="variable">@interface</span> MyAnnotation &#123;</div><div class="line">    String   value();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><h3 id="8-Inherited"><a href="#8-Inherited" class="headerlink" title="8. @Inherited"></a>8. @Inherited</h3><pre><code>- 一个类和它的子类都包含某个注解
+
+eg:
+
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">java.lang.annotation.<span class="type">Inherited</span></div><div class="line"></div><div class="line"><span class="meta">@Inherited</span></div><div class="line">public <span class="meta">@interface</span> <span class="type">MyAnnotation</span> &#123;</div><div class="line"></div><div class="line">&#125;  </div><div class="line"><span class="meta">@MyAnnotation</span></div><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MySuperClass</span> </span>&#123; ... &#125;   </div><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MySubClass</span> <span class="keyword">extends</span> <span class="title">MySuperClass</span> </span>&#123; ... &#125;</div></pre></td></tr></table></figure>
 
 
 上述代码的大致意思:
@@ -421,8 +421,8 @@ eg:
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/13/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2016/04/13/java_线程提高/" rel="next" title="Java线程详解">
+                <i class="fa fa-chevron-left"></i> Java线程详解
               </a>
             
           </div>
@@ -564,7 +564,7 @@ eg:
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_内置的java注解"><span class="nav-number">1.</span> <span class="nav-text">1. 内置的java注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-_内置java注解详解"><span class="nav-number">2.</span> <span class="nav-text">2. 内置java注解详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-_创建自己的注解"><span class="nav-number">3.</span> <span class="nav-text">3. 创建自己的注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-_应用自己的注解"><span class="nav-number">4.</span> <span class="nav-text">4. 应用自己的注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-_注解元素默认值"><span class="nav-number">5.</span> <span class="nav-text">5. 注解元素默认值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-_@Retention"><span class="nav-number">6.</span> <span class="nav-text">6. @Retention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-_@Target"><span class="nav-number">7.</span> <span class="nav-text">7. @Target</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-_@Inherited"><span class="nav-number">8.</span> <span class="nav-text">8. @Inherited</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-内置的java注解"><span class="nav-number">1.</span> <span class="nav-text">1. 内置的java注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-内置java注解详解"><span class="nav-number">2.</span> <span class="nav-text">2. 内置java注解详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-创建自己的注解"><span class="nav-number">3.</span> <span class="nav-text">3. 创建自己的注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-应用自己的注解"><span class="nav-number">4.</span> <span class="nav-text">4. 应用自己的注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-注解元素默认值"><span class="nav-number">5.</span> <span class="nav-text">5. 注解元素默认值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Retention"><span class="nav-number">6.</span> <span class="nav-text">6. @Retention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-Target"><span class="nav-number">7.</span> <span class="nav-text">7. @Target</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-Inherited"><span class="nav-number">8.</span> <span class="nav-text">8. @Inherited</span></a></li></ol></div>
             
           </div>
         </section>
