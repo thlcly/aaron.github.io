@@ -80,16 +80,19 @@
 
 
 
-<meta name="description" content="数据库读现象解析">
+<meta name="description" content="This this my learning notes of kafka">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据库中读现象解析">
-<meta property="og:url" content="http://thlcly.xyz/2016/08/21/数据库读现象解析/index.html">
+<meta property="og:title" content="kafka学习笔记">
+<meta property="og:url" content="http://thlcly.xyz/2016/08/22/Kafka学习笔记/index.html">
 <meta property="og:site_name" content="Monkey Coder">
-<meta property="og:description" content="数据库读现象解析">
-<meta property="og:updated_time" content="2016-08-21T11:02:47.000Z">
+<meta property="og:description" content="This this my learning notes of kafka">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/thlcly.xyz/kafka/kafka_cluster.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/thlcly.xyz/kafka/kafka_topic.png">
+<meta property="og:updated_time" content="2016-08-23T06:46:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数据库中读现象解析">
-<meta name="twitter:description" content="数据库读现象解析">
+<meta name="twitter:title" content="kafka学习笔记">
+<meta name="twitter:description" content="This this my learning notes of kafka">
+<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/thlcly.xyz/kafka/kafka_cluster.png">
 
 
 
@@ -107,7 +110,7 @@
   };
 </script>
 
-  <title> 数据库中读现象解析 | Monkey Coder </title>
+  <title> kafka学习笔记 | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -237,7 +240,7 @@
             
             
               
-                数据库中读现象解析
+                kafka学习笔记
               
             
           </h1>
@@ -249,8 +252,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-08-21T16:54:05+08:00" content="2016-08-21">
-              2016-08-21
+            <time itemprop="dateCreated" datetime="2016-08-22T16:22:53+08:00" content="2016-08-22">
+              2016-08-22
             </time>
           </span>
 
@@ -263,8 +266,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/分布式消息中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式消息中间件</span>
                   </a>
                 </span>
 
@@ -279,8 +282,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/21/数据库读现象解析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/21/数据库读现象解析/" itemprop="commentsCount"></span>
+                <a href="/2016/08/22/Kafka学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/22/Kafka学习笔记/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -303,99 +306,32 @@
       
 
       
-        <p>数据库读现象解析</p>
+        <p>This this my learning notes of kafka</p>
 <a id="more"></a>
-<h3 id="1-脏读"><a href="#1-脏读" class="headerlink" title="1. 脏读"></a>1. 脏读</h3><h4 id="1-1-脏读的概念"><a href="#1-1-脏读的概念" class="headerlink" title="1.1 脏读的概念"></a>1.1 脏读的概念</h4><blockquote>
-<p>事务1对数据进行了修改但是还没有提交, 事务2读取了事务1中修改了但是还没有提交的数据, 此时事务2读取到的数据相当于是一个脏数据, 因为事务1还没有提交有可能会因为某些原因进行回滚, 所以事务2有可能读到的是一个不存在的数据. 简单的说脏读就是<strong>一个事务读到了另外一个事务修改了但是还没有提交的数据</strong></p>
-</blockquote>
-<p>eg: </p>
-<table>
-<thead>
-<tr>
-<th>事务1</th>
-<th>事务2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>select age from user where id = 1; // return 20</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>update user set age = 21 where id = 1; // not commit</td>
-</tr>
-<tr>
-<td>select age from user where id = 1; // return 21</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>// rollback</td>
-</tr>
-</tbody>
-</table>
-<p>注意: <strong>事务2回滚后就没有id是1，age是21的数据了。所以，事务一读到了一条脏数据。</strong></p>
-<h3 id="2-不可重复读"><a href="#2-不可重复读" class="headerlink" title="2. 不可重复读"></a>2. 不可重复读</h3><h4 id="2-1-不可重复读的概念"><a href="#2-1-不可重复读的概念" class="headerlink" title="2.1 不可重复读的概念"></a>2.1 不可重复读的概念</h4><blockquote>
-<p>在一个事务中, 多次读取一条相同的数据, 在这个事务还没有结束的时候, 另外一个事务对这条数据进行修改, 导致第一个事务两次读取同一条数据的结果不一致</p>
-</blockquote>
-<p>eg: </p>
-<table>
-<thead>
-<tr>
-<th>事务1</th>
-<th>事务2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>select age from user where id = 1; // return 20</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>update user set age = 21 where id = 1; commit;</td>
-</tr>
-<tr>
-<td>select age from user where id = 1; commit;// return 21</td>
-</tr>
-</tbody>
-</table>
-<p>注意: <strong>在这个例子中，事务2提交成功，因此他对id为1的行的修改就对其他事务可见了。但是事务1在此前已经从这行读到了另外一个”age”的值。</strong></p>
-<h3 id="3-幻读"><a href="#3-幻读" class="headerlink" title="3. 幻读"></a>3. 幻读</h3><h4 id="3-1-幻读的概念"><a href="#3-1-幻读的概念" class="headerlink" title="3.1 幻读的概念"></a>3.1 幻读的概念</h4><blockquote>
-<p>当事务不是独立执行时发生的一种现象,例如第一个事务对一个表中的数据进行了修改,比如这种修改涉及到表中的”全部数据行”.同时,第二个事务也修改这个表中的数据，这种修改是向表中插入”一行新数据”.那么,以后就会发生操作第一个事务的用户发现表中还有没有修改的数据行, 就好象发生了幻觉一样.</p>
-</blockquote>
-<h4 id="3-2-幻读和不可重复读的区别"><a href="#3-2-幻读和不可重复读的区别" class="headerlink" title="3.2 幻读和不可重复读的区别:"></a>3.2 幻读和不可重复读的区别:</h4><ul>
-<li>不可重复读是相对于一条数据来说的, 而幻读是针对于一个数据范围来说的.</li>
-<li>避免不可重复读的方法是: 对要进行多次select的操作的情况下对那条数据进行加锁操作, 因此只要select操作的事务不提交其他事务就不能对那条记录进行操作, 从而也避免了不可重复读的现象. 但是幻读是针对一个数据范围的因此单单对一条数据进行加锁并不能防止幻读的产生</li>
-<li>解决幻读的方法就是在数据范围的两端加上锁, 这样其他事务就不能对这个数据范围中的数据进行操作, 也就防止了幻读的发生</li>
+<h3 id="1-kafka世界里的常用术语"><a href="#1-kafka世界里的常用术语" class="headerlink" title="1. kafka世界里的常用术语"></a>1. kafka世界里的常用术语</h3><ul>
+<li>Topic(主题): kafka根据Topic对消息进行归类, 所有的消息都属于一个Topic</li>
+<li>Producer(生产者): Producer向Topic中发送消息</li>
+<li>Consumer(消费者): Consumer从Topic中获取消息</li>
+<li>Broker(server实例): 每一个kafka服务都称为实例, kafka集群就是由多个broker组成的</li>
+<li>partition(分区): 对于存储层面就是log文件, 使用分区可以避免单个文件超过系统的最大值</li>
+<li>replicas(备份): 每个分区可以有多个备份</li>
 </ul>
-<p>eg: </p>
-<table>
-<thead>
-<tr>
-<th>事务1</th>
-<th>事务2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>select * from user where age between 10 and 30;</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>insert into user values(3, ‘Bob’, 27); commit</td>
-</tr>
-<tr>
-<td>select * from user where age between 10 and 30;</td>
-</tr>
-</tbody>
-</table>
-<p>注意: <strong>事务一执行了两次相同的查询操作。但是两次操作中间事务二向数据库中增加了一条符合事务一的查询条件的数据，导致幻读</strong></p>
-<h3 id="4-参考"><a href="#4-参考" class="headerlink" title="4. 参考:"></a>4. 参考:</h3><blockquote>
-<p><a href="http://www.hollischuang.com/archives/900" target="_blank" rel="external">数据库的读现象浅析</a></p>
-</blockquote>
+<h3 id="2-kafka宏观架构"><a href="#2-kafka宏观架构" class="headerlink" title="2. kafka宏观架构"></a>2. kafka宏观架构</h3><p><img src="http://o6qqyj17y.bkt.clouddn.com/thlcly.xyz/kafka/kafka_cluster.png" alt="kafka架构"></p>
+<h3 id="3-详细介绍常用术语"><a href="#3-详细介绍常用术语" class="headerlink" title="3. 详细介绍常用术语"></a>3. 详细介绍常用术语</h3><h4 id="3-1-Topic-logs"><a href="#3-1-Topic-logs" class="headerlink" title="3.1 Topic/logs"></a>3.1 Topic/logs</h4><p>一个Topic是一类消息的代称, 每个topic可以被分成多个partition(区), 每个partition在存储层面就是append log文件. 任务被分发到此partition的消息都会被追加到log文件的尾部, 每条消息在文件中的位置称为offset(偏移量), offset是long型的数据, 它是消息的唯一标志符</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/thlcly.xyz/kafka/kafka_topic.png" alt="kafka topic"></p>
+<p>注意: kafka中的消息要是被消费了, 消息仍然不会被立即删除, 日志文件(log)会根据broker中的配置要求保留一定的时间之后再进行删除; 比如broker中配置log文件保留2天, 那么两天后文件会被删除, 无论其中的消息是否已经被消费了. 这样做的好处是减少消息消费之后对文件内容改动的磁盘IO开支, 因为不再需要每次消费完消息之后就操作log文件将数据删除</p>
+<h4 id="3-2-Producer"><a href="#3-2-Producer" class="headerlink" title="3.2 Producer"></a>3.2 Producer</h4><p>Producer将消息发布到指定的Topic中, 同时Producer也能决定消息归属于哪个partition</p>
+<h4 id="3-3-Consumer"><a href="#3-3-Consumer" class="headerlink" title="3.3 Consumer"></a>3.3 Consumer</h4><ul>
+<li>每个consumer属于一个consumer group, 每个consumer group可以有多个consumer. 发送到Topic的消息只会被订阅此Topic的每个group中的一个consumer消费</li>
+<li>如果所有的consumer都有相同的group, 就相当于是队列模式, 所有的消息会在所有的consumer之间负载均衡</li>
+<li>如果所有的consumer都具有不同的group, 就相当于是’发布-订阅’, 消息会广播给所有的消费者</li>
+<li>因为Topic是可以分区的(partition), 所有在分区的层面上来说, 一个partition中消息只能被一个consumer group中的一个consumer消费, 但是一个consumer可以消费多个partition中的消息.kafka只能保证一个partition中的消息被某个consumer消费时消息时顺序的. 但是从Topic的角度上来说消息仍然不是有序的</li>
+<li>kafka的设计原理决定, 对于一个topic, 同一个group中不能有多于partition个数的consumer同时消费, 否则某些consumer将无法得到消息</li>
+</ul>
+<h4 id="3-4-Distribution"><a href="#3-4-Distribution" class="headerlink" title="3.4 Distribution"></a>3.4 Distribution</h4><ul>
+<li>一个Topic的多个partition, 被分布在Kafka集群中的多个server上, 每个kafka实例负责partition中消息的读写操作, 此外kafka还可以配置partition需要备份的个数(replicas), 这样partition会被备份到多台机器上, 以提高可用性</li>
+<li>基于replicated方案, 需要对多个备份进行调度; 每个partition都有一个leader server, leader server负责所有的读写操作, 如果leader失效, 将会有其他的follower来接管(成为新的leader); follower只是单调的负责和leader跟进, 同步消息即可</li>
+</ul>
 
       
     </div>
@@ -419,17 +355,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/04/Thymeleaf遇到的坑总结/" rel="next" title="Thymeleaf中遇到的坑总结">
-                <i class="fa fa-chevron-left"></i> Thymeleaf中遇到的坑总结
+              <a href="/2016/08/21/数据库读现象解析/" rel="next" title="数据库中读现象解析">
+                <i class="fa fa-chevron-left"></i> 数据库中读现象解析
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/22/Kafka学习笔记/" rel="prev" title="kafka学习笔记">
-                kafka学习笔记 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -455,8 +387,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/08/21/数据库读现象解析/"
-           data-title="数据库中读现象解析" data-url="http://thlcly.xyz/2016/08/21/数据库读现象解析/">
+      <div class="ds-thread" data-thread-key="2016/08/22/Kafka学习笔记/"
+           data-title="kafka学习笔记" data-url="http://thlcly.xyz/2016/08/22/Kafka学习笔记/">
       </div>
     
   </div>
@@ -562,7 +494,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-脏读"><span class="nav-number">1.</span> <span class="nav-text">1. 脏读</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-脏读的概念"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 脏读的概念</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-不可重复读"><span class="nav-number">2.</span> <span class="nav-text">2. 不可重复读</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-不可重复读的概念"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 不可重复读的概念</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-幻读"><span class="nav-number">3.</span> <span class="nav-text">3. 幻读</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-幻读的概念"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 幻读的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-幻读和不可重复读的区别"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 幻读和不可重复读的区别:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-参考"><span class="nav-number">4.</span> <span class="nav-text">4. 参考:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-kafka世界里的常用术语"><span class="nav-number">1.</span> <span class="nav-text">1. kafka世界里的常用术语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-kafka宏观架构"><span class="nav-number">2.</span> <span class="nav-text">2. kafka宏观架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-详细介绍常用术语"><span class="nav-number">3.</span> <span class="nav-text">3. 详细介绍常用术语</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-Topic-logs"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 Topic/logs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-Producer"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Producer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-Consumer"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 Consumer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-Distribution"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 Distribution</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
