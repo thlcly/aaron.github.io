@@ -1,0 +1,653 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Anonymous-favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="This is an application notes for Lombok">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lombok使用笔记">
+<meta property="og:url" content="http://thlcly.xyz/2016/08/29/lombok使用笔记/index.html">
+<meta property="og:site_name" content="Monkey Coder">
+<meta property="og:description" content="This is an application notes for Lombok">
+<meta property="og:updated_time" content="2016-08-29T09:13:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="lombok使用笔记">
+<meta name="twitter:description" content="This is an application notes for Lombok">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> lombok使用笔记 | Monkey Coder </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Monkey Coder</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                lombok使用笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-08-29T15:02:27+08:00" content="2016-08-29">
+              2016-08-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Node/" itemprop="url" rel="index">
+                    <span itemprop="name">Node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/29/lombok使用笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/29/lombok使用笔记/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>This is an application notes for <em>Lombok</em><br><a id="more"></a></p>
+<h3 id="1-NotNull"><a href="#1-NotNull" class="headerlink" title="1. @NotNull"></a>1. @NotNull</h3><ul>
+<li>概述</li>
+</ul>
+<p><code>@NotNull</code> 可以用在方法或者构造函数的参数上, 用于生成非空校验语句<br>生成的校验语句类似于<code>if (param == null) throw new NullPointerException(&quot;param&quot;);</code>, 同时校验语句会加入到方法的最开始的位置, 如果是构造函数则是出现在super()或者this()语句之后<br>如果非空校验语句已经在方法顶部生成, 则<code>@NotNull</code>不会再生成校验语句</p>
+<p>eg:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// with lombok</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> lombok.<span class="type">NonNull</span>;</div><div class="line"> </div><div class="line"> public <span class="class"><span class="keyword">class</span> <span class="title">NonNullExample</span> <span class="keyword">extends</span> <span class="title">Something</span> </span>&#123;</div><div class="line">   <span class="keyword">private</span> <span class="type">String</span> name;</div><div class="line">   </div><div class="line">   public <span class="type">NonNullExample</span>(<span class="meta">@NonNull</span> <span class="type">Person</span> person) &#123;</div><div class="line">     <span class="keyword">super</span>(<span class="string">"Hello"</span>);</div><div class="line">     <span class="keyword">this</span>.name = person.getName();</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>最后生成的代码</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Vanilla Java</span></div><div class="line"></div><div class="line"> <span class="keyword">import</span> lombok.<span class="type">NonNull</span>;</div><div class="line"> </div><div class="line"> public <span class="class"><span class="keyword">class</span> <span class="title">NonNullExample</span> <span class="keyword">extends</span> <span class="title">Something</span> </span>&#123;</div><div class="line">   <span class="keyword">private</span> <span class="type">String</span> name;</div><div class="line">   </div><div class="line">   public <span class="type">NonNullExample</span>(<span class="meta">@NonNull</span> <span class="type">Person</span> person) &#123;</div><div class="line">     <span class="keyword">super</span>(<span class="string">"Hello"</span>);</div><div class="line">     <span class="keyword">if</span> (person == <span class="literal">null</span>) &#123;</div><div class="line">       <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">NullPointerException</span>(<span class="string">"person"</span>);</div><div class="line">     &#125;</div><div class="line">     <span class="keyword">this</span>.name = person.getName();</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h3 id="2-Cleanup"><a href="#2-Cleanup" class="headerlink" title="2. @Cleanup"></a>2. @Cleanup</h3><ul>
+<li>概述</li>
+</ul>
+<p><code>@Cleanup</code>确保在代码执行完成之后指定的资源会被安全的释放, <code>@Cleanup</code>默认调用的是资源的<code>close</code>的方法, 如果资源不是调用<code>close</code>方法进行释放则在<code>@Cleanup(&quot;method name&quot;)</code>中指定, <code>@Cleanup</code>只支持无参的方法, 默认调用的是<code>close</code>方法. 只有在资源不为null时才会调用close方法. <strong>如果被@Cleanup包围的代码中抛出异常, 则这个异常将被lombok隐藏, 而抛出clean up的异常, 这点要注意</strong></p>
+<p>eg: </p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// With Lombok</span></div><div class="line"></div><div class="line"> <span class="keyword">import</span> lombok.Cleanup;</div><div class="line"> <span class="keyword">import</span> java.io.*;</div><div class="line"> </div><div class="line"> <span class="keyword">public</span> <span class="keyword">class</span> CleanupExample &#123;</div><div class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) throws IOException &#123;</div><div class="line">     <span class="keyword">@Cleanup</span> InputStream <span class="keyword">in</span> = <span class="keyword">new</span> FileInputStream(args[<span class="number">0</span>]);</div><div class="line">     <span class="keyword">@Cleanup</span> OutputStream <span class="keyword">out</span> = <span class="keyword">new</span> FileOutputStream(args[<span class="number">1</span>]);</div><div class="line">     <span class="keyword">byte</span>[] b = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">10000</span>];</div><div class="line">     <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</div><div class="line">       <span class="keyword">int</span> r = <span class="keyword">in</span>.read(b);</div><div class="line">       <span class="keyword">if</span> (r == -<span class="number">1</span>) <span class="keyword">break</span>;</div><div class="line">       <span class="keyword">out</span>.write(b, <span class="number">0</span>, r);</div><div class="line">     &#125;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>最后生成的代码</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">import java.io.*;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CleanupExample</span> &#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) throws IOException </span>&#123;</div><div class="line">    InputStream <span class="keyword">in</span> = <span class="keyword">new</span> FileInputStream(args[<span class="number">0</span>]);</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      OutputStream <span class="keyword">out</span> = <span class="keyword">new</span> FileOutputStream(args[<span class="number">1</span>]);</div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">byte</span>[] b = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">10000</span>];</div><div class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</div><div class="line">          <span class="keyword">int</span> r = <span class="keyword">in</span>.read(b);</div><div class="line">          <span class="keyword">if</span> (r == <span class="number">-1</span>) <span class="keyword">break</span>;</div><div class="line">          <span class="keyword">out</span>.write(b, <span class="number">0</span>, r);</div><div class="line">        &#125;</div><div class="line">      &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">out</span> != <span class="literal">null</span>) &#123;</div><div class="line">          <span class="keyword">out</span>.close();</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="keyword">in</span> != <span class="literal">null</span>) &#123;</div><div class="line">        <span class="keyword">in</span>.close();</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="3-Getter-Setter"><a href="#3-Getter-Setter" class="headerlink" title="3. @Getter / @Setter"></a>3. @Getter / @Setter</h3><ul>
+<li>概述</li>
+</ul>
+<p>@Getter/@Setter用于生成get/set方法, 默认的getter/setter方法生成的方法是get+字段名/set+字段名(参数类型 参数名), 如果字段类型是boolean, 则是is+字段名/is+字段名(参数类型 参数名). 生成的方法默认是public的, 可以通过AccessLevel.xxx进行修改, 如果AccessLevel.NONE, 则默认不生成get/set方法. @Getter/@Getter只会为非静态字段生成get/set方法. 可以使用onMethod＝@<strong>(), 在生成的方法上添加注解, 可以使用onParam=@</strong>(), 在生成的方法的参数上添加注解. @Getter/@Setter既可以用在字段上也可以用在类上, 如果用在类上则默认为类中所有的非静态字段生成get/set方法</p>
+<p>eg: </p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// With Lombok</span></div><div class="line"></div><div class="line">import lombok<span class="selector-class">.AccessLevel</span>;</div><div class="line">import lombok<span class="selector-class">.Getter</span>;</div><div class="line">import lombok<span class="selector-class">.Setter</span>;</div><div class="line"></div><div class="line"><span class="selector-tag">public</span> <span class="selector-tag">class</span> <span class="selector-tag">GetterSetterExample</span> &#123;</div><div class="line">  <span class="comment">/**</span></div><div class="line">   * Age of the person. Water is wet.</div><div class="line">   * </div><div class="line">   * @param age New value for this person's age. Sky is blue.</div><div class="line">   * @return The current value of this person's age. Circles are round.</div><div class="line">   */</div><div class="line">  <span class="variable">@Getter</span> <span class="variable">@Setter</span> private int age = <span class="number">10</span>;</div><div class="line">  </div><div class="line">  <span class="comment">/**</span></div><div class="line">   * Name of the person.</div><div class="line">   * -- SETTER --</div><div class="line">   * Changes the name of this person.</div><div class="line">   * </div><div class="line">   * @param name The new value.</div><div class="line">   */</div><div class="line">  <span class="variable">@Setter</span>(AccessLevel.PROTECTED) private String name;</div><div class="line">  </div><div class="line">  <span class="variable">@Override</span> public String toString() &#123;</div><div class="line">    return String<span class="selector-class">.format</span>(<span class="string">"%s (age: %d)"</span>, name, age);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后生成的代码</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">GetterSetterExample</span> &#123;</div><div class="line">  <span class="comment">/**</span></div><div class="line">   * Age of the person. Water is wet.</div><div class="line">   */</div><div class="line">  <span class="keyword">private</span> <span class="keyword">int</span> age = <span class="number">10</span>;</div><div class="line"></div><div class="line">  <span class="comment">/**</span></div><div class="line">   * Name of the person.</div><div class="line">   */</div><div class="line">  <span class="keyword">private</span> String name;</div><div class="line">  </div><div class="line">  @<span class="function">Override <span class="keyword">public</span> String <span class="title">toString</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> String.format(<span class="string">"%s (age: %d)"</span>, name, age);</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="comment">/**</span></div><div class="line">   * Age of the person. Water is wet.</div><div class="line">   *</div><div class="line">   * @return The current value of this person's age. Circles are round.</div><div class="line">   */</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> age;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="comment">/**</span></div><div class="line">   * Age of the person. Water is wet.</div><div class="line">   *</div><div class="line">   * @param age New value for this person's age. Sky is blue.</div><div class="line">   */</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span>(<span class="params"><span class="keyword">int</span> age</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.age = age;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="comment">/**</span></div><div class="line">   * Changes the name of this person.</div><div class="line">   *</div><div class="line">   * @param name The new value.</div><div class="line">   */</div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">setName</span>(<span class="params">String name</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用onMethod/onParam的例子</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// With Lombok</span></div><div class="line"></div><div class="line">import lombok<span class="selector-class">.AllArgsConstructor</span>;</div><div class="line">import lombok<span class="selector-class">.Getter</span>;</div><div class="line">import lombok<span class="selector-class">.Setter</span>;</div><div class="line"></div><div class="line">import javax<span class="selector-class">.inject</span><span class="selector-class">.Inject</span>;</div><div class="line">import javax<span class="selector-class">.persistence</span><span class="selector-class">.Id</span>;</div><div class="line">import javax<span class="selector-class">.persistence</span><span class="selector-class">.Column</span>;</div><div class="line">import javax<span class="selector-class">.validation</span><span class="selector-class">.constraints</span><span class="selector-class">.Max</span>;</div><div class="line"></div><div class="line"><span class="variable">@AllArgsConstructor</span>(onConstructor=<span class="variable">@__</span>(<span class="variable">@Inject</span>))</div><div class="line">public class OnXExample &#123;</div><div class="line">  <span class="variable">@Getter</span>(onMethod=<span class="variable">@__</span>(&#123;<span class="variable">@Id</span>, <span class="variable">@Column</span>(name=<span class="string">"unique-id"</span>)&#125;))</div><div class="line">  <span class="variable">@Setter</span>(onParam=<span class="variable">@__</span>(<span class="variable">@Max</span>(<span class="number">10000</span>)))</div><div class="line">  private long unid;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后生成的代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Vanilla Java</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> javax.inject.Inject;</div><div class="line"><span class="keyword">import</span> javax.persistence.Id;</div><div class="line"><span class="keyword">import</span> javax.persistence.Column;</div><div class="line"><span class="keyword">import</span> javax.validation.constraints.Max;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OnXExample</span> </span>&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">long</span> unid;</div><div class="line"></div><div class="line">  <span class="meta">@Inject</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="title">OnXExample</span><span class="params">(<span class="keyword">long</span> unid)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>.unid = unid;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Id</span> <span class="meta">@Column</span>(name=<span class="string">"unique-id"</span>)</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getUnid</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> unid;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUnid</span><span class="params">(@Max(<span class="number">10000</span>)</span> <span class="keyword">long</span> unid) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.unid = unid;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="4-ToString"><a href="#4-ToString" class="headerlink" title="4. @ToString"></a>4. @ToString</h3><ul>
+<li>概述</li>
+</ul>
+<p><code>@ToString</code>用于生成<code>toString()</code>方法, 默认情况下生成的<code>toString()</code>方法会打印类名, 按声明顺序的逗号隔开的字段. 默认情况下所有非静态的字段将被打印. 可以使用<code>exclude</code>指定不被打印的字段, 使用<code>of</code>指定要被打印的字段. <code>callSuper</code>为<code>true</code>则会打印父类的<code>toString()</code>方法. includeFieldNames为true则会带上字段名. doNotUseGetters为true且字段的get方法存在则会调用字段的get方法而不是直接使用字段的引用.</p>
+<p>eg:</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// With Lombok</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> lombok.ToString;</div><div class="line"></div><div class="line">@ToString(exclude=<span class="string">"id"</span>)</div><div class="line"><span class="keyword">public</span> class ToStringExample &#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="built_in">int</span> STATIC_VAR = <span class="number">10</span>;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">String</span> name;</div><div class="line">  <span class="keyword">private</span> Shape <span class="built_in">shape</span> = <span class="keyword">new</span> Square(<span class="number">5</span>, <span class="number">10</span>);</div><div class="line">  <span class="keyword">private</span> <span class="keyword">String</span>[] tags;</div><div class="line">  <span class="keyword">private</span> <span class="built_in">int</span> id;</div><div class="line">  </div><div class="line">  <span class="keyword">public</span> <span class="keyword">String</span> getName() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.getName();</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  @ToString(callSuper=<span class="keyword">true</span>, includeFieldNames=<span class="keyword">true</span>)</div><div class="line">  <span class="keyword">public</span> <span class="keyword">static</span> class Square extends Shape &#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="built_in">int</span> <span class="built_in">width</span>, <span class="built_in">height</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> Square(<span class="built_in">int</span> <span class="built_in">width</span>, <span class="built_in">int</span> <span class="built_in">height</span>) &#123;</div><div class="line">      <span class="keyword">this</span>.<span class="built_in">width</span> = <span class="built_in">width</span>;</div><div class="line">      <span class="keyword">this</span>.<span class="built_in">height</span> = <span class="built_in">height</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后生成的代码</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.util.Arrays;</div><div class="line"></div><div class="line"><span class="keyword">public</span> class ToStringExample &#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="built_in">int</span> STATIC_VAR = <span class="number">10</span>;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">String</span> name;</div><div class="line">  <span class="keyword">private</span> Shape <span class="built_in">shape</span> = <span class="keyword">new</span> Square(<span class="number">5</span>, <span class="number">10</span>);</div><div class="line">  <span class="keyword">private</span> <span class="keyword">String</span>[] tags;</div><div class="line">  <span class="keyword">private</span> <span class="built_in">int</span> id;</div><div class="line">  </div><div class="line">  <span class="keyword">public</span> <span class="keyword">String</span> getName() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.getName();</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="keyword">public</span> <span class="keyword">static</span> class Square extends Shape &#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="built_in">int</span> <span class="built_in">width</span>, <span class="built_in">height</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> Square(<span class="built_in">int</span> <span class="built_in">width</span>, <span class="built_in">int</span> <span class="built_in">height</span>) &#123;</div><div class="line">      <span class="keyword">this</span>.<span class="built_in">width</span> = <span class="built_in">width</span>;</div><div class="line">      <span class="keyword">this</span>.<span class="built_in">height</span> = <span class="built_in">height</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    @Override <span class="keyword">public</span> <span class="keyword">String</span> toString() &#123;</div><div class="line">      <span class="keyword">return</span> <span class="string">"Square(super="</span> + <span class="keyword">super</span>.toString() + <span class="string">", width="</span> + <span class="keyword">this</span>.<span class="built_in">width</span> + <span class="string">", height="</span> + <span class="keyword">this</span>.<span class="built_in">height</span> + <span class="string">")"</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  @Override <span class="keyword">public</span> <span class="keyword">String</span> toString() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">"ToStringExample("</span> + <span class="keyword">this</span>.getName() + <span class="string">", "</span> + <span class="keyword">this</span>.<span class="built_in">shape</span> + <span class="string">", "</span> + Arrays.deepToString(<span class="keyword">this</span>.tags) + <span class="string">")"</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/29/ECMAScript6学习笔记/" rel="next" title="ECMAScript6学习笔记">
+                <i class="fa fa-chevron-left"></i> ECMAScript6学习笔记
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/29/lombok使用笔记/"
+           data-title="lombok使用笔记" data-url="http://thlcly.xyz/2016/08/29/lombok使用笔记/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/Anonymous.jpg"
+               alt="Tony Hui" />
+          <p class="site-author-name" itemprop="name">Tony Hui</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/thlcly" target="_blank">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/tonyhui0717" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-NotNull"><span class="nav-number">1.</span> <span class="nav-text">1. @NotNull</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Cleanup"><span class="nav-number">2.</span> <span class="nav-text">2. @Cleanup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Getter-Setter"><span class="nav-number">3.</span> <span class="nav-text">3. @Getter / @Setter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-ToString"><span class="nav-number">4.</span> <span class="nav-text">4. @ToString</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tony Hui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"thlcly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

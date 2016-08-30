@@ -86,7 +86,7 @@
 <meta property="og:url" content="http://thlcly.xyz/2016/08/29/ECMAScript6学习笔记/index.html">
 <meta property="og:site_name" content="Monkey Coder">
 <meta property="og:description" content="This is a continuous updating learning notes for ECMAScript6">
-<meta property="og:updated_time" content="2016-08-29T05:48:10.000Z">
+<meta property="og:updated_time" content="2016-08-30T02:06:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ECMAScript6学习笔记">
 <meta name="twitter:description" content="This is a continuous updating learning notes for ECMAScript6">
@@ -142,7 +142,7 @@
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
-  <p class="site-subtitle">Walk steps step by step</p>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
 </div>
 
 <div class="site-nav-toggle">
@@ -418,6 +418,10 @@
 <li>var/function命令声明的全局变量, 依旧是全局对象的属性. let/const/class命令声明的全局变量不属于全局对象的属性</li>
 </ul>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"><span class="comment">// 如果在Node的REPL环境，可以写成global.a</span></div><div class="line"><span class="comment">// 或者采用通用方法，写成this.a</span></div><div class="line"><span class="built_in">window</span>.a <span class="comment">// 1</span></div><div class="line"></div><div class="line"><span class="keyword">let</span> b = <span class="number">1</span>;</div><div class="line"><span class="built_in">window</span>.b <span class="comment">// undefined</span></div></pre></td></tr></table></figure>
+<h3 id="变量的解构赋值"><a href="#变量的解构赋值" class="headerlink" title="变量的解构赋值"></a>变量的解构赋值</h3><h4 id="1-数组的解构赋值"><a href="#1-数组的解构赋值" class="headerlink" title="1. 数组的解构赋值"></a>1. 数组的解构赋值</h4><ul>
+<li>基本用法</li>
+</ul>
+<p>ES6允许按照一定的模式, 从数组和对象中提取值, 对变量进行赋值, 称为解构</p>
 
       
     </div>
@@ -448,6 +452,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/29/lombok使用笔记/" rel="prev" title="lombok使用笔记">
+                lombok使用笔记 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -514,12 +522,12 @@
                src="/uploads/Anonymous.jpg"
                alt="Tony Hui" />
           <p class="site-author-name" itemprop="name">Tony Hui</p>
-          <p class="site-description motion-element" itemprop="description">Walk steps step by step</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
         </div>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-count">27</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -580,7 +588,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#let和const命令"><span class="nav-number">1.</span> <span class="nav-text">let和const命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-let命令"><span class="nav-number">1.1.</span> <span class="nav-text">1. let命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-块级作用域"><span class="nav-number">1.2.</span> <span class="nav-text">2. 块级作用域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-const命令"><span class="nav-number">1.3.</span> <span class="nav-text">3. const命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-全局对象的属性"><span class="nav-number">1.4.</span> <span class="nav-text">4. 全局对象的属性</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#let和const命令"><span class="nav-number">1.</span> <span class="nav-text">let和const命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-let命令"><span class="nav-number">1.1.</span> <span class="nav-text">1. let命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-块级作用域"><span class="nav-number">1.2.</span> <span class="nav-text">2. 块级作用域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-const命令"><span class="nav-number">1.3.</span> <span class="nav-text">3. const命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-全局对象的属性"><span class="nav-number">1.4.</span> <span class="nav-text">4. 全局对象的属性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量的解构赋值"><span class="nav-number">2.</span> <span class="nav-text">变量的解构赋值</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-数组的解构赋值"><span class="nav-number">2.1.</span> <span class="nav-text">1. 数组的解构赋值</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
