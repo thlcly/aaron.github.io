@@ -80,15 +80,16 @@
 
 
 
-<meta name="description" content="Talk is cheap, Show me the code">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Monkey Coder">
-<meta property="og:url" content="http://thlcly.xyz/categories/Java-8/index.html">
+<meta name="description" content="This is a continuous updating learning notes for SpringBoot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot学习笔记">
+<meta property="og:url" content="http://thlcly.xyz/2016/09/07/SpringBoot学习笔记/index.html">
 <meta property="og:site_name" content="Monkey Coder">
-<meta property="og:description" content="Talk is cheap, Show me the code">
+<meta property="og:description" content="This is a continuous updating learning notes for SpringBoot">
+<meta property="og:updated_time" content="2016-09-07T11:03:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Monkey Coder">
-<meta name="twitter:description" content="Talk is cheap, Show me the code">
+<meta name="twitter:title" content="SpringBoot学习笔记">
+<meta name="twitter:description" content="This is a continuous updating learning notes for SpringBoot">
 
 
 
@@ -106,7 +107,7 @@
   };
 </script>
 
-  <title> Category: Java 8 | Monkey Coder </title>
+  <title> SpringBoot学习笔记 | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -127,7 +128,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -215,47 +216,151 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        Java 8
-        <small>Category</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SpringBoot学习笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-07T16:12:29+08:00" content="2016-09-07">
+              2016-09-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java-Web/" itemprop="url" rel="index">
+                    <span itemprop="name">Java Web</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/07/SpringBoot学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/07/SpringBoot学习笔记/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <p>This is a continuous updating learning notes for <em>SpringBoot</em><br><a id="more"></a></p>
+<h3 id="1-注解"><a href="#1-注解" class="headerlink" title="1. 注解"></a>1. 注解</h3><h4 id="1-1-EnableAutoConfiguration"><a href="#1-1-EnableAutoConfiguration" class="headerlink" title="1.1 @EnableAutoConfiguration"></a>1.1 <code>@EnableAutoConfiguration</code></h4><ul>
+<li><p>开启自动配置spring应用上下文的功能. 使用了这个注解spring boot会根据引入的starter-*依赖自动猜测当前开发的是什么应用程序以及需要导入什么依赖, 需要配置什么开发环境. (例如, 如果引入了spring-boot-starter-web就会推测是web应用, 就会引入内置的tomcat, 如果引入了spring-boot-starter-jooq, 就会推测需要连接数据库, 就会要求配置数据库的相关的属性)</p>
+</li>
+<li><p><strong>一个spring boot的应用必须有一个类上面有这个注解</strong></p>
+</li>
+<li>spring boot会自动扫描被该注解修饰的类的子包中的bean(<strong>不包括和这个类平级的类</strong>), 可以把这个类放在根目录下, 这个才会扫描所有的子包. 如果要指定扫描范围, 可以使用<code>@ComponentScan</code>这个注解</li>
+</ul>
 
-      <h1 class="post-title">
+      
+    </div>
+    
+    <div>
+      
         
-            <a class="post-title-link" href="/2016/07/07/Java8学习笔记/" itemprop="url">
-              
-                <span itemprop="name">Java8学习笔记</span>
-              
-            </a>
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-07-07T10:25:38+08:00"
-              content="2016-07-07" >
-          07-07
-        </time>
-      </div>
+    <footer class="post-footer">
+      
 
-    </header>
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/29/lombok使用笔记/" rel="next" title="lombok使用笔记">
+                <i class="fa fa-chevron-left"></i> lombok使用笔记
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/09/Flyway学习笔记/" rel="prev" title="SpringBoot学习笔记">
+                SpringBoot学习笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </section>
 
-  
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -263,6 +368,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/07/SpringBoot学习笔记/"
+           data-title="SpringBoot学习笔记" data-url="http://thlcly.xyz/2016/09/07/SpringBoot学习笔记/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -282,8 +395,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/Anonymous.jpg"
@@ -348,6 +470,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-注解"><span class="nav-number">1.</span> <span class="nav-text">1. 注解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-EnableAutoConfiguration"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 @EnableAutoConfiguration</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -444,6 +577,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
