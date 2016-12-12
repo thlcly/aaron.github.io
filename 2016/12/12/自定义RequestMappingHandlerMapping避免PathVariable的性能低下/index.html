@@ -1,0 +1,631 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Anonymous-favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Using hacker method to avoid performance problem for @PathVariable
+背景: 由于公司最近在做一个广告系统, 其中我负责的广告跟踪模块有一个记录用户点击数的Api接口, 接口的url /api/event/click/{userId}, 接口中使用了路径变量, 因此在处理的方法中就要用@PathVariable进行处理. 之前一直没有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自定义`RequestMappingHandlerMapping`避免`PathVariable`的性能低下">
+<meta property="og:url" content="http://thlcly.xyz/2016/12/12/自定义RequestMappingHandlerMapping避免PathVariable的性能低下/index.html">
+<meta property="og:site_name" content="Monkey Coder">
+<meta property="og:description" content="Using hacker method to avoid performance problem for @PathVariable
+背景: 由于公司最近在做一个广告系统, 其中我负责的广告跟踪模块有一个记录用户点击数的Api接口, 接口的url /api/event/click/{userId}, 接口中使用了路径变量, 因此在处理的方法中就要用@PathVariable进行处理. 之前一直没有">
+<meta property="og:updated_time" content="2016-12-12T13:03:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自定义`RequestMappingHandlerMapping`避免`PathVariable`的性能低下">
+<meta name="twitter:description" content="Using hacker method to avoid performance problem for @PathVariable
+背景: 由于公司最近在做一个广告系统, 其中我负责的广告跟踪模块有一个记录用户点击数的Api接口, 接口的url /api/event/click/{userId}, 接口中使用了路径变量, 因此在处理的方法中就要用@PathVariable进行处理. 之前一直没有">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 自定义`RequestMappingHandlerMapping`避免`PathVariable`的性能低下 | Monkey Coder </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Monkey Coder</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                自定义`RequestMappingHandlerMapping`避免`PathVariable`的性能低下
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-12-12T19:27:46+08:00" content="2016-12-12">
+              2016-12-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/12/自定义RequestMappingHandlerMapping避免PathVariable的性能低下/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/12/自定义RequestMappingHandlerMapping避免PathVariable的性能低下/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Using hacker method to avoid performance problem for @PathVariable</p>
+<p>背景: 由于公司最近在做一个广告系统, 其中我负责的广告跟踪模块有一个记录用户点击数的Api接口, 接口的url <code>/api/event/click/{userId}</code>, 接口中使用了路径变量, 因此在处理的方法中就要用<code>@PathVariable</code>进行处理. 之前一直没有关注路径变量和参数变量(<code>@RequestParam</code>)在性能上的区别, 但是这个参与的广告系统对请求的响应要求很高. 因此在代码review的时候, 架构师发了一篇达达科技的文章, 里面提到了路径变量和参数变量在性能上的区别, 同时提出了相应的解决思路. 因此就按照达达科技的思路对原本的广告系统的实现进行了改造. 具体的达达科技提到的思路<a href="https://tech.imdada.cn/2015/12/23/springmvc-restful-optimize/" target="_blank" rel="external">请看这里</a></p>
+<h3 id="1-解决路径参数带来的性能问题的步骤"><a href="#1-解决路径参数带来的性能问题的步骤" class="headerlink" title="1. 解决路径参数带来的性能问题的步骤"></a>1. 解决路径参数带来的性能问题的步骤</h3><p>思路: 因为使用路径参数需要进行复杂的匹配流程以及正则匹配, 因此性能会比较低. 所以解决的思路就是跳过复杂的匹配流程以及正则匹配. 因为复杂的匹配流程和正则匹配的目的就是为了找到处理当前url的方法是哪一个, 因为这是一个内部系统, 因此调用端完全可以知道处理当前的url的方法是哪一个,可以通过url传递过来使用哪个方法进行处理, 因此就可以跳过复杂的匹配流程.</p>
+<h4 id="1-1-自定义查找url对应的处理方法"><a href="#1-1-自定义查找url对应的处理方法" class="headerlink" title="1.1 自定义查找url对应的处理方法"></a>1.1 自定义查找url对应的处理方法</h4><p><code>RequestMappingHandlerMapping</code>中查找url对应的处理方法是由<code>lookupHandlerMethod</code>这个函数实现的, 在这个函数中会优先查找参数变量其次是路径变量url, 在查找到路径变量url后, 再进行正则的替换. 因此我们要做的就是如果url是路径变量就跳过这个方法, 而使用我们自己的查找方式</p>
+<p>代码如下:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">CustomRequestMappingHandlerMapping</span> <span class="keyword">extends</span> <span class="title">RequestMappingHandlerMapping</span> </span>&#123;</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> static <span class="type">Map</span>&lt;<span class="type">HandlerMethod</span>, <span class="type">RequestMappingInfo</span>&gt; <span class="type">HANDLER_METHOD_REQUEST_MAPPING_INFO_MAP</span> = <span class="type">Maps</span>.newHashMap();</div><div class="line"></div><div class="line">	<span class="comment">// 用于保存处理方法和RequestMappingInfo的映射关系(这个方法在解析@RequestMapping时就会被调用, 达达科技中这个地方可能写的有问题, 文中提到覆写AbstractHandlerMethodMapping#registerMapping方法, 但是经过实验之后覆写这个方法不能生效)</span></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="keyword">protected</span> void registerHandlerMethod(<span class="type">Object</span> handler, <span class="type">Method</span> method, <span class="type">RequestMappingInfo</span> mapping) &#123;</div><div class="line">        <span class="type">HandlerMethod</span> handlerMethod = <span class="keyword">super</span>.createHandlerMethod(handler, method);</div><div class="line">        <span class="type">HANDLER_METHOD_REQUEST_MAPPING_INFO_MAP</span>.put(handlerMethod, mapping);</div><div class="line">        <span class="keyword">super</span>.registerHandlerMethod(handler, method, mapping);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="keyword">protected</span> <span class="type">HandlerMethod</span> lookupHandlerMethod(<span class="type">String</span> lookupPath, <span class="type">HttpServletRequest</span> request) <span class="keyword">throws</span> <span class="type">Exception</span> &#123;</div><div class="line">    		</div><div class="line">    		<span class="comment">// 判断请求参数中是否带了event字段</span></div><div class="line">        <span class="type">String</span> event = request.getParameter(<span class="string">"event"</span>);</div><div class="line">			</div><div class="line">			<span class="comment">// 如果没有带则说明这次的请求不带路径参数, 则使用默认的处理</span></div><div class="line">        <span class="keyword">if</span>(<span class="type">StringUtils</span>.isEmpty(event)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">super</span>.lookupHandlerMethod(lookupPath, request);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="comment">// 如果带了, 则从Map(这个Map中的entry在后面介绍)中获取处理当前url的方法</span></div><div class="line">        <span class="type">List</span>&lt;<span class="type">HandlerMethod</span>&gt; handlerMethods = <span class="keyword">super</span>.getHandlerMethodsForMappingName(event);</div><div class="line">        <span class="keyword">if</span>(<span class="type">CollectionUtils</span>.isEmpty(handlerMethods)) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">ServiceException</span>(<span class="string">"没有找到指定的方法"</span>);</div><div class="line">        <span class="keyword">if</span>(handlerMethods.size() &gt; <span class="number">1</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">ServiceException</span>(<span class="string">"存在多个匹配的方法"</span>);</div><div class="line"></div><div class="line">        <span class="type">HandlerMethod</span> handlerMethod = handlerMethods.get(<span class="number">0</span>);</div><div class="line">        </div><div class="line">        <span class="comment">// 根据处理方法查找RequestMappingInfo, 用于解析路径url中的参数</span></div><div class="line">        <span class="type">RequestMappingInfo</span> requestMappingInfo = <span class="type">HANDLER_METHOD_REQUEST_MAPPING_INFO_MAP</span>.get(handlerMethod);</div><div class="line">        <span class="keyword">if</span>(requestMappingInfo == <span class="literal">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">ServiceException</span>(<span class="string">"没有对应的匹配方法"</span>);</div><div class="line">        <span class="keyword">super</span>.handleMatch(requestMappingInfo, lookupPath, request);</div><div class="line">        <span class="keyword">return</span> handlerMethod;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="1-2-注入自定义的RequestMappingHandlerMapping"><a href="#1-2-注入自定义的RequestMappingHandlerMapping" class="headerlink" title="1.2 注入自定义的RequestMappingHandlerMapping"></a>1.2 注入自定义的<code>RequestMappingHandlerMapping</code></h4><p>因为我们的广告系统使用的是Spring boot, 因此可以通过继承<code>WebMvcConfigurationSupport</code>, 并且覆写其中的<code>createRequestMappingHandlerMapping</code>方法注入自己的<code>RequestMappingHandlerMapping</code>.最后在继承<code>WebMvcConfigurationSupport</code>的类上加上<code>@Configuration</code>注解</p>
+<p>这里有一个需要注意的地方: 如果有类继承了<code>WebMvcConfigurationSupport</code>并且加上了<code>@Configuration</code>, 那么默认的<code>ViewResolver</code>只会默认加上<code>BeanNameViewResolver</code>和<code>ViewResolverComposite</code>, 这样就会导致如果返回的是<code>&quot;redirect:url&quot;</code>这个重定向的url失效, 因此还要覆写<code>configureViewResolvers</code>方法加上额外的<code>ViewResolver</code>. 同时如果系统中还有类是继承了<code>WebMvcConfigurerAdapter</code>, 那覆写了<code>WebMvcConfigurerAdapter#addFormatters</code>就会失效, 需要移动到继承到<code>WebMvcConfigurationSupport</code>的类中(这个原因还要看一下), 最后如果只继承了<code>WebMvcConfigurerAdapter</code>, 那么默认就会添加4个<code>ViewResolver</code>. 代码如下</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="variable">@Configuration</span></div><div class="line">public class WebMvcConfig extends WebMvcConfigurationSupport &#123;</div><div class="line"></div><div class="line">    <span class="variable">@Override</span></div><div class="line">    protected RequestMappingHandlerMapping createRequestMappingHandlerMapping() &#123;</div><div class="line">        return new CustomRequestMappingHandlerMapping();</div><div class="line">    &#125;</div><div class="line"></div><div class="line"> <span class="comment">// 添加ViewResolver</span></div><div class="line">    <span class="variable">@Override</span></div><div class="line">    protected void configureViewResolvers(ViewResolverRegistry registry) &#123;</div><div class="line">			<span class="comment">// 处理"redirect:url"字符串</span></div><div class="line">        registry<span class="selector-class">.enableContentNegotiation</span>();</div><div class="line">        registry<span class="selector-class">.viewResolver</span>(new InternalResourceViewResolver());</div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="comment">// 添加自己的格式化,  从覆写了WebMvcConfigurerAdapter中类中移过来</span></div><div class="line">    <span class="variable">@Override</span></div><div class="line">    protected void addFormatters(FormatterRegistry registry) &#123;</div><div class="line">        new CustomFormatterRegistrar(ENUM_PROP_NAME)<span class="selector-class">.registerFormatters</span>(registry);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="1-3-在-RequestMapping中加上name属性-让解析的时候就生成-lt-字符串-处理方法-gt-的集合"><a href="#1-3-在-RequestMapping中加上name属性-让解析的时候就生成-lt-字符串-处理方法-gt-的集合" class="headerlink" title="1.3 在@RequestMapping中加上name属性, 让解析的时候就生成&lt;字符串, 处理方法&gt;的集合"></a>1.3 在<code>@RequestMapping</code>中加上<code>name</code>属性, 让解析的时候就生成&lt;字符串, 处理方法&gt;的集合</h4><p>因为<code>@RequestMapping</code>中<code>name</code>属性不会用于<code>url</code>的匹配, <code>spring</code>会解析<code>name</code>属性, 并将<code>name</code>属性的值和处理方法进行关联, 这就正好可以满足我们的需求. 因此<code>url</code>中传的<code>event</code>的值就对应着<code>name</code>属性的值, 这样就可以找到对应的处理方法了, 而不需要我们再维护一个集合</p>
+<p>代码如下: </p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="variable">@Controller</span></div><div class="line"><span class="variable">@Api</span>(tags = <span class="string">"2-User Event"</span>, description = <span class="string">"用户事件API"</span>)</div><div class="line"><span class="variable">@Validated</span></div><div class="line">public class UserEventController extends BaseNasdaqController &#123;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 点击计数</div><div class="line">     *</div><div class="line">     * @param userId</div><div class="line">     * @param hash</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    <span class="variable">@RequestMapping</span>(name=<span class="string">"click"</span>, value = EVENT_CLICK, method = GET)</div><div class="line">    <span class="variable">@ApiOperation</span>(value = <span class="string">"点击计数"</span>, notes = <span class="string">"点击计数+1"</span>)</div><div class="line">    public String click(<span class="variable">@PathVariable</span> Integer userId, <span class="variable">@NotNull</span> String hash) &#123;</div><div class="line">        ...</div><div class="line">        ...</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/30/Retrofit源码阅读笔记/" rel="next" title="Retrofit源码阅读笔记">
+                <i class="fa fa-chevron-left"></i> Retrofit源码阅读笔记
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/12/自定义RequestMappingHandlerMapping避免PathVariable的性能低下/"
+           data-title="自定义`RequestMappingHandlerMapping`避免`PathVariable`的性能低下" data-url="http://thlcly.xyz/2016/12/12/自定义RequestMappingHandlerMapping避免PathVariable的性能低下/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/Anonymous.jpg"
+               alt="Tony Hui" />
+          <p class="site-author-name" itemprop="name">Tony Hui</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/thlcly" target="_blank">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/tonyhui0717" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-解决路径参数带来的性能问题的步骤"><span class="nav-number">1.</span> <span class="nav-text">1. 解决路径参数带来的性能问题的步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-自定义查找url对应的处理方法"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 自定义查找url对应的处理方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-注入自定义的RequestMappingHandlerMapping"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 注入自定义的RequestMappingHandlerMapping</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-在-RequestMapping中加上name属性-让解析的时候就生成-lt-字符串-处理方法-gt-的集合"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 在@RequestMapping中加上name属性, 让解析的时候就生成<字符串, 处理方法>的集合</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tony Hui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"thlcly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
