@@ -81,18 +81,18 @@
 
 
 <meta name="description" content="This is a note that reading source code for Retrofit
-Retrofit源码阅读小结Retrofit的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用Retrofit只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成Http请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用Retrofit一直是处于一">
+Retrofit的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用Retrofit只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成Http请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用Retrofit一直是处于一知半解的状态, 这次的Ret">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Retrofit源码阅读笔记">
 <meta property="og:url" content="http://thlcly.xyz/2016/11/30/Retrofit源码阅读笔记/index.html">
 <meta property="og:site_name" content="Monkey Coder">
 <meta property="og:description" content="This is a note that reading source code for Retrofit
-Retrofit源码阅读小结Retrofit的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用Retrofit只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成Http请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用Retrofit一直是处于一">
-<meta property="og:updated_time" content="2016-12-17T10:44:36.000Z">
+Retrofit的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用Retrofit只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成Http请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用Retrofit一直是处于一知半解的状态, 这次的Ret">
+<meta property="og:updated_time" content="2016-12-17T10:52:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Retrofit源码阅读笔记">
 <meta name="twitter:description" content="This is a note that reading source code for Retrofit
-Retrofit源码阅读小结Retrofit的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用Retrofit只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成Http请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用Retrofit一直是处于一">
+Retrofit的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用Retrofit只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成Http请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用Retrofit一直是处于一知半解的状态, 这次的Ret">
 
 
 
@@ -307,7 +307,8 @@ Retrofit源码阅读小结Retrofit的使用应该是从门诊就开始了, 但�
 
       
         <p>This is a note that reading source code for <em>Retrofit</em></p>
-<h1 id="Retrofit源码阅读小结"><a href="#Retrofit源码阅读小结" class="headerlink" title="Retrofit源码阅读小结"></a>Retrofit源码阅读小结</h1><p><code>Retrofit</code>的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用<code>Retrofit</code>只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成<code>Http</code>请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用<code>Retrofit</code>一直是处于一知半解的状态, 这次的<code>Retrofit</code>看码的收获就是解决一些疑问, 并且对<code>Retrofit</code>的整个请求流程有了一定的理解.</p>
+<p><code>Retrofit</code>的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用<code>Retrofit</code>只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成<code>Http</code>请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用<code>Retrofit</code>一直是处于一知半解的状态, 这次的<code>Retrofit</code>看码的收获就是解决一些疑问, 并且对<code>Retrofit</code>的整个请求流程有了一定的理解.</p>
+<a id="more"></a>
 <h3 id="Retrofit发送请求的过程"><a href="#Retrofit发送请求的过程" class="headerlink" title="Retrofit发送请求的过程"></a>Retrofit发送请求的过程</h3><ol>
 <li><p>创建<code>Retrofit</code>对象</p>
 <p> 创建<code>Retrofit</code>对象的时候使用的是<code>Builder</code>模式, 可以在创建<code>Retrofit</code>对象的时候设置<code>Retrofit</code>的<code>baseURL</code>, 添加自己的<code>converterFactory</code></p>
@@ -704,7 +705,7 @@ public ServiceMethod build() {
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Retrofit源码阅读小结"><span class="nav-number">1.</span> <span class="nav-text">Retrofit源码阅读小结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Retrofit发送请求的过程"><span class="nav-number">1.0.1.</span> <span class="nav-text">Retrofit发送请求的过程</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Retrofit发送请求的过程"><span class="nav-number">1.</span> <span class="nav-text">Retrofit发送请求的过程</span></a></li></ol></div>
             
           </div>
         </section>
