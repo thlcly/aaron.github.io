@@ -80,16 +80,21 @@
 
 
 
-<meta name="description" content="This is a continuous updating learning notes for Express">
+<meta name="description" content="This is a note about Redis master/slave mode and cluster mode
+下面将介绍最简的Redis的主从搭建环境搭建和集群环境搭建">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Express 学习笔记">
-<meta property="og:url" content="http://thlcly.xyz/2016/07/07/Express 学习笔记/index.html">
+<meta property="og:title" content="Redis主从和集群搭建">
+<meta property="og:url" content="http://thlcly.xyz/2017/01/07/Redis主从和集群搭建/index.html">
 <meta property="og:site_name" content="Monkey Coder">
-<meta property="og:description" content="This is a continuous updating learning notes for Express">
-<meta property="og:updated_time" content="2016-07-10T08:46:27.000Z">
+<meta property="og:description" content="This is a note about Redis master/slave mode and cluster mode
+下面将介绍最简的Redis的主从搭建环境搭建和集群环境搭建">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/redis_cluster.png">
+<meta property="og:updated_time" content="2017-01-07T17:12:13.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Express 学习笔记">
-<meta name="twitter:description" content="This is a continuous updating learning notes for Express">
+<meta name="twitter:title" content="Redis主从和集群搭建">
+<meta name="twitter:description" content="This is a note about Redis master/slave mode and cluster mode
+下面将介绍最简的Redis的主从搭建环境搭建和集群环境搭建">
+<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/redis_cluster.png">
 
 
 
@@ -107,7 +112,7 @@
   };
 </script>
 
-  <title> Express 学习笔记 | Monkey Coder </title>
+  <title> Redis主从和集群搭建 | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -237,7 +242,7 @@
             
             
               
-                Express 学习笔记
+                Redis主从和集群搭建
               
             
           </h1>
@@ -249,8 +254,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-07T10:25:45+08:00" content="2016-07-07">
-              2016-07-07
+            <time itemprop="dateCreated" datetime="2017-01-07T18:17:47+08:00" content="2017-01-07">
+              2017-01-07
             </time>
           </span>
 
@@ -263,8 +268,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/NodeJs/" itemprop="url" rel="index">
-                    <span itemprop="name">NodeJs</span>
+                  <a href="/categories/Redis/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis</span>
                   </a>
                 </span>
 
@@ -279,8 +284,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/07/Express 学习笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/07/Express 学习笔记/" itemprop="commentsCount"></span>
+                <a href="/2017/01/07/Redis主从和集群搭建/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/07/Redis主从和集群搭建/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -303,9 +308,49 @@
       
 
       
-        <p>This is a continuous updating learning notes for <em>Express</em></p>
+        <p>This is a note about <strong>Redis master/slave mode and cluster mode</strong></p>
+<p>下面将介绍最简的Redis的主从搭建环境搭建和集群环境搭建</p>
 <a id="more"></a>
-<h3 id="1-请求方式"><a href="#1-请求方式" class="headerlink" title="1. 请求方式"></a>1. 请求方式</h3>
+<h2 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h2><p>使用的操作系统是os x系统, 已经安装了redis(我这里是使用brew进行安装).</p>
+<h2 id="redis主从环境搭建"><a href="#redis主从环境搭建" class="headerlink" title="redis主从环境搭建"></a>redis主从环境搭建</h2><p>这里假设搭建一个master, 一个slave的环境(多个slave的环境搭建类似)</p>
+<ol>
+<li>到<code>/usr/local/etc</code>目录下查找redis的配置文件, redis.conf文件</li>
+<li>拷贝redis.conf文件, 重命名成redis6380.conf</li>
+<li><p>修改redis6380.conf配置文件中的以下配置: </p>
+ <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">port <span class="number">6380</span></div><div class="line">slaveof <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="number">6379</span></div><div class="line">  masterauth &lt;master-password&gt;(如果master主机设置了auth密码则要进行设置)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li>分别启动mater和slave, 启动时指定配置文件(不指定默认使用redis.conf)<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">redis-server &lt;PATH-TO-REDIS.<span class="keyword">CONF</span>&gt;/redis.<span class="keyword">conf</span>   <span class="comment">// 启动master</span></div><div class="line">redis-server &lt;PATH-TO-REDIS6380.<span class="keyword">CONF</span>&gt;/redis6380.<span class="keyword">conf</span> <span class="comment">// 启动slave</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>master: 
+![redis-master](http://o6qqyj17y.bkt.clouddn.com/redis/redis_mater.png)
+
+slave: 
+![redis-slave](http://o6qqyj17y.bkt.clouddn.com/redis/redis-slave.png)
+</code></pre><ol>
+<li>使用客户端连接redis进行操作, 连接时要指定端口 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">redis-cli -<span class="selector-tag">p</span> <span class="number">6379</span> <span class="comment">// 连接到master</span></div><div class="line">redis-cli -<span class="selector-tag">p</span> <span class="number">6380</span> <span class="comment">// 连接到slave</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>注意: 默认情况下slave服务只能进行读操作, 要是想让slave也能进行写操作, 则需要修改`slave-read-only no`, 这样就能对slave进行写操作, 但是对slave的写操作不会同步到master中. 
+</code></pre><h2 id="redis集群搭建"><a href="#redis集群搭建" class="headerlink" title="redis集群搭建"></a>redis集群搭建</h2><ol>
+<li>新建3个目录, 目录名是端口号</li>
+<li>每一个目录中都放一份redis.server执行文件(方便后面的执行, 不是必要的)和一份redis.conf配置文件</li>
+<li><p>修改每个目录中的redis.conf配置文件中的以下属性</p>
+  <figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">cluster</span>-config-<span class="keyword">file</span> nodes-&lt;port&gt;.<span class="keyword">conf</span>(只要3个配置的文件名不一样即可)</div><div class="line">daemonize yes</div><div class="line"><span class="keyword">cluster</span>-enabled yes</div><div class="line"><span class="keyword">cluster</span>-node-timeout 5000</div></pre></td></tr></table></figure>
+</li>
+<li><p>进入到每个目录, 使用命令./redis-server redis.conf启动redis</p>
+</li>
+<li>安装ruby(已经安装的跳过, mac应该是自带ruby的)</li>
+<li>安装redis的ruby模块 [sudo] gem install redis</li>
+<li>从redis的源码中下载<a href="https://raw.githubusercontent.com/antirez/redis/unstable/src/redis-trib.rb" target="_blank" rel="external">src/redis-trib.rb</a>文件(这个ruby用于管理redis的集群, 例如slots的设置)</li>
+<li>启动集群, ruby <redis-trib.rd-path> create &lt;–replicas 1&gt;(用于创建master-slave 模式, 设置每个master有1个slave) 127.0.0.1:7000 127.0.0.1:7001…</redis-trib.rd-path></li>
+<li>使用redis-cli -p <port>指定任意一个端口, 就可以连接redis的集群了</port></li>
+</ol>
+<p>cluster: </p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/redis_cluster.png" alt="redis-cluster"></p>
+
       
     </div>
     
@@ -328,17 +373,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/07/ThreadLocal/" rel="next" title="ThreadLocal学习笔记">
-                <i class="fa fa-chevron-left"></i> ThreadLocal学习笔记
+              <a href="/2016/12/31/Java Bridge Method/" rel="next" title="Bridge Method">
+                <i class="fa fa-chevron-left"></i> Bridge Method
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/10/redis学习笔记/" rel="prev" title="redis学习笔记">
-                redis学习笔记 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -364,8 +405,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/07/Express 学习笔记/"
-           data-title="Express 学习笔记" data-url="http://thlcly.xyz/2016/07/07/Express 学习笔记/">
+      <div class="ds-thread" data-thread-key="2017/01/07/Redis主从和集群搭建/"
+           data-title="Redis主从和集群搭建" data-url="http://thlcly.xyz/2017/01/07/Redis主从和集群搭建/">
       </div>
     
   </div>
@@ -471,7 +512,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-请求方式"><span class="nav-number">1.</span> <span class="nav-text">1. 请求方式</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前期准备"><span class="nav-number">1.</span> <span class="nav-text">前期准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis主从环境搭建"><span class="nav-number">2.</span> <span class="nav-text">redis主从环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis集群搭建"><span class="nav-number">3.</span> <span class="nav-text">redis集群搭建</span></a></li></ol></div>
             
           </div>
         </section>
