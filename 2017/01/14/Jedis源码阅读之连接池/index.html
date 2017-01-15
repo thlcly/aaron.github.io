@@ -1,0 +1,655 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Anonymous-favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="This is a note that reading source code for JedisPool
+最近在看Jedis的源码, 打算写一系列关于Jedis源码阅读心得的文章, 首先先从比较容易理解的JedisPool开始">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jedis源码阅读之连接池">
+<meta property="og:url" content="http://thlcly.xyz/2017/01/14/Jedis源码阅读之连接池/index.html">
+<meta property="og:site_name" content="Monkey Coder">
+<meta property="og:description" content="This is a note that reading source code for JedisPool
+最近在看Jedis的源码, 打算写一系列关于Jedis源码阅读心得的文章, 首先先从比较容易理解的JedisPool开始">
+<meta property="og:updated_time" content="2017-01-15T04:44:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jedis源码阅读之连接池">
+<meta name="twitter:description" content="This is a note that reading source code for JedisPool
+最近在看Jedis的源码, 打算写一系列关于Jedis源码阅读心得的文章, 首先先从比较容易理解的JedisPool开始">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Jedis源码阅读之连接池 | Monkey Coder </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Monkey Coder</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Jedis源码阅读之连接池
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-01-14T23:46:21+08:00" content="2017-01-14">
+              2017-01-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/14/Jedis源码阅读之连接池/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/14/Jedis源码阅读之连接池/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>This is a note that reading source code for <em>JedisPool</em></p>
+<p>最近在看Jedis的源码, 打算写一系列关于Jedis源码阅读心得的文章, 首先先从比较容易理解的JedisPool开始</p>
+<a id="more"></a>
+<h3 id="1-什么是连接池"><a href="#1-什么是连接池" class="headerlink" title="1. 什么是连接池"></a>1. 什么是连接池</h3><p>一般在程序中如果要和其他的系统创建连接进行交互并且连接的创建代价比较”昂贵”就需要用到连接池. 那怎么样才算是昂贵呢? 简单说来就是创建连接的时间接近甚至超过交互的时间. 所以连接池就是一个创建连接管理连接, 对连接进行缓存的技术. 最常见的连接池就是数据库连接池. 更加具体的关于连接池的介绍, 请移步<a href="https://en.wikipedia.org/wiki/Connection_pool" target="_blank" rel="external">连接池</a></p>
+<h3 id="2-Jedis的连接池"><a href="#2-Jedis的连接池" class="headerlink" title="2. Jedis的连接池"></a>2. Jedis的连接池</h3><p>既然连接池的作用就是管理连接, 那<code>Jedis</code>的连接池也不例外, 它的作用就是缓存<code>Jedis</code>和<code>redis server</code>之间的连接. <code>Jedis</code> 连接池的作用具体来说分为以下几个部分: </p>
+<h4 id="2-1-创建保存连接的容器"><a href="#2-1-创建保存连接的容器" class="headerlink" title="2.1 创建保存连接的容器"></a>2.1 创建保存连接的容器</h4><p>当初始化一个<code>JedisPool</code>的时候会创建一个<code>LinkedBlockingDeque&lt;PooledObject&lt;T&gt;&gt; idleObjects</code>队列, 这个队列用于存放已经和<code>redis server</code>建立连接<strong>并且已经使用过</strong>的连接对象(实际上存放的是<code>DefaultPooledObject&lt;Jedis&gt;</code>对象, 后面会看到).<br>同时还会创建一个<code>Map&lt;IdentityWrapper&lt;T&gt;, PooledObject&lt;T&gt;&gt; allObjects</code>对象, 这个<code>Map</code>用于没有可用的连接时新创建出来的连接.</p>
+<h4 id="2-2-发起请求获取连接"><a href="#2-2-发起请求获取连接" class="headerlink" title="2.2 发起请求获取连接"></a>2.2 发起请求获取连接</h4><p>当发起请求从连接池中获取一个连接的时候, 连接池会先从<code>idleObjects</code>队列中获取连接, 如果获取不到则开始创建一个新的连接, 创建新的连接是首先判断当前已经存在的连接是否已经大于连接池可容纳的连接数量, 如果是则不予创建, 以阻塞等的方式从<code>idleObjects</code>中等待获取可用连接(默认是阻塞不超时等待即等待直到有可用的连接, 但是也可以配置超时时间). 如果可以创建, 则创建一个新的连接放入到<code>allObjects</code>对象中, 同时将连接返回.</p>
+<h4 id="2-3-连接使用完毕关闭连接"><a href="#2-3-连接使用完毕关闭连接" class="headerlink" title="2.3 连接使用完毕关闭连接"></a>2.3 连接使用完毕关闭连接</h4><p>当使用完连接调用连接关闭的时候, 连接池会将归还连接从<code>allObjects</code>中拿出来放入到<code>idleObjects</code>中, 所以下一次再获取连接将从<code>idleObjects</code>直接获取.<br>但是这里要特别注意, 从<code>allObjects</code>中拿出来放入到<code>idleObjects</code>中时, 并没有将连接从<code>allObjects</code>中删除, 也就是说<code>allObjects</code>和<code>idleObjects</code>中的连接实际上是指向同一个对象实例的. 为什么要这么做, 而不是直接删除<code>allObjects</code>中的连接呢? 因为<code>JedisPool</code>会在指定的时间内对连接池中空闲对象进行删除, 这样可以减少资源的占用, 这个是<code>JedisPool</code>的单独线程自动完成的操作. 所以说, 如果有个连接创建出来长时间没有使用是会被自动销毁的, 而不是一直连接着占用资源.</p>
+<h3 id="3-源码阅读"><a href="#3-源码阅读" class="headerlink" title="3. 源码阅读"></a>3. 源码阅读</h3><p>下面针对于上面提到的<code>Jedis Pool</code>的关键点来看看具体的代码实现</p>
+<h4 id="3-1-连接池的创建"><a href="#3-1-连接池的创建" class="headerlink" title="3.1 连接池的创建"></a>3.1 连接池的创建</h4><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">JedisPool pool = new JedisPool(<span class="name">new</span> JedisPoolConfig(), hnp.getHost(), hnp.getPort(), <span class="number">2000</span>)<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>调用上面的代码就可以创建一个连接池了, 其中最关键的部分就是<code>JedisPoolConfig</code>对象的创建</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// JedisPoolConfig.java</span></div><div class="line"></div><div class="line">public <span class="class"><span class="keyword">class</span> <span class="title">JedisPoolConfig</span> <span class="keyword">extends</span> <span class="title">GenericObjectPoolConfig</span> </span>&#123;</div><div class="line">  public <span class="type">JedisPoolConfig</span>() &#123;</div><div class="line">    ...</div><div class="line">    <span class="comment">// 连接空闲的最小时间，达到此值后空闲连接将会被移除。负值(-1)表示不移除</span></div><div class="line">    setMinEvictableIdleTimeMillis(<span class="number">60000</span>);</div><div class="line">    <span class="comment">// 连接空闲的最小时间, 达到此值后空闲链接将会被移除, 但是会保留"minIdle"个空闲连接数。默认为-1.</span></div><div class="line">    setTimeBetweenEvictionRunsMillis(<span class="number">1000</span>);</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在创建连接池的同时会创建<code>idleObjects</code>对象</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// GenericObjectPool.java</span></div><div class="line"><span class="keyword">public</span> GenericObjectPool(PooledObjectFactory&lt;T&gt; factory,</div><div class="line">            GenericObjectPoolConfig <span class="built_in">config</span>) &#123;</div><div class="line"></div><div class="line">        ...other code...</div><div class="line">        </div><div class="line">        <span class="comment">// 创建idleObjects对象</span></div><div class="line">        idleObjects = <span class="keyword">new</span> LinkedBlockingDeque&lt;PooledObject&lt;T&gt;&gt;(<span class="built_in">config</span>.getFairness());</div><div class="line"></div><div class="line">        setConfig(<span class="built_in">config</span>);</div><div class="line">			</div><div class="line">        startEvictor(getTimeBetweenEvictionRunsMillis());</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>在上面的代码中创建了<code>idleObjects</code>对象, 但是还有一句很关键的代码<code>startEvictor(getTimeBetweenEvictionRunsMillis());</code>.<br><strong>没错, 这就是启动自动回收空闲连接的代码!</strong></p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// BaseGenericObjectPool.java</span></div><div class="line"></div><div class="line"><span class="keyword">final</span> <span class="function"><span class="keyword">void</span> <span class="title">startEvictor</span><span class="params">(<span class="keyword">long</span> delay)</span> </span>&#123;</div><div class="line">        <span class="keyword">synchronized</span> (evictionLock) &#123;</div><div class="line">            <span class="keyword">if</span> (<span class="keyword">null</span> != evictor) &#123;</div><div class="line">                EvictionTimer.cancel(evictor);</div><div class="line">                evictor = <span class="keyword">null</span>;</div><div class="line">                evictionIterator = <span class="keyword">null</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (delay &gt; <span class="number">0</span>) &#123;</div><div class="line">                evictor = <span class="keyword">new</span> Evictor();</div><div class="line">                EvictionTimer.schedule(evictor, delay, delay);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>至于保存刚创建出来的连接的<code>allObjects</code>对象是<code>GenericObjectPool</code>的成员变量<br><figure class="highlight pf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">private final Map<span class="variable">&lt;IdentityWrapper&lt;T&gt;</span>, PooledObject<span class="variable">&lt;T&gt;</span>&gt; <span class="literal">all</span>Objects =</div><div class="line">       new ConcurrentHashMap<span class="variable">&lt;IdentityWrapper&lt;T&gt;</span>, PooledObject<span class="variable">&lt;T&gt;</span>&gt;();</div></pre></td></tr></table></figure></p>
+<h4 id="3-2-获取一个连接"><a href="#3-2-获取一个连接" class="headerlink" title="3.2 获取一个连接"></a>3.2 获取一个连接</h4><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Jedis </span><span class="keyword">jedis </span>= pool.getResource()<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>调用上面的代码就可以获取一个连接了</p>
+<p>获取连接最关键的就是<code>borrowObject</code></p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// GenericObjectPool.java</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function">T <span class="title">borrowObject</span><span class="params">(<span class="keyword">long</span> borrowMaxWaitMillis)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        assertOpen();</div><div class="line"></div><div class="line">        ...other code...</div><div class="line"></div><div class="line">        PooledObject&lt;T&gt; p = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">        <span class="comment">// 没有空闲连接的时候是否阻塞的等待连接</span></div><div class="line">        <span class="keyword">boolean</span> blockWhenExhausted = getBlockWhenExhausted();</div><div class="line"></div><div class="line">        <span class="keyword">boolean</span> create;</div><div class="line">        <span class="keyword">long</span> waitTime = System.currentTimeMillis();</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (p == <span class="keyword">null</span>) &#123;</div><div class="line">            create = <span class="keyword">false</span>;</div><div class="line">            <span class="comment">// 没有空闲连接时等待</span></div><div class="line">            <span class="keyword">if</span> (blockWhenExhausted) &#123;</div><div class="line">                <span class="comment">// 先从idleObjects队列中获取</span></div><div class="line">                p = idleObjects.pollFirst();</div><div class="line">                <span class="keyword">if</span> (p == <span class="keyword">null</span>) &#123;</div><div class="line">                		<span class="comment">// 如果队列中没有空闲的连接, 则创建一个连接</span></div><div class="line">                    p = create();</div><div class="line">                    <span class="keyword">if</span> (p != <span class="keyword">null</span>) &#123;</div><div class="line">                        create = <span class="keyword">true</span>;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// 如果连接创建失败, 则继续从idleObjects中阻塞的获取连接</span></div><div class="line">                <span class="keyword">if</span> (p == <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="keyword">if</span> (borrowMaxWaitMillis &lt; <span class="number">0</span>) &#123;</div><div class="line">                    	<span class="comment">// 无限制的等待, 不会超时</span></div><div class="line">                        p = idleObjects.takeFirst();</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    	<span class="comment">// 有超时时间的等待</span></div><div class="line">                        p = idleObjects.pollFirst(borrowMaxWaitMillis,</div><div class="line">                                TimeUnit.MILLISECONDS);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (p == <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException(</div><div class="line">                            <span class="string">"Timeout waiting for idle object"</span>);</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (!p.allocate()) &#123;</div><div class="line">                    p = <span class="keyword">null</span>;</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// 没有空闲连接时直接抛出异常</span></div><div class="line">                p = idleObjects.pollFirst();</div><div class="line">                <span class="keyword">if</span> (p == <span class="keyword">null</span>) &#123;</div><div class="line">                    p = create();</div><div class="line">                    <span class="keyword">if</span> (p != <span class="keyword">null</span>) &#123;</div><div class="line">                        create = <span class="keyword">true</span>;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (p == <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException(<span class="string">"Pool exhausted"</span>);</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (!p.allocate()) &#123;</div><div class="line">                    p = <span class="keyword">null</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">				...other code...</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        updateStatsBorrow(p, System.currentTimeMillis() - waitTime);</div><div class="line">			</div><div class="line">			<span class="comment">// 返回连接</span></div><div class="line">        <span class="function"><span class="keyword">return</span> p.<span class="title">getObject</span><span class="params">()</span></span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>上面是获取连接时的一个完整的流程, 包括有空闲连接时直接返回, 没有空闲连接时创建空闲连接, 连接创建失败后是继续阻塞等待(包括是否超时)还是直接抛出异常. 下面看一下是如何创建一个连接的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// GenericObjectPool.java</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> PooledObject&lt;T&gt; <span class="title">create</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line"></div><div class="line">			<span class="comment">// 判断当前已经创建的连接是否已经超过设置的最大连接数(默认是8)</span></div><div class="line">        <span class="keyword">int</span> localMaxTotal = getMaxTotal();</div><div class="line">        <span class="keyword">long</span> newCreateCount = createCount.incrementAndGet();</div><div class="line">        <span class="keyword">if</span> (localMaxTotal &gt; -<span class="number">1</span> &amp;&amp; newCreateCount &gt; localMaxTotal ||</div><div class="line">                newCreateCount &gt; Integer.MAX_VALUE) &#123;</div><div class="line">            createCount.decrementAndGet();</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">final</span> PooledObject&lt;T&gt; p;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">        		<span class="comment">// 创建一个到redis server的连接</span></div><div class="line">            p = factory.makeObject();</div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">            createCount.decrementAndGet();</div><div class="line">            <span class="keyword">throw</span> e;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">       ...other code...</div><div class="line"></div><div class="line">        createdCount.incrementAndGet();</div><div class="line">        <span class="comment">// 将新创建的连接放入到allObjects中</span></div><div class="line">        allObjects.put(<span class="keyword">new</span> IdentityWrapper&lt;T&gt;(p.getObject()), p);</div><div class="line">        <span class="comment">// 返回新创建的连接</span></div><div class="line">        <span class="keyword">return</span> p;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>上面就是创建一个到<code>redis server</code>连接的过程. 但是上面没有深究是如何与<code>redis server</code>创建连接的, 因为这次介绍的主题是<code>JedisPool</code>, 所以客户端与<code>redis server</code>创建连接的具体细节会在之后的文章中介绍.</p>
+<h4 id="3-3-关闭一个连接"><a href="#3-3-关闭一个连接" class="headerlink" title="3.3 关闭一个连接"></a>3.3 关闭一个连接</h4><p>在使用完一个连接之后就要将一个连接关闭. 其实上面创建一个连接之后还有一个比较重要的步骤</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="keyword">public</span> Jedis getResource() &#123;</div><div class="line">  <span class="comment">// 获取连接</span></div><div class="line">  Jedis jedis = <span class="keyword">super</span>.getResource();</div><div class="line"> <span class="comment">// 将连接池放入到连接中, 这里这么做的目的其实就是为关闭连接的时候作准备的</span></div><div class="line">  jedis.setDataSource(<span class="keyword">this</span>);</div><div class="line">  <span class="keyword">return</span> jedis;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>调用下面的代码就可以关闭一个连接了</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jedis<span class="selector-class">.close</span>();</div></pre></td></tr></table></figure>
+<p>我们知道连接池的作用就是为了缓存连接而生的, 所以这里的关闭连接肯定不能是直接和<code>redis server</code>断开连接, 所以让我们看看这里的关闭连接到底是做了什么操作从而实现连接的复用</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Jedis.java</span></div><div class="line"><span class="keyword">public</span> void close() &#123;</div><div class="line">		</div><div class="line">	  <span class="comment">// 如果连接池存在就调用连接池的返回资源(这里的资源就是连接)的方法</span></div><div class="line">    <span class="keyword">if</span> (dataSource != <span class="literal">null</span>) &#123;</div><div class="line">      <span class="keyword">if</span> (client.isBroken()) &#123;</div><div class="line">        <span class="keyword">this</span>.dataSource.returnBrokenResource(<span class="keyword">this</span>);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">this</span>.dataSource.returnResource(<span class="keyword">this</span>);</div><div class="line">      &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123; <span class="comment">// 如果连接池不存在就直接关闭连接</span></div><div class="line">      client.close();</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>所以当关闭一个连接的时候如果连接存在其实是将资源还给了连接池. 其中最核心的方法就是<code>returnObject</code></p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// GenericObjectPool.java</span></div><div class="line">@Override</div><div class="line"><span class="keyword">public</span> <span class="keyword">void</span> returnObject(T obj) &#123;</div><div class="line">			</div><div class="line">			<span class="comment">// 从allObjects中获取要归还的连接</span></div><div class="line">        PooledObject&lt;T&gt; p = allObjects.<span class="built_in">get</span>(<span class="keyword">new</span> IdentityWrapper&lt;T&gt;(obj));</div><div class="line">        </div><div class="line">        ...other code...</div><div class="line"></div><div class="line">        <span class="keyword">int</span> maxIdleSave = getMaxIdle();</div><div class="line">        <span class="comment">// 如果idleObjects队列中连接的数据已经&gt;=允许的最大连接数或者连接已经关闭就直接销毁这个连接</span></div><div class="line">        <span class="built_in">if</span> (isClosed() || maxIdleSave &gt; <span class="number">-1</span> &amp;&amp; maxIdleSave &lt;= idleObjects.<span class="built_in">size</span>()) &#123;</div><div class="line">            <span class="built_in">try</span> &#123;</div><div class="line">                destroy(p);</div><div class="line">            &#125; <span class="built_in">catch</span> (Exception e) &#123;</div><div class="line">                swallowException(e);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="built_in">else</span> &#123; <span class="comment">// 将连接放入到idleObjects队列中, 一旦将连接放入到idleObjects中如果连接长时间不被使用就会被自动回收</span></div><div class="line">            <span class="built_in">if</span> (getLifo()) &#123; <span class="comment">// 默认是使用last in first out机制</span></div><div class="line">                idleObjects.addFirst(p);</div><div class="line">            &#125; <span class="built_in">else</span> &#123;</div><div class="line">                idleObjects.addLast(p);</div><div class="line">            &#125;</div><div class="line">            <span class="built_in">if</span> (isClosed()) &#123;</div><div class="line">                <span class="comment">// Pool closed while object was being added to idle objects.</span></div><div class="line">                <span class="comment">// Make sure the returned object is destroyed rather than left</span></div><div class="line">                <span class="comment">// in the idle object pool (which would effectively be a leak)</span></div><div class="line">                <span class="built_in">clear</span>();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        updateStatsReturn(activeTime);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><ul>
+<li>使用了这么久的连接池自从看了<code>Jedis Pool</code>的源码之后才对连接池有了一个直观的认识, 之后可以看看数据库的连接池, 比较一下两个对于连接池实现的异同</li>
+<li><code>Jedis</code>的连接池使用上是对<code>apache common pool2</code>的一个实现, 有了<code>Jedis Pool</code>这个例子以后要是要实现自己的连接池也方便许多</li>
+</ul>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/07/Redis主从和集群搭建/" rel="next" title="Redis主从和集群搭建">
+                <i class="fa fa-chevron-left"></i> Redis主从和集群搭建
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/14/Jedis源码阅读之连接池/"
+           data-title="Jedis源码阅读之连接池" data-url="http://thlcly.xyz/2017/01/14/Jedis源码阅读之连接池/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/Anonymous.jpg"
+               alt="Tony Hui" />
+          <p class="site-author-name" itemprop="name">Tony Hui</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/thlcly" target="_blank">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/tonyhui0717" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-什么是连接池"><span class="nav-number">1.</span> <span class="nav-text">1. 什么是连接池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Jedis的连接池"><span class="nav-number">2.</span> <span class="nav-text">2. Jedis的连接池</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-创建保存连接的容器"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 创建保存连接的容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-发起请求获取连接"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 发起请求获取连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-连接使用完毕关闭连接"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 连接使用完毕关闭连接</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-源码阅读"><span class="nav-number">3.</span> <span class="nav-text">3. 源码阅读</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-连接池的创建"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 连接池的创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-获取一个连接"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 获取一个连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-关闭一个连接"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 关闭一个连接</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4. 总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tony Hui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"thlcly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

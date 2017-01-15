@@ -80,20 +80,32 @@
 
 
 
-<meta name="description" content="This is a note that reading source code of Filter and Interceptor
-Filter和Interceptor是Java Web开发程序员每天都在接触的内容, 但是他们之间的区别是什么呢, 各自有什么优缺点呢? 本篇文章通过阅读源码来解答这些问题">
+<meta name="description" content="Filter
+Filter是servlet规范中定义的java web组件, 在所有支持java web的容器中都可以使用
+Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因为有了Filter Chain
+ 
+ 上图是Filter对请求进行拦截的原理图, 那么java web容器(以tomcat为例子)是如何实现这个功能的呢?
+ 下面看下Filter和Filt">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Filter和Interceptor的比较">
+<meta property="og:title" content="Monkey Coder">
 <meta property="og:url" content="http://thlcly.xyz/2016/12/17/Filter和Interceptor的比较/index.html">
 <meta property="og:site_name" content="Monkey Coder">
-<meta property="og:description" content="This is a note that reading source code of Filter and Interceptor
-Filter和Interceptor是Java Web开发程序员每天都在接触的内容, 但是他们之间的区别是什么呢, 各自有什么优缺点呢? 本篇文章通过阅读源码来解答这些问题">
+<meta property="og:description" content="Filter
+Filter是servlet规范中定义的java web组件, 在所有支持java web的容器中都可以使用
+Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因为有了Filter Chain
+ 
+ 上图是Filter对请求进行拦截的原理图, 那么java web容器(以tomcat为例子)是如何实现这个功能的呢?
+ 下面看下Filter和Filt">
 <meta property="og:image" content="http://img.my.csdn.net/uploads/201212/03/1354532810_3107.jpg">
-<meta property="og:updated_time" content="2016-12-17T11:03:11.000Z">
+<meta property="og:updated_time" content="2017-01-09T09:51:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Filter和Interceptor的比较">
-<meta name="twitter:description" content="This is a note that reading source code of Filter and Interceptor
-Filter和Interceptor是Java Web开发程序员每天都在接触的内容, 但是他们之间的区别是什么呢, 各自有什么优缺点呢? 本篇文章通过阅读源码来解答这些问题">
+<meta name="twitter:title" content="Monkey Coder">
+<meta name="twitter:description" content="Filter
+Filter是servlet规范中定义的java web组件, 在所有支持java web的容器中都可以使用
+Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因为有了Filter Chain
+ 
+ 上图是Filter对请求进行拦截的原理图, 那么java web容器(以tomcat为例子)是如何实现这个功能的呢?
+ 下面看下Filter和Filt">
 <meta name="twitter:image" content="http://img.my.csdn.net/uploads/201212/03/1354532810_3107.jpg">
 
 
@@ -112,7 +124,7 @@ Filter和Interceptor是Java Web开发程序员每天都在接触的内容, 但�
   };
 </script>
 
-  <title> Filter和Interceptor的比较 | Monkey Coder </title>
+  <title>  | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -242,7 +254,7 @@ Filter和Interceptor是Java Web开发程序员每天都在接触的内容, 但�
             
             
               
-                Filter和Interceptor的比较
+                
               
             
           </h1>
@@ -259,25 +271,6 @@ Filter和Interceptor是Java Web开发程序员每天都在接触的内容, 但�
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java-Web/" itemprop="url" rel="index">
-                    <span itemprop="name">Java Web</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
@@ -308,10 +301,7 @@ Filter和Interceptor是Java Web开发程序员每天都在接触的内容, 但�
       
 
       
-        <p>This is a note that reading source code of <em>Filter</em> and <em>Interceptor</em></p>
-<p><code>Filter</code>和<code>Interceptor</code>是<code>Java Web</code>开发程序员每天都在接触的内容, 但是他们之间的区别是什么呢, 各自有什么优缺点呢? 本篇文章通过阅读源码来解答这些问题</p>
-<a id="more"></a>
-<h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><ol>
+        <h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><ol>
 <li><code>Filter</code>是<code>servlet</code>规范中定义的java web组件, 在所有支持java web的容器中都可以使用</li>
 <li><p><code>Filter</code>和<code>Filter Chain</code>是密不可分的, <code>Filter</code>可以实现依次调用正是因为有了<code>Filter Chain</code></p>
 <p> <img src="http://img.my.csdn.net/uploads/201212/03/1354532810_3107.jpg" alt="Filter调用链"></p>
@@ -421,7 +411,7 @@ Filter和Interceptor是Java Web开发程序员每天都在接触的内容, 但�
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2016/12/17/Filter和Interceptor的比较/"
-           data-title="Filter和Interceptor的比较" data-url="http://thlcly.xyz/2016/12/17/Filter和Interceptor的比较/">
+           data-title="" data-url="http://thlcly.xyz/2016/12/17/Filter和Interceptor的比较/">
       </div>
     
   </div>
@@ -466,7 +456,7 @@ Filter和Interceptor是Java Web开发程序员每天都在接触的内容, 但�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
