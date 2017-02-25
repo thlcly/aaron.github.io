@@ -239,6 +239,128 @@
             
               
                 
+                <a class="post-title-link" href="/2017/02/25/cpu、内存、硬盘、指令之间的关系/" itemprop="url">
+                  cpu、内存、硬盘、指令之间的关系
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-02-25T17:33:55+08:00" content="2017-02-25">
+              2017-02-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/计算机体系结构/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机体系结构</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/25/cpu、内存、硬盘、指令之间的关系/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/25/cpu、内存、硬盘、指令之间的关系/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>简单的介绍了cpu、内存、硬盘、指令之间的关系</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/02/25/cpu、内存、硬盘、指令之间的关系/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/01/14/Jedis源码阅读之连接池/" itemprop="url">
                   Jedis源码阅读之连接池
                 </a>
@@ -609,7 +731,7 @@
               
                 
                 <a class="post-title-link" href="/2016/12/17/Filter和Interceptor的比较/" itemprop="url">
-                  Untitled
+                  Filter和Interceptor的比较
                 </a>
               
             
@@ -627,6 +749,25 @@
             </time>
           </span>
 
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java-Web/" itemprop="url" rel="index">
+                    <span itemprop="name">Java Web</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
           
 
           
@@ -658,59 +799,12 @@
 
       
         
-          
-            <h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><ol>
-<li><code>Filter</code>是<code>servlet</code>规范中定义的java web组件, 在所有支持java web的容器中都可以使用</li>
-<li><p><code>Filter</code>和<code>Filter Chain</code>是密不可分的, <code>Filter</code>可以实现依次调用正是因为有了<code>Filter Chain</code></p>
-<p> <img src="http://img.my.csdn.net/uploads/201212/03/1354532810_3107.jpg" alt="Filter调用链"></p>
-<p> 上图是<code>Filter</code>对请求进行拦截的原理图, 那么java web容器(以tomcat为例子)是如何实现这个功能的呢?</p>
-<p> 下面看下<code>Filter</code>和<code>Filter Chain</code>的源码</p>
-</li>
-</ol>
-<pre><code><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line"><span class="comment">// Filter</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Filter</span> </span>&#123;</div><div class="line">	</div><div class="line">    <span class="comment">// 容器创建的时候调用, 即启动tomcat的时候调用</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(FilterConfig filterConfig)</span> <span class="keyword">throws</span> ServletException</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 由FilterChain调用, 并且传入Filter Chain本身</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest request, ServletResponse response,</span></span></div><div class="line">            FilterChain chain) <span class="keyword">throws</span> IOException, ServletException;</div><div class="line"></div><div class="line">    <span class="comment">// 容器销毁的时候调用, 即关闭tomcat的时候调用</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// FilterChain</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">FilterChain</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="comment">// 由Filter.doFilter()中的chain.doFilter调用</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest request, ServletResponse response)</span></span></div><div class="line">           <span class="keyword">throws</span> IOException, ServletException;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-- 正是因为`Filter Chain`在调用每一个`Filter.doFilter()`时将自身引用传递进去, 才实现了`Filter`的依次调用, 在`Filter`全部调用完之后再调用真正处理请求的`servlet`, 并且再次逆序回调`Filter`. 可能这么看还是不太明白是怎么实现Filter的顺序调用, 调用真正的`servlet`, 逆序调用`Filter`的, 一起看下Tomcat的源码就一目了然了. 
-</code></pre><ol>
-<li><p>在tomcat中<code>Filter Chain</code>的默认实现是<code>ApplicationFilterChain</code>, 在<code>ApplicationFilterChain</code>中最关键的方法就是<code>internalDoFilter</code>, 整个<code>Filter</code>流程的实现就是由这个方法完成. </p>
- <figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line"><span class="comment">// internalDoFilter(只保留关键代码)</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">void</span> internalDoFilter(ServletRequest request, ServletResponse response)</div><div class="line">    <span class="keyword">throws</span> IOException, ServletException &#123;</div><div class="line">	</div><div class="line">    <span class="comment">// Call the next filter if there is one</span></div><div class="line">    <span class="comment">// pos: 当前的filter的索引, n: 调用链中所有的Filter的数量</span></div><div class="line">    <span class="comment">// 如果调用链中还有没有调用的Filter就继续调用, 否则跳过if语句</span></div><div class="line">    <span class="keyword">if</span> (pos &lt; n) &#123;</div><div class="line">        ApplicationFilterConfig filterConfig = filters[pos++];</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="comment">// 获取Filter</span></div><div class="line">            Filter <span class="built_in">filter</span> = filterConfig.getFilter();</div><div class="line">	</div><div class="line">            </div><div class="line">            <span class="keyword">if</span>( Globals.IS_SECURITY_ENABLED ) &#123;</div><div class="line">            	...</div><div class="line">            	其他代码</div><div class="line">            	...    </div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">// 这句话是重点, 调用Filter的doFilter方法并把Filter Chain本身传进去(this)</span></div><div class="line">                <span class="built_in">filter</span>.doFilter(request, response, <span class="keyword">this</span>);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException | ServletException | RuntimeException e) &#123;</div><div class="line">        	...</div><div class="line">        	异常处理代码</div><div class="line">        	...    </div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">	</div><div class="line">    <span class="comment">// We fell off the end of the chain -- call the servlet instance</span></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        ...</div><div class="line">        其他代码</div><div class="line">        ...</div><div class="line">        <span class="comment">// Use potentially wrapped request from this point</span></div><div class="line">        <span class="keyword">if</span> ((request <span class="keyword">instanceof</span> HttpServletRequest) &amp;&amp;</div><div class="line">                (response <span class="keyword">instanceof</span> HttpServletResponse) &amp;&amp;</div><div class="line">                Globals.IS_SECURITY_ENABLED ) &#123;</div><div class="line">            ...</div><div class="line">            其他代码</div><div class="line">            ...</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">       			<span class="comment">// 调用真正的Filter</span></div><div class="line">            servlet.service(request, response);</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">catch</span> (IOException | ServletException | RuntimeException e) &#123;</div><div class="line">        ...</div><div class="line">        异常处理代码</div><div class="line">        ...</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        ...</div><div class="line">        始终要执行的代码</div><div class="line">        ...</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<pre><code>- 看了上面我添加的注释之后应该可以知道`Filter`的正序调用的过程和调用真正的`servlet`的过程了, 但是`Filter`的逆序调用在哪里体现了呢? 
-</code></pre><ol>
-<li>假设下面的<code>Filter</code>就是调用链中的最后一个<code>Filter</code></li>
-</ol>
-<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> LogFilter implements <span class="built_in">Filter</span> &#123;</div><div class="line">		<span class="keyword">public</span> void doFilter(ServletRequest <span class="built_in">request</span>, ServletResponse <span class="built_in">response</span>,</div><div class="line">            FilterChain chain) throws IOException, ServletException &#123;</div><div class="line"></div><div class="line">        <span class="built_in">Log</span>.info(<span class="string">"before"</span>);</div><div class="line">     		chain.doFilter(<span class="built_in">request</span>, <span class="built_in">response</span>);       </div><div class="line">			<span class="built_in">Log</span>.info(<span class="string">"after"</span>);</div><div class="line">     &#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li><p>那么在调用<code>chain.doFilter</code>之后就跳过了<code>if</code>语句从而调用了真正的<code>servlet</code>, 然后<code>internalDoFilter</code>方法就结束(出栈)了, 紧接着就是调用<code>Log.info(&quot;after&quot;)</code>了, 然后<code>LogFilter的doFilter就结束了(也出栈了)</code>, 紧接着就是<code>internalDoFilter</code>中<code>filter.doFilter(request, response, this)</code>的结束然后<code>return</code>, 然后就是调用上一个filter的<code>chain.doFilter()</code>之后的代码, 以此类推. </p>
-</li>
-<li><p>因此<code>Filter</code>调用链的实现其实就是一个方法调用链的过程. 刚开始, <code>Filter Chain</code>每调用一个<code>Filter.doFilter()</code>方法就是向方法调用栈中进行压栈操作(代码上的体现就是执行<code>Filter.doFilter</code>之前的代码), 当<code>Filter</code>全部调用完成之后就调用真正处理请求的<code>servlet</code>, 然后由方法调用链自动进行出栈操作(代码上的体现就是执行<code>Filter.doFilter</code>之后的代码), 从而完成整个<code>Filter</code>的调用链. 因为<code>Filter</code>功能实现实际上就是利用了方法的压栈出栈, 所以可以在调用<code>chain.doFilter</code>之前将方法返回, 让容器不在调用<code>servlet</code>方法, 从而实现权限的控制, 关键词的过滤等功能. </p>
-</li>
-</ul>
-<h3 id="Interceptor"><a href="#Interceptor" class="headerlink" title="Interceptor"></a>Interceptor</h3><ol>
-<li><code>Interceptor</code>不是<code>servlet</code>规范中的java web组件, 而是Spring提供的组件, 功能上和Filter差不多. 但是实现上和Filter不一样. </li>
-</ol>
-<p><code>Interceptor</code>功能的实现主要是在Spring Mvc的<code>DispatcherServelt.doDispatch</code>方法中, 让我们来看看源码</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Interceptor的源码</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">HandlerInterceptor</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="comment">// 在调用真正的处理请求类之前调用</span></div><div class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">preHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object <span class="keyword">handler</span>)</span></span></div><div class="line">			<span class="keyword">throws</span> Exception;</div><div class="line"></div><div class="line">	<span class="comment">// 在调用真正的处理请求类之后调用</span></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">postHandle</span><span class="params">(</span></span></div><div class="line">			HttpServletRequest request, HttpServletResponse response, Object <span class="keyword">handler</span>, ModelAndView modelAndView)</div><div class="line">			<span class="keyword">throws</span> Exception;</div><div class="line"></div><div class="line"> <span class="comment">// 在完成渲染或者出错之后调用</span></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">afterCompletion</span><span class="params">(</span></span></div><div class="line">			HttpServletRequest request, HttpServletResponse response, Object <span class="keyword">handler</span>, Exception ex)</div><div class="line">			<span class="keyword">throws</span> Exception;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// doDispatch源码(只保留关键代码)</span></div><div class="line"></div><div class="line"><span class="keyword">protected</span> <span class="literal">void</span> doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception &#123;</div><div class="line">		try &#123;</div><div class="line">			ModelAndView mv = <span class="built_in">null</span>;</div><div class="line">			Exception dispatchException = <span class="built_in">null</span>;</div><div class="line"></div><div class="line">			try &#123;</div><div class="line">				<span class="params">...</span>.</div><div class="line">				其它的处理代码</div><div class="line">				<span class="params">...</span>.</div><div class="line">				</div><div class="line">				<span class="comment">// 调用拦截器的前置处理方法</span></div><div class="line">				<span class="keyword">if</span> (!mappedHandler.applyPreHandle(processedRequest, response)) &#123;</div><div class="line">					<span class="keyword">return</span>;</div><div class="line">				&#125;</div><div class="line"></div><div class="line">				<span class="comment">// Actually invoke the handler.</span></div><div class="line">				<span class="comment">// 调用真正的处理请求的方法</span></div><div class="line">				mv = ha.<span class="keyword">handle</span>(processedRequest, response, mappedHandler.getHandler());</div><div class="line"></div><div class="line">				<span class="comment">// 找到渲染模版</span></div><div class="line">				applyDefaultViewName(processedRequest, mv);</div><div class="line">				</div><div class="line">				<span class="comment">// 调用拦截器的后置处理方法</span></div><div class="line">				mappedHandler.applyPostHandle(processedRequest, response, mv);</div><div class="line">			&#125;</div><div class="line">			catch (Exception ex) &#123;</div><div class="line">				<span class="params">...</span>.</div><div class="line">				异常处理代码</div><div class="line">				<span class="params">...</span>.</div><div class="line">		&#125;</div><div class="line">		finally &#123;</div><div class="line">			<span class="params">...</span>.</div><div class="line">			始终要执行的代码</div><div class="line">			<span class="params">...</span>.</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-<p>其实看了<code>doDispatch</code>的关键代码, Spring Mvc对整个请求的处理流程已经很清楚了: </p>
-<p>调用拦截器的前置方法 -&gt; 调用处理请求的方法 -&gt; 渲染模版 -&gt; 调用拦截器的后置处理方法 -&gt; 调用拦截器的完成方法</p>
-<p>接下来看一看Spring Mvc是如何实现依此调用这么多拦截器的前置方法, 后置方法, 完成方法的</p>
-<p>进入到<code>mapperHandler.applyPreHandle()</code>方法中(调用拦截器的前置方法)</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">applyPreHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		HandlerInterceptor[] interceptors = getInterceptors();</div><div class="line">		<span class="comment">// 如果拦截器数组不为空</span></div><div class="line">		<span class="keyword">if</span> (!ObjectUtils.isEmpty(interceptors)) &#123;</div><div class="line">		   <span class="comment">// 按顺序调用拦截器数组中的preHandle方法</span></div><div class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; interceptors.length; i++) &#123;</div><div class="line">				HandlerInterceptor interceptor = interceptors[i];</div><div class="line">				<span class="comment">// 如果拦截器的preHandle方法返回false, 则调用当前拦截器的triggerAfterCompletion方法, 然后返回, 并且不再调用后续的拦截器</span></div><div class="line">				<span class="keyword">if</span> (!interceptor.preHandle(request, response, <span class="keyword">this</span>.<span class="keyword">handler</span>)) &#123;</div><div class="line">					triggerAfterCompletion(request, response, <span class="keyword">null</span>);</div><div class="line">					<span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">				&#125;</div><div class="line">				<span class="keyword">this</span>.interceptorIndex = i;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-<p>进入到<code>mappedHandler.applyPostHandle()</code>方法中(调用拦截器的后置方法)</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">applyPostHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, ModelAndView mv)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		HandlerInterceptor[] interceptors = getInterceptors();</div><div class="line">		<span class="comment">// 如果拦截器数组不为空</span></div><div class="line">		<span class="keyword">if</span> (!ObjectUtils.isEmpty(interceptors)) &#123;</div><div class="line">			<span class="comment">// 倒序调用拦截器数组中拦截器的postHandle方法</span></div><div class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> i = interceptors.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line">				HandlerInterceptor interceptor = interceptors[i];</div><div class="line">				interceptor.postHandle(request, response, <span class="keyword">this</span>.<span class="keyword">handler</span>, mv);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-<p>不管是否出异常<code>triggerAfterCompletion</code>方法始终会被调用</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">triggerAfterCompletion</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Exception ex)</span></span></div><div class="line">			<span class="keyword">throws</span> Exception &#123;</div><div class="line"></div><div class="line">		HandlerInterceptor[] interceptors = getInterceptors();</div><div class="line">		<span class="comment">// 拦截器数组不为空</span></div><div class="line">		<span class="keyword">if</span> (!ObjectUtils.isEmpty(interceptors)) &#123;</div><div class="line">		   <span class="comment">// 从成功执行的最后一个拦截器开始逆序调用afterCompletion方法</span></div><div class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="keyword">this</span>.interceptorIndex; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line">				HandlerInterceptor interceptor = interceptors[i];</div><div class="line">				<span class="keyword">try</span> &#123;</div><div class="line">					interceptor.afterCompletion(request, response, <span class="keyword">this</span>.<span class="keyword">handler</span>, ex);</div><div class="line">				&#125;</div><div class="line">				<span class="keyword">catch</span> (Throwable ex2) &#123;</div><div class="line">					logger.<span class="keyword">error</span>(<span class="string">"HandlerInterceptor.afterCompletion threw exception"</span>, ex2);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-<p>看过以上三个方法之后, Spring Mvc如何处理拦截器的前置, 后置, 完成方法就一目了然了. 其实Spring Mvc就是将拦截器统一放到了拦截器数组中, 然后在调用真正的处理请求方法之前和之后正序或者倒序遍历拦截器, 同时调用拦截器的相应的方法. 最后不管是否正常结束这个流程还是出异常都会从成功的最后一个拦截器开始逆序调用<code>afterCompletion</code>方法</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
-<li>从以上分析可以看到过滤器和拦截器实现的方式的不同. <code>Filter</code>是利用了方法的调用(入栈出栈)完成整个流程, 而<code>Interceptor</code>是利用了<code>for</code>循环完成了整个流程. </li>
-<li><code>Filter</code>的实现比较占用栈空间, 在<code>Filter</code>多的情况下可能会有栈溢出的风险存在. </li>
-<li><code>Interceptor</code>的实现逻辑更加的清晰简单</li>
-<li><code>Filter</code>组件更加的通用, 只要支持<code>java servlet</code>的容器都可以使用, 而<code>Interceptor</code>必须依赖于Spring</li>
-<li>Filter的优先级是高于<code>Interceptor</code>, 即请求是先到<code>Filter</code>再到<code>Interceptor</code>的, 因为<code>Interceptor</code>的实现主体还是一个<code>servlet</code></li>
-</ol>
-
-          
+          <p>通过阅读源码比较Filter和Interceptor</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/12/17/Filter和Interceptor的比较/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -951,7 +1045,7 @@
       
         
           <p>This is a note that reading source code for <em>Retrofit</em></p>
-<p><code>Retrofit</code>的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用<code>Retrofit</code>只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成<code>Http</code>请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用<code>Retrofit</code>一直是处于一知半解的状态, 这次的<code>Retrofit</code>看码的收获就是解决一些疑问, 并且对<code>Retrofit</code>的整个请求流程有了一定的理解.</p>
+<p><code>Retrofit</code>的使用从很早之前就已经开始了, 但是一直没有深入研究为什么使用<code>Retrofit</code>只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成<code>Http</code>请求了, 也没有研究请求参数和请求结果是如何进行封装的, 所以使用<code>Retrofit</code>一直是处于一知半解的状态, 不知道其内部的原理, 因此花了一点时间看了<code>Retrofit</code>的源码, 对<code>Retrofit</code>的整个请求流程有了一定的理解.</p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/11/30/Retrofit源码阅读笔记/#more" rel="contents">
               Read more &raquo;
@@ -1004,8 +1098,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/11/24/Vim移动快捷键/" itemprop="url">
-                  Vim移动快捷键
+                <a class="post-title-link" href="/2016/08/29/lombok使用笔记/" itemprop="url">
+                  lombok使用笔记
                 </a>
               
             
@@ -1018,8 +1112,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-11-24T15:38:03+08:00" content="2016-11-24">
-              2016-11-24
+            <time itemprop="dateCreated" datetime="2016-08-29T15:02:27+08:00" content="2016-08-29">
+              2016-08-29
             </time>
           </span>
 
@@ -1032,8 +1126,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Vim/" itemprop="url" rel="index">
-                    <span itemprop="name">Vim</span>
+                  <a href="/categories/Node/" itemprop="url" rel="index">
+                    <span itemprop="name">Node</span>
                   </a>
                 </span>
 
@@ -1048,8 +1142,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/11/24/Vim移动快捷键/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/24/Vim移动快捷键/" itemprop="commentsCount"></span>
+                <a href="/2016/08/29/lombok使用笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/29/lombok使用笔记/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1073,129 +1167,9 @@
 
       
         
-          
-            <p>This is a continuous updating shortcut key for <em>Vim</em></p>
-
-          
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/10/12/Thinking in Java读书笔记/" itemprop="url">
-                  Thinking in Java读书笔记
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-10-12T22:19:38+08:00" content="2016-10-12">
-              2016-10-12
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/10/12/Thinking in Java读书笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/12/Thinking in Java读书笔记/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>This is a continuous updating reading notes for <em>Thinking in Java</em></p>
+          <p>This is an application notes for <em>Lombok</em><br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/10/12/Thinking in Java读书笔记/#more" rel="contents">
+            <a class="btn" href="/2016/08/29/lombok使用笔记/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1246,8 +1220,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/09/09/Flyway学习笔记/" itemprop="url">
-                  SpringBoot学习笔记
+                <a class="post-title-link" href="/2016/08/21/数据库读现象解析/" itemprop="url">
+                  数据库中读现象解析
                 </a>
               
             
@@ -1260,8 +1234,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-09-09T14:44:07+08:00" content="2016-09-09">
-              2016-09-09
+            <time itemprop="dateCreated" datetime="2016-08-21T16:54:05+08:00" content="2016-08-21">
+              2016-08-21
             </time>
           </span>
 
@@ -1274,8 +1248,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Database-Version-Management/" itemprop="url" rel="index">
-                    <span itemprop="name">Database Version Management</span>
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
                   </a>
                 </span>
 
@@ -1290,8 +1264,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/09/Flyway学习笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/09/Flyway学习笔记/" itemprop="commentsCount"></span>
+                <a href="/2016/08/21/数据库读现象解析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/21/数据库读现象解析/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1315,9 +1289,9 @@
 
       
         
-          <p>This is a continuous updating learning notes for <em>Flyway</em><br>
+          <p>数据库读现象解析</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/09/09/Flyway学习笔记/#more" rel="contents">
+            <a class="btn" href="/2016/08/21/数据库读现象解析/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1368,8 +1342,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/09/07/SpringBoot学习笔记/" itemprop="url">
-                  SpringBoot学习笔记
+                <a class="post-title-link" href="/2016/08/04/Thymeleaf遇到的坑总结/" itemprop="url">
+                  Thymeleaf中遇到的坑总结
                 </a>
               
             
@@ -1382,8 +1356,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-09-07T16:12:29+08:00" content="2016-09-07">
-              2016-09-07
+            <time itemprop="dateCreated" datetime="2016-08-04T17:39:02+08:00" content="2016-08-04">
+              2016-08-04
             </time>
           </span>
 
@@ -1396,8 +1370,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java-Web/" itemprop="url" rel="index">
-                    <span itemprop="name">Java Web</span>
+                  <a href="/categories/Thymeleaf/" itemprop="url" rel="index">
+                    <span itemprop="name">Thymeleaf</span>
                   </a>
                 </span>
 
@@ -1412,8 +1386,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/07/SpringBoot学习笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/07/SpringBoot学习笔记/" itemprop="commentsCount"></span>
+                <a href="/2016/08/04/Thymeleaf遇到的坑总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/04/Thymeleaf遇到的坑总结/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1437,9 +1411,9 @@
 
       
         
-          <p>This is a continuous updating learning notes for <em>SpringBoot</em><br>
+          <p>This is experience from using thymeleaf in actual project </p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/09/07/SpringBoot学习笔记/#more" rel="contents">
+            <a class="btn" href="/2016/08/04/Thymeleaf遇到的坑总结/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1473,7 +1447,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1514,7 +1488,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -1522,7 +1496,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>

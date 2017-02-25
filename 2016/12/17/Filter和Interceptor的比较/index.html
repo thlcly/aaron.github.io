@@ -80,32 +80,17 @@
 
 
 
-<meta name="description" content="Filter
-Filter是servlet规范中定义的java web组件, 在所有支持java web的容器中都可以使用
-Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因为有了Filter Chain
- 
- 上图是Filter对请求进行拦截的原理图, 那么java web容器(以tomcat为例子)是如何实现这个功能的呢?
- 下面看下Filter和Filt">
+<meta name="description" content="通过阅读源码比较Filter和Interceptor">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Monkey Coder">
+<meta property="og:title" content="Filter和Interceptor的比较">
 <meta property="og:url" content="http://thlcly.xyz/2016/12/17/Filter和Interceptor的比较/index.html">
 <meta property="og:site_name" content="Monkey Coder">
-<meta property="og:description" content="Filter
-Filter是servlet规范中定义的java web组件, 在所有支持java web的容器中都可以使用
-Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因为有了Filter Chain
- 
- 上图是Filter对请求进行拦截的原理图, 那么java web容器(以tomcat为例子)是如何实现这个功能的呢?
- 下面看下Filter和Filt">
+<meta property="og:description" content="通过阅读源码比较Filter和Interceptor">
 <meta property="og:image" content="http://img.my.csdn.net/uploads/201212/03/1354532810_3107.jpg">
-<meta property="og:updated_time" content="2017-01-09T09:51:35.000Z">
+<meta property="og:updated_time" content="2017-02-25T09:46:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Monkey Coder">
-<meta name="twitter:description" content="Filter
-Filter是servlet规范中定义的java web组件, 在所有支持java web的容器中都可以使用
-Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因为有了Filter Chain
- 
- 上图是Filter对请求进行拦截的原理图, 那么java web容器(以tomcat为例子)是如何实现这个功能的呢?
- 下面看下Filter和Filt">
+<meta name="twitter:title" content="Filter和Interceptor的比较">
+<meta name="twitter:description" content="通过阅读源码比较Filter和Interceptor">
 <meta name="twitter:image" content="http://img.my.csdn.net/uploads/201212/03/1354532810_3107.jpg">
 
 
@@ -124,7 +109,7 @@ Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因
   };
 </script>
 
-  <title>  | Monkey Coder </title>
+  <title> Filter和Interceptor的比较 | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -254,7 +239,7 @@ Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因
             
             
               
-                
+                Filter和Interceptor的比较
               
             
           </h1>
@@ -271,6 +256,25 @@ Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因
             </time>
           </span>
 
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java-Web/" itemprop="url" rel="index">
+                    <span itemprop="name">Java Web</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
           
 
           
@@ -301,7 +305,9 @@ Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因
       
 
       
-        <h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><ol>
+        <p>通过阅读源码比较Filter和Interceptor</p>
+<a id="more"></a>
+<h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><ol>
 <li><code>Filter</code>是<code>servlet</code>规范中定义的java web组件, 在所有支持java web的容器中都可以使用</li>
 <li><p><code>Filter</code>和<code>Filter Chain</code>是密不可分的, <code>Filter</code>可以实现依次调用正是因为有了<code>Filter Chain</code></p>
 <p> <img src="http://img.my.csdn.net/uploads/201212/03/1354532810_3107.jpg" alt="Filter调用链"></p>
@@ -411,7 +417,7 @@ Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2016/12/17/Filter和Interceptor的比较/"
-           data-title="" data-url="http://thlcly.xyz/2016/12/17/Filter和Interceptor的比较/">
+           data-title="Filter和Interceptor的比较" data-url="http://thlcly.xyz/2016/12/17/Filter和Interceptor的比较/">
       </div>
     
   </div>
@@ -456,7 +462,7 @@ Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -464,7 +470,7 @@ Filter和Filter Chain是密不可分的, Filter可以实现依次调用正是因
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>

@@ -81,18 +81,18 @@
 
 
 <meta name="description" content="This is a note that reading source code for Retrofit
-Retrofit的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用Retrofit只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成Http请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用Retrofit一直是处于一知半解的状态, 这次的Ret">
+Retrofit的使用从很早之前就已经开始了, 但是一直没有深入研究为什么使用Retrofit只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成Http请求了, 也没有研究请求参数和请求结果是如何进行封装的, 所以使用Retrofit一直是处于一知半解的状态, 不知道其">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Retrofit源码阅读笔记">
 <meta property="og:url" content="http://thlcly.xyz/2016/11/30/Retrofit源码阅读笔记/index.html">
 <meta property="og:site_name" content="Monkey Coder">
 <meta property="og:description" content="This is a note that reading source code for Retrofit
-Retrofit的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用Retrofit只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成Http请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用Retrofit一直是处于一知半解的状态, 这次的Ret">
-<meta property="og:updated_time" content="2016-12-17T10:52:01.000Z">
+Retrofit的使用从很早之前就已经开始了, 但是一直没有深入研究为什么使用Retrofit只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成Http请求了, 也没有研究请求参数和请求结果是如何进行封装的, 所以使用Retrofit一直是处于一知半解的状态, 不知道其">
+<meta property="og:updated_time" content="2017-01-25T10:16:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Retrofit源码阅读笔记">
 <meta name="twitter:description" content="This is a note that reading source code for Retrofit
-Retrofit的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用Retrofit只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成Http请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用Retrofit一直是处于一知半解的状态, 这次的Ret">
+Retrofit的使用从很早之前就已经开始了, 但是一直没有深入研究为什么使用Retrofit只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成Http请求了, 也没有研究请求参数和请求结果是如何进行封装的, 所以使用Retrofit一直是处于一知半解的状态, 不知道其">
 
 
 
@@ -307,237 +307,188 @@ Retrofit的使用应该是从门诊就开始了, 但是一只没有搞清楚为�
 
       
         <p>This is a note that reading source code for <em>Retrofit</em></p>
-<p><code>Retrofit</code>的使用应该是从门诊就开始了, 但是一只没有搞清楚为什么使用<code>Retrofit</code>只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成<code>Http</code>请求了, 也没搞清楚请求参数和请求结果是如何进行封装的, 所以使用<code>Retrofit</code>一直是处于一知半解的状态, 这次的<code>Retrofit</code>看码的收获就是解决一些疑问, 并且对<code>Retrofit</code>的整个请求流程有了一定的理解.</p>
+<p><code>Retrofit</code>的使用从很早之前就已经开始了, 但是一直没有深入研究为什么使用<code>Retrofit</code>只要定义一个接口, 同时在接口的方法上和方法的参数上加上一些注解就可以完成<code>Http</code>请求了, 也没有研究请求参数和请求结果是如何进行封装的, 所以使用<code>Retrofit</code>一直是处于一知半解的状态, 不知道其内部的原理, 因此花了一点时间看了<code>Retrofit</code>的源码, 对<code>Retrofit</code>的整个请求流程有了一定的理解.</p>
 <a id="more"></a>
-<h3 id="Retrofit发送请求的过程"><a href="#Retrofit发送请求的过程" class="headerlink" title="Retrofit发送请求的过程"></a>Retrofit发送请求的过程</h3><ol>
-<li><p>创建<code>Retrofit</code>对象</p>
-<p> 创建<code>Retrofit</code>对象的时候使用的是<code>Builder</code>模式, 可以在创建<code>Retrofit</code>对象的时候设置<code>Retrofit</code>的<code>baseURL</code>, 添加自己的<code>converterFactory</code></p>
-<p> 例子: </p>
- <figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="type">Retrofit</span> retrofit = <span class="function"><span class="keyword">new</span> <span class="title">Retrofit</span>.<span class="title">Builder</span>()</span></div><div class="line">               .<span class="title">baseUrl</span>(<span class="type">GITHUB_API</span>)</div><div class="line">               .<span class="title">addConverterFactory</span>(<span class="type">GsonConverterFactory</span>.create())</div><div class="line">               .<span class="title">build</span>();</div></pre></td></tr></table></figure>
+<h2 id="Retrofit核心源码解读"><a href="#Retrofit核心源码解读" class="headerlink" title="Retrofit核心源码解读"></a>Retrofit核心源码解读</h2><h3 id="1-创建Retrofit对象"><a href="#1-创建Retrofit对象" class="headerlink" title="1. 创建Retrofit对象"></a>1. 创建<code>Retrofit</code>对象</h3><p>创建<code>Retrofit</code>对象的时候使用的是<code>Builder</code>模式, 可以在创建<code>Retrofit</code>对象的时候设置<code>Retrofit</code>的<code>baseURL</code>, 添加自己的<code>converterFactory</code></p>
+<p>例子: </p>
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="type">Retrofit</span> retrofit = <span class="function"><span class="keyword">new</span> <span class="title">Retrofit</span>.<span class="title">Builder</span>()</span></div><div class="line">           .<span class="title">baseUrl</span>(<span class="type">GITHUB_API</span>)</div><div class="line">           .<span class="title">addConverterFactory</span>(<span class="type">GsonConverterFactory</span>.create())</div><div class="line">           .<span class="title">build</span>();</div></pre></td></tr></table></figure>
+<p>注意点: </p>
+<ul>
+<li><p>在设置<code>baseUrl</code>的时候和<code>Retrofit 1.x</code>版本不同的是<code>url</code>必须以<code>&#39;/&#39;</code>结尾</p>
+<p>  源码: </p>
+  <figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// Retrofit.java#baseUrl method</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> Builder baseUrl(HttpUrl baseUrl) &#123;</div><div class="line">	<span class="params">...</span>.</div><div class="line">   <span class="comment">// pathSegments() 返回的是url的查找路径List(查找路径是以'/'分割的字符串, 所以只要split("/")就可以了)</span></div><div class="line">     <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; pathSegments = baseUrl.pathSegments();</div><div class="line">     <span class="comment">// 如果List的最后一个元素不是(""), 则说明查找路径不是以'/'结尾的字符串</span></div><div class="line">     <span class="keyword">if</span> (!<span class="string">""</span>.<span class="keyword">equals</span>(pathSegments.get(pathSegments.size() - <span class="number">1</span>))) &#123;</div><div class="line">       throw <span class="literal">new</span> IllegalArgumentException(<span class="string">"baseUrl must end in /: "</span> + baseUrl);</div><div class="line">     &#125;</div><div class="line">   	<span class="params">...</span>. </div><div class="line">   &#125;</div></pre></td></tr></table></figure>
 </li>
-</ol>
-<pre><code>注意点: 
+</ul>
+<ul>
+<li><p>如果不添加自己的转换器, 则返回值只能封装成<code>ResponseBody</code>类型或者没有返回值</p>
+<p>  源码:</p>
+  <figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">	<span class="comment">// Retrofit.java#Builder</span></div><div class="line">	</div><div class="line">	Builder(Platform platform) &#123;</div><div class="line">      <span class="keyword">this</span>.platform = platform;</div><div class="line">      </div><div class="line">      <span class="comment">// 添加默认的BuiltInConverter</span></div><div class="line">      converterFactories.add(<span class="keyword">new</span> BuiltInConverters());</div><div class="line">    &#125;</div><div class="line">	</div><div class="line">	</div><div class="line">	<span class="comment">// BuiltInConverters.java#responseBodyConverter method</span></div><div class="line">	</div><div class="line">	 <span class="keyword">public</span> Converter&lt;ResponseBody, ?&gt; responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) &#123;</div><div class="line">	 </div><div class="line">	 	 <span class="comment">// 如果返回值是ResponseBody类型</span></div><div class="line">	    <span class="keyword">if</span> (type == ResponseBody.<span class="keyword">class</span>) &#123;</div><div class="line">	      <span class="keyword">return</span> Utils.isAnnotationPresent(annotations, Streaming.<span class="keyword">class</span>)</div><div class="line">	          ? StreamingResponseBodyConverter.INSTANCE</div><div class="line">	          : BufferingResponseBodyConverter.INSTANCE;</div><div class="line">	    &#125;</div><div class="line">	    </div><div class="line">	    <span class="comment">// 如果返回值类型是Void类型</span></div><div class="line">	    <span class="keyword">if</span> (type == Void.<span class="keyword">class</span>) &#123;</div><div class="line">	      <span class="keyword">return</span> VoidResponseBodyConverter.INSTANCE;</div><div class="line">	    &#125;</div><div class="line">	    </div><div class="line">	    <span class="comment">// 如果返回值是其他的类型</span></div><div class="line">	    <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">	  &#125;</div><div class="line">	</div><div class="line">	<span class="string">``</span><span class="string">` </span></div><div class="line">	</div><div class="line">- 创建`Retrofit<span class="string">`对象时使用了`</span>Builder<span class="string">`模式, 而使用`</span>Builder<span class="string">`模式的好处就是创建的对象是不可变对象(因为属性都是`</span><span class="keyword">private</span><span class="string">`的且没有`</span>setter<span class="string">`方法), 这样在使用的使用就不用担心对象中属性是否被修改或者不小心修改了对象中的属性了. 如果存在有些请求不能和其他请求共用同一个`</span>Retrofit<span class="string">`对象, 但是大部分的属性都一样只有少部分的属性不一致, 那么可以用一个`</span>Retrofit<span class="string">`对象为模版来创建一个新的`</span>Retrofit<span class="string">`对象</span></div><div class="line"></div><div class="line">	源码:</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>// Retrofit.java#Builder
 
-- 在设置`baseUrl`的时候和`Retrofit 1.x`版本不同的是`url`必须以`&apos;/&apos;`结尾
-
-    关键代码: 
-
-    <figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Retrofit.java#baseUrl method</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> Builder baseUrl(HttpUrl baseUrl) &#123;</div><div class="line">	<span class="params">...</span>.</div><div class="line">   <span class="comment">// pathSegments() 返回的是url的查找路径List(查找路径是以'/'分割的字符串, 所以只要split("/")就可以了)</span></div><div class="line">     <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; pathSegments = baseUrl.pathSegments();</div><div class="line">     <span class="comment">// 如果List的最后一个元素不是(""), 则说明查找路径不是以'/'结尾的字符串</span></div><div class="line">     <span class="keyword">if</span> (!<span class="string">""</span>.<span class="keyword">equals</span>(pathSegments.get(pathSegments.size() - <span class="number">1</span>))) &#123;</div><div class="line">       throw <span class="literal">new</span> IllegalArgumentException(<span class="string">"baseUrl must end in /: "</span> + baseUrl);</div><div class="line">     &#125;</div><div class="line">   	<span class="params">...</span>. </div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-
-
-- 如果不添加自己的转换器, 则返回值只能封装成`ResponseBody`类型或者没有返回值
-
-    关键代码
-
-        <figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">		</div><div class="line">		<span class="comment">// Retrofit.java#Builder</span></div><div class="line">		</div><div class="line">		Builder(Platform platform) &#123;</div><div class="line">	      <span class="keyword">this</span>.platform = platform;</div><div class="line">	      </div><div class="line">	      <span class="comment">// 添加默认的BuiltInConverter</span></div><div class="line">	      converterFactories.add(<span class="keyword">new</span> BuiltInConverters());</div><div class="line">	    &#125;</div><div class="line">		</div><div class="line">		</div><div class="line">		<span class="comment">// BuiltInConverters.java#responseBodyConverter method</span></div><div class="line">		</div><div class="line">		 <span class="keyword">public</span> Converter&lt;ResponseBody, ?&gt; responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) &#123;</div><div class="line">		 </div><div class="line">		 	 <span class="comment">// 如果返回值是ResponseBody类型</span></div><div class="line">		    <span class="keyword">if</span> (type == ResponseBody.<span class="keyword">class</span>) &#123;</div><div class="line">		      <span class="keyword">return</span> Utils.isAnnotationPresent(annotations, Streaming.<span class="keyword">class</span>)</div><div class="line">		          ? StreamingResponseBodyConverter.INSTANCE</div><div class="line">		          : BufferingResponseBodyConverter.INSTANCE;</div><div class="line">		    &#125;</div><div class="line">		    </div><div class="line">		    <span class="comment">// 如果返回值类型是Void类型</span></div><div class="line">		    <span class="keyword">if</span> (type == Void.<span class="keyword">class</span>) &#123;</div><div class="line">		      <span class="keyword">return</span> VoidResponseBodyConverter.INSTANCE;</div><div class="line">		    &#125;</div><div class="line">		    </div><div class="line">		    <span class="comment">// 如果返回值是其他的类型</span></div><div class="line">		    <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">		  &#125;</div><div class="line">		</div><div class="line">		<span class="string">``</span><span class="string">` </span></div><div class="line">	</div><div class="line">- 创建`Retrofit<span class="string">`对象时使用了`</span>Builder<span class="string">`模式, 而使用`</span>Builder<span class="string">`模式的好处就是创建的对象时不可变对象(因为属性都是`</span><span class="keyword">private</span><span class="string">`的且没有`</span>setter<span class="string">`方法), 这样在使用的使用就不用担心对象中属性是否被修改或者不小心修改了对象中的属性了. 如果存在有些请求不能和其他请求共用同一个`</span>Retrofit<span class="string">`对象, 但是大部分的属性都一样只有少部分的属性不一致, 那么可以用一个`</span>Retrofit<span class="string">`对象为模版来创建一个新的`</span>Retrofit<span class="string">`对象</span></div><div class="line"></div><div class="line">	关键代码:</div></pre></td></tr></table></figure>
-
-
-        // Retrofit.java#Builder
-
-        Builder(Retrofit retrofit) {
-            // 以retrofit对象为模版生成一个新的Retrofit对象
-          this.platform = Platform.get();
-          callFactory = retrofit.callFactory;
-          baseUrl = retrofit.baseUrl;
-          converterFactories.addAll(retrofit.converterFactories);
-          adapterFactories.addAll(retrofit.adapterFactories);
-          // Remove the default, platform-aware call adapter added by build().
-          adapterFactories.remove(adapterFactories.size() - 1);
-          callbackExecutor = retrofit.callbackExecutor;
-          validateEagerly = retrofit.validateEagerly;
-        }
-        <figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">		</div><div class="line">- 这里要额外提一下. 因为`Retrofit`是支持多个平台`(jvm, android, ios)`, 那么`Retrofit`是如何分辨当前引用的是什么平台的呢, 实际上`Retrofit`使用的方法就是查看当前的`classpath`中是否存在相应平台特有的class来判断当前是在哪个平台. 这个和Spring的`@ConditionalOnClass(ClassName.class)`来决定是否初始化注解所修饰的bean有异曲同工的味道</div><div class="line"></div><div class="line"><span class="symbol">	关键代码:</span></div></pre></td></tr></table></figure>
+Builder(Retrofit retrofit) {
+    // 以retrofit对象为模版生成一个新的Retrofit对象
+  this.platform = Platform.get();
+  callFactory = retrofit.callFactory;
+  baseUrl = retrofit.baseUrl;
+  converterFactories.addAll(retrofit.converterFactories);
+  adapterFactories.addAll(retrofit.adapterFactories);
+  // Remove the default, platform-aware call adapter added by build().
+  adapterFactories.remove(adapterFactories.size() - 1);
+  callbackExecutor = retrofit.callbackExecutor;
+  validateEagerly = retrofit.validateEagerly;
+}
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">		</div><div class="line">- 这里要额外提一下. 因为`Retrofit`是支持多个平台`(jvm, android, ios)`, 那么`Retrofit`是如何分辨当前引用的是什么平台的呢, 实际上`Retrofit`使用的方法就是查看当前的`classpath`中是否存在相应平台特有的`class`来判断当前是在哪个平台. 这个和Spring的`@ConditionalOnClass(ClassName.class)`来决定是否初始化注解所修饰的bean有异曲同工的味道</div><div class="line"></div><div class="line"><span class="symbol">	关键代码:</span></div></pre></td></tr></table></figure>
 
 
-        // Platform.java#findPlatform method 
-        // 查找当前所在的平台
-        private static Platform findPlatform() {
-            try {
-              // 如果存在&quot;android.os.Build&quot;则是android平台
-              Class.forName(&quot;android.os.Build&quot;);
-              if (Build.VERSION.SDK_INT != 0) {
-                return new Android();
-              }
-            } catch (ClassNotFoundException ignored) {
-            }
-            try {
-              // 如果存在&quot;java.util.Optional&quot;则是java8平台
-              Class.forName(&quot;java.util.Optional&quot;);
-              return new Java8();
-            } catch (ClassNotFoundException ignored) {
-            }
-            try {
-              // 如果存在&quot;org.robovm.apple.foundation.NSObject&quot;则是ios平台
-              Class.forName(&quot;org.robovm.apple.foundation.NSObject&quot;);
-              return new IOS();
-            } catch (ClassNotFoundException ignored) {
-            }
-
-            // 默认平台
-            return new Platform();
-          }
-        <figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="code">			</span></div><div class="line"><span class="bullet">2. </span>创建发送请求的接口</div><div class="line"></div><div class="line"><span class="code">	包含发送请求方法必须是一个接口, 同时这个接口是不能继承其他的接口的</span></div><div class="line"><span class="code">	</span></div><div class="line"><span class="code">	例子:</span></div></pre></td></tr></table></figure>
-
-    public interface GitApi {
-        @GET(&quot;/users/{user}&quot;)
-        Call&lt;GitModel&gt; getFeed(@Path(&quot;user&quot;) String user);
-    }
-<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">注意点: </div><div class="line"></div><div class="line"><span class="bullet">- </span>包含请求方法必须是一个接口同时不能继承其他的接口的关键代码</div></pre></td></tr></table></figure>
-
-    static &lt;T&gt; void validateServiceInterface(Class&lt;T&gt; service) {
-
-         // class必须是一个接口
-        if (!service.isInterface()) {
-          throw new IllegalArgumentException(&quot;API declarations must be interfaces.&quot;);
-        }
-
-        // 接口不能继承其他的接口
-        if (service.getInterfaces().length &gt; 0) {
-          throw new IllegalArgumentException(&quot;API interfaces must not extend other interfaces.&quot;);
-        }
+// Platform.java#findPlatform method 
+// 查找当前所在的平台
+private static Platform findPlatform() {
+    try {
+      // 如果存在&quot;android.os.Build&quot;则是android平台
+      Class.forName(&quot;android.os.Build&quot;);
+      if (Build.VERSION.SDK_INT != 0) {
+        return new Android();
       }
-    <figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">- 为什么只要定一个接口和一个请求方法, `Retrofit`就可以发送`Http`请求了呢?因为`Retrofit`使用了代理, 其实在创建接口的对象的时候返回的是一个代理对象</div><div class="line"></div><div class="line"><span class="symbol">	关键代码:</span></div></pre></td></tr></table></figure>
+    } catch (ClassNotFoundException ignored) {
+    }
+    try {
+      // 如果存在&quot;java.util.Optional&quot;则是java8平台
+      Class.forName(&quot;java.util.Optional&quot;);
+      return new Java8();
+    } catch (ClassNotFoundException ignored) {
+    }
+    try {
+      // 如果存在&quot;org.robovm.apple.foundation.NSObject&quot;则是ios平台
+      Class.forName(&quot;org.robovm.apple.foundation.NSObject&quot;);
+      return new IOS();
+    } catch (ClassNotFoundException ignored) {
+    }
 
-        // 创建接口的实现对象, 返回的是GitApi接口的代理对象
-       GitApi git = retrofit.create(GitApi.class);
+    // 默认平台
+    return new Platform();
+  }
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">			</div><div class="line"><span class="meta">### 2. 创建发送请求的接口</span></div><div class="line"></div><div class="line">包含发送请求方法必须是一个接口, 同时这个接口是不能继承其他的接口的</div><div class="line">	</div><div class="line">例子:</div></pre></td></tr></table></figure>
 
-       // 关键代码: create方法
-       public &lt;T&gt; T create(final Class&lt;T&gt; service) {
+public interface GitApi {
+    @GET(&quot;/users/{user}&quot;)
+    Call&lt;GitModel&gt; getFeed(@Path(&quot;user&quot;) String user);
+}
+</code></pre><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">注意点: </div><div class="line">	</div><div class="line">-<span class="ruby"> 包含请求方法必须是一个接口同时不能继承其他的接口的</span></div><div class="line"></div><div class="line">	源码:</div></pre></td></tr></table></figure>
+<pre><code>static &lt;T&gt; void validateServiceInterface(Class&lt;T&gt; service) {
 
-            // 校验service是否是一个没有继承其他接口的接口
-            Utils.validateServiceInterface(service);
+     // class必须是一个接口
+    if (!service.isInterface()) {
+      throw new IllegalArgumentException(&quot;API declarations must be interfaces.&quot;);
+    }
 
-            // 如果validateEagerly==true, 则先将接口中的方法全部都放到serviceMethodCache中,
-            // 这样在之后的调用过程中就不需要走loadServiceMethod的流程, 而是直接走的缓存, 这样子可以加快访问的速度,
-            // 但是这样子也存在一定的坏处, 因为会造成内存占用量变大而且可能有些方法不会被调用都被放到缓存中了
-            if (validateEagerly) {
-              eagerlyValidateMethods(service);
-            }
+    // 接口不能继承其他的接口
+    if (service.getInterfaces().length &gt; 0) {
+      throw new IllegalArgumentException(&quot;API interfaces must not extend other interfaces.&quot;);
+    }
+  }
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">- 为什么只要定一个接口和一个请求方法, `Retrofit`就可以发送`Http`请求了呢? 因为`Retrofit`使用了代理, 其实在创建接口的对象的时候返回的是一个代理对象, **这个代理其实也是`Retrofit`的核心**. </div><div class="line"></div><div class="line"><span class="symbol">	源码:</span></div></pre></td></tr></table></figure>
 
-            // 代理模式,
-            // 使用代理拦截接口中所有的方法, 从而解析方法上的注解, 方法参数上的注解, 返回值等, 这也是retrofit可以实现面向接口和注解编程的关键
-            // service: 真实对象, proxy: 代理对象, method: 调用的方法, args: 方法参数
-            return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class&lt;?&gt;[] { service },
-                new InvocationHandler() {
-                  private final Platform platform = Platform.get();
+    // 创建接口的实现对象, 返回的是GitApi接口的代理对象
+   GitApi git = retrofit.create(GitApi.class);
 
-                  @Override public Object invoke(Object proxy, Method method, Object... args)
-                      throws Throwable {
+   // 关键代码: create方法
+   public &lt;T&gt; T create(final Class&lt;T&gt; service) {
 
-                    // 如果调用的是Object对象中方法则直接返回调用结果
-                    if (method.getDeclaringClass() == Object.class) {
-                      return method.invoke(this, args);
-                    }
-                    // 如果调用的是接口中的默认方法则直接返回对应平台对调用默认方法的处理
-                    if (platform.isDefaultMethod(method)) {
-                      return platform.invokeDefaultMethod(method, service, proxy, args);
-                    }
+        // 校验service是否是一个没有继承其他接口的接口
+        Utils.validateServiceInterface(service);
 
-                    // 获取或者创建ServiceMethod对象
-                    ServiceMethod&lt;Object, Object&gt; serviceMethod =
-                        (ServiceMethod&lt;Object, Object&gt;) loadServiceMethod(method);
-                   // 创建OkHttpCall对象用于发送请求和解析结果 
-                    OkHttpCall&lt;Object&gt; okHttpCall = new OkHttpCall&lt;&gt;(serviceMethod, args);
-                    return serviceMethod.callAdapter.adapt(okHttpCall);
-                  }
-                });
-              }
-    <figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">		</div><div class="line">	- 上面很明显可以看到`Retrofit`实际上使用了`jdk`的`Proxy`动态代理技术使得可以定义一个接口加上注解就完成`http`请求. 由于使用了`Proxy`所以必须定义成一个接口而不是一个抽象类的原因也就显而易见了, 因为`jdk`的`proxy`只能生成接口的代理对象. 如果这里使用的是`cglib`库的话那也可以定义成抽象类</div><div class="line"></div><div class="line"><span class="number">3</span>. 发送`Http`请求</div><div class="line"></div><div class="line">	要发送`http`请求就离不开`ServiceMethod`类和`OkHttpCall`类, 他们是发送`Http`请求的核心类. 首先会从`Map`中获取和当前请求方法相关联的`ServiceMethod`, 如果找到了(说明之前这个方法已经被调用过了)就直接使用找到的`ServiceMethod`, 如果没有找到, 则创建一个新的`ServiceMethod`并且和当前的请求方法相关联`put`到`Map`中. 最后调用OkHttpCall.execute发送请求. </div><div class="line">	</div><div class="line"><span class="symbol">	关键代码:</span></div></pre></td></tr></table></figure>
-
-  // 查找或者判断和请求的方法相关联的ServiceMethod
-
-    ServiceMethod&lt;?, ?&gt; loadServiceMethod(Method method) {
-        // 缓存技术
-        ServiceMethod&lt;?, ?&gt; result = serviceMethodCache.get(method);
-        if (result != null) return result;
-
-        // 使用了两次判断
-        synchronized (serviceMethodCache) {
-          // 这一次从缓存中取是有必要的且非常重要, 如果没有这一次则有可能下面的代码会被重复执行, 同一个key也可能被重复赋值
-          result = serviceMethodCache.get(method);
-          if (result == null) {
-            result = new ServiceMethod.Builder&lt;&gt;(this, method).build();
-            serviceMethodCache.put(method, result);
-          }
+        // 如果validateEagerly==true, 则先将接口中的方法全部都放到serviceMethodCache中,
+        // 这样在之后的调用过程中就不需要走loadServiceMethod的流程, 而是直接走的缓存, 这样子可以加快访问的速度,
+        // 但是这样子也存在一定的坏处, 因为会造成内存占用量变大而且可能有些方法不会被调用都被放到缓存中了
+        if (validateEagerly) {
+          eagerlyValidateMethods(service);
         }
-        return result;
+
+        // 代理模式,
+        // 使用代理拦截接口中所有的方法, 从而解析方法上的注解, 方法参数上的注解, 返回值等, 这也是retrofit可以实现面向接口和注解编程的关键
+        // service: 真实对象, proxy: 代理对象, method: 调用的方法, args: 方法参数
+        return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class&lt;?&gt;[] { service },
+            new InvocationHandler() {
+              private final Platform platform = Platform.get();
+
+              @Override public Object invoke(Object proxy, Method method, Object... args)
+                  throws Throwable {
+
+                // 如果调用的是Object对象中方法则直接返回调用结果
+                if (method.getDeclaringClass() == Object.class) {
+                  return method.invoke(this, args);
+                }
+                // 如果调用的是接口中的默认方法则直接返回对应平台对调用默认方法的处理
+                if (platform.isDefaultMethod(method)) {
+                  return platform.invokeDefaultMethod(method, service, proxy, args);
+                }
+
+                // 获取或者创建ServiceMethod对象
+                ServiceMethod&lt;Object, Object&gt; serviceMethod =
+                    (ServiceMethod&lt;Object, Object&gt;) loadServiceMethod(method);
+               // 创建OkHttpCall对象用于发送请求和解析结果 
+                OkHttpCall&lt;Object&gt; okHttpCall = new OkHttpCall&lt;&gt;(serviceMethod, args);
+                return serviceMethod.callAdapter.adapt(okHttpCall);
+              }
+            });
+          }
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">- 上面很明显可以看到`Retrofit`实际上使用了`jdk`的`Proxy`动态代理技术使得可以定义一个接口加上注解就完成`http`请求. 由于使用了`Proxy`所以必须定义成一个接口而不是一个抽象类的原因也就显而易见了, 因为`jdk`的`proxy`只能生成接口的代理对象. 如果这里使用的是`cglib`库的话那也可以定义成抽象类</div><div class="line"></div><div class="line"></div><div class="line">### <span class="number">3</span>. 发送`Http`请求</div><div class="line"></div><div class="line">要发送`http`请求就离不开`ServiceMethod`类和`OkHttpCall`类, 他们是发送`Http`请求的核心类. 首先会从`Map`中获取和当前请求方法相关联的`ServiceMethod`, 如果找到了(说明之前这个方法已经被调用过了)就直接使用找到的`ServiceMethod`, 如果没有找到, 则创建一个新的`ServiceMethod`并且和当前的请求方法相关联`put`到`Map`中. 最后调用`OkHttpCall.execute`发送请求. </div><div class="line">	</div><div class="line"><span class="symbol">源码:</span></div></pre></td></tr></table></figure>
+</code></pre><p>  // 查找或者判断和请求的方法相关联的ServiceMethod</p>
+<pre><code>ServiceMethod&lt;?, ?&gt; loadServiceMethod(Method method) {
+    // 缓存技术
+    ServiceMethod&lt;?, ?&gt; result = serviceMethodCache.get(method);
+    if (result != null) return result;
+
+    // 使用了两次判断(两段锁)
+    synchronized (serviceMethodCache) {
+      // 这一次从缓存中取是有必要的且非常重要, 如果没有这一次则有可能下面的代码会被重复执行, 同一个key也可能被重复赋值
+      result = serviceMethodCache.get(method);
+      if (result == null) {
+        result = new ServiceMethod.Builder&lt;&gt;(this, method).build();
+        serviceMethodCache.put(method, result);
       }
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">- 创建`ServiceMethod`也使用了`Build`模式, 在build方法中对请求的方法上的注解, 方法参数, 返回值进行了解析</div><div class="line"></div><div class="line"><span class="symbol">	关键代码:</span></div></pre></td></tr></table></figure>
-
-public ServiceMethod build() {
- // 创建callAdapter对象(默认使用的是DefaultCallAdapterFactory), callAdapter对象用于.
- // callAdapter对象的主要作用就是返回一个CallAdapter接口的实例用于调用底层okhttp的方法发送请求和解析返回值(DefaultCallAdapterFactory中使用OkHttpCall.execute来发送请求和解析结果). 
- // 默认的请求方法返回值都是Call&lt;T&gt;, 可以继承CallAdapter.Factory来实现自定义的返回值类型
- callAdapter = createCallAdapter();
-
-  ...
-  other code
-  ...
-
-  // 创建返回值解析器(默认只有BuiltInConverters), 可以在创建Retrofit的时候使用addConverterFactory加入其他的converters
-  responseConverter = createResponseConverter();
-
-    // 解析方法上的注解
-  for (Annotation annotation : methodAnnotations) {
-    parseMethodAnnotation(annotation);
-  }
-
-  ...
-  other code
-  ...
-
-  // 解析参数
-  int parameterCount = parameterAnnotationsArray.length;
-  parameterHandlers = new ParameterHandler&lt;?&gt;[parameterCount];
-  for (int p = 0; p &lt; parameterCount; p++) {
-    Type parameterType = parameterTypes[p];
-    if (Utils.hasUnresolvableType(parameterType)) {
-      throw parameterError(p, &quot;Parameter type must not include a type variable or wildcard: %s&quot;,
-          parameterType);
     }
-
-    Annotation[] parameterAnnotations = parameterAnnotationsArray[p];
-    if (parameterAnnotations == null) {
-      throw parameterError(p, &quot;No Retrofit annotation found.&quot;);
-    }
-
-    parameterHandlers[p] = parseParameter(p, parameterType, parameterAnnotations);
+    return result;
   }
+</code></pre><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">- 创建`ServiceMethod`也使用了`Build`模式, 在build方法中对请求的方法上的注解, 方法参数, 返回值进行了解析</div><div class="line"></div><div class="line"><span class="symbol">源码:</span></div></pre></td></tr></table></figure>
+<p>public ServiceMethod build() {<br> // 创建callAdapter对象(默认使用的是DefaultCallAdapterFactory), callAdapter对象用于.<br> // callAdapter对象的主要作用就是返回一个CallAdapter接口的实例用于调用底层okhttp的方法发送请求和解析返回值(DefaultCallAdapterFactory中使用OkHttpCall.execute来发送请求和解析结果).<br> // 默认的请求方法返回值都是Call<t>, 可以继承CallAdapter.Factory来实现自定义的返回值类型<br> callAdapter = createCallAdapter();</t></p>
+<p> …<br> other code<br> …</p>
+<p> // 创建返回值解析器(默认只有BuiltInConverters), 可以在创建Retrofit的时候使用addConverterFactory加入其他的converters<br> responseConverter = createResponseConverter();</p>
+<pre><code>// 解析方法上的注解
+</code></pre><p> for (Annotation annotation : methodAnnotations) {<br>   parseMethodAnnotation(annotation);<br> }</p>
+<p> …<br> other code<br> …</p>
+<p> // 解析参数<br> int parameterCount = parameterAnnotationsArray.length;<br> parameterHandlers = new ParameterHandler&lt;?&gt;[parameterCount];<br> for (int p = 0; p &lt; parameterCount; p++) {<br>   Type parameterType = parameterTypes[p];<br>   if (Utils.hasUnresolvableType(parameterType)) {<br>     throw parameterError(p, “Parameter type must not include a type variable or wildcard: %s”,<br>         parameterType);<br>   }</p>
+<p>   Annotation[] parameterAnnotations = parameterAnnotationsArray[p];<br>   if (parameterAnnotations == null) {<br>     throw parameterError(p, “No Retrofit annotation found.”);<br>   }</p>
+<p>   parameterHandlers[p] = parseParameter(p, parameterType, parameterAnnotations);<br> }</p>
+<p> …<br> 一些错误情况的处理<br> …</p>
+<p> return new ServiceMethod&lt;&gt;(this);<br>}<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">-<span class="ruby"> 在<span class="string">`Retrofit.java#create`</span>的<span class="string">`proxy`</span>中调用请求方法最后返回的是		<span class="string">`return serviceMethod.callAdapter.adapt(okHttpCall);`</span>, 默认情况下返回的就是<span class="string">`OkHttpCall`</span>, 所以最后调用的就是<span class="string">`OkHttpCall.execute()`</span>方法发送请求和解析返回结果</span></div><div class="line"></div><div class="line">关键代码:</div></pre></td></tr></table></figure></p>
+<pre><code>@Override public Response&lt;T&gt; execute() throws IOException {
+okhttp3.Call call;
+
+synchronized (this) {
 
   ...
-  一些错误情况的处理
-  ...
 
-  return new ServiceMethod&lt;&gt;(this);
- }
-<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">-<span class="ruby"> 在<span class="string">`Retrofit.java#create`</span>的<span class="string">`proxy`</span>中调用请求方法最后返回的是		<span class="string">`return serviceMethod.callAdapter.adapt(okHttpCall);`</span>, 默认情况下返回的就是<span class="string">`OkHttpCall`</span>, 所以最后调用的就是<span class="string">`OkHttpCall.execute()`</span>方法发送请求和解析返回结果</span></div><div class="line"></div><div class="line">	关键代码:</div></pre></td></tr></table></figure>
-
-    @Override public Response&lt;T&gt; execute() throws IOException {
-    okhttp3.Call call;
-
-    synchronized (this) {
-
+  call = rawCall;
+  if (call == null) {
+    try {
+      // 创建Okhttp的call方法
+      call = rawCall = createRawCall();
+    } catch (IOException | RuntimeException e) {
       ...
-
-      call = rawCall;
-      if (call == null) {
-        try {
-          // 创建Okhttp的call方法
-          call = rawCall = createRawCall();
-        } catch (IOException | RuntimeException e) {
-          ...
-        }
-      }
     }
-
-     ....
-
-     // call.execute: 调用okhttp发送真正的请求
-     // parseResponse: 对返回的结果进行解析, 方法就是调用创建retrofit时加入的所有converterFactory, 知道找到一个converter可以处理返回值
-    return parseResponse(call.execute());
   }
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">### 总结</div><div class="line"></div><div class="line"><span class="symbol">至此, `Retrofit`发送请求的整个流程就已经讲解完毕了, 实际上整个流程中关键点就只有几个, 比如:</span> </div><div class="line"></div><div class="line">- `Retrofit.java#create`方法, 这个方法的作用就是使用Proxy创建用户定义的接口的实现, 从而实现使用时只要创建接口, 创建方法, 添加相关注释三个步骤就可以完成一个http请求的关键</div><div class="line"></div><div class="line">- `ServiceMethod.java#build`方法, 这个方法的作用是对请求方法上的注解, 方法的参数, 方法的返回值进行解析, 同时创建callAdapter对象, 这是Retrofit留下的一个'插口', 只要我们实现`CallAdapter.Factory`就可以处理自定义的方法返回值类型, 方法不一定要返回Call&lt;T&gt;类型</div><div class="line"></div><div class="line">- `OkHttpCall.java#execute`方法, 这个方法的作用是调用底层的`okhttp`发送真正的`http`请求 , 然后对返回结果进行解析. 解析返回结果是的方法就是遍历`Retrofit`中的`converterFactories`, 知道找到一个可以解析返回结果的对象. 这事`Retrofit`留下的另一个'插口', 只要我们实现`Converter.Factory`就可以处理自定义的返回结果, 而不一定只能是`Call&lt;ResponseBody&gt;`类型</div><div class="line"></div><div class="line"></div><div class="line">另外, `Retrofit`提供了</div></pre></td></tr></table></figure>
-</code></pre><p>Gson: com.squareup.retrofit2:converter-gson<br>Jackson: com.squareup.retrofit2:converter-jackson<br>Moshi: com.squareup.retrofit2:converter-moshi<br>Protobuf: com.squareup.retrofit2:converter-protobuf<br>Wire: com.squareup.retrofit2:converter-wire<br>Simple XML: com.squareup.retrofit2:converter-simplexml<br>Scalars (primitives, boxed, and String): com.squareup.retrofit2:converter-scalars<br>```<br>这写转换器, 应该可以满足日常开发需要了. </p>
+}
+
+ ....
+
+ // call.execute: 调用okhttp发送真正的请求
+ // parseResponse: 对返回的结果进行解析, 方法就是调用创建retrofit时加入的所有converterFactory, 知道找到一个converter可以处理返回值
+return parseResponse(call.execute());
+</code></pre><p>  }<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">### 总结</div><div class="line"></div><div class="line"><span class="symbol">至此, `Retrofit`发送请求的整个流程就已经讲解完毕了, 实际上整个流程中关键点就只有几个, 比如:</span> </div><div class="line"></div><div class="line">- `Retrofit.java#create`方法, 这个方法的作用就是使用Proxy创建用户定义的接口的实现, 从而实现使用时只要创建接口, 创建方法, 添加相关注释三个步骤就可以完成一个http请求的关键</div><div class="line"></div><div class="line">- `ServiceMethod.java#build`方法, 这个方法的作用是对请求方法上的注解, 方法的参数, 方法的返回值进行解析, 同时创建callAdapter对象, 这是Retrofit留下的一个'插口', 只要我们实现`CallAdapter.Factory`就可以处理自定义的方法返回值类型, 方法不一定要返回Call&lt;T&gt;类型</div><div class="line"></div><div class="line">- `OkHttpCall.java#execute`方法, 这个方法的作用是调用底层的`okhttp`发送真正的`http`请求 , 然后对返回结果进行解析. 解析返回结果是的方法就是遍历`Retrofit`中的`converterFactories`, 知道找到一个可以解析返回结果的对象. 这事`Retrofit`留下的另一个'插口', 只要我们实现`Converter.Factory`就可以处理自定义的返回结果, 而不一定只能是`Call&lt;ResponseBody&gt;`类型</div><div class="line"></div><div class="line"></div><div class="line">另外, `Retrofit`提供了</div></pre></td></tr></table></figure></p>
+<p>Gson: com.squareup.retrofit2:converter-gson<br>Jackson: com.squareup.retrofit2:converter-jackson<br>Moshi: com.squareup.retrofit2:converter-moshi<br>Protobuf: com.squareup.retrofit2:converter-protobuf<br>Wire: com.squareup.retrofit2:converter-wire<br>Simple XML: com.squareup.retrofit2:converter-simplexml<br>Scalars (primitives, boxed, and String): com.squareup.retrofit2:converter-scalars<br>```<br>这写转换器, 应该可以满足日常开发需要了. </p>
 <p>从上面可以看到, <code>Retrofit</code>可以允许我们自定义返回类型, 返回结果同时屏蔽掉了底层的<code>OkHttp</code>的复杂性, 使得我们只要定义一个接口就完成<code>Http</code>请求的发送, 这对于使用者来说是非常友好的. 易于上手和高度的定制性是现如今<code>Retrofit</code>如此流行的关键</p>
 
       
@@ -562,8 +513,8 @@ public ServiceMethod build() {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/24/Vim移动快捷键/" rel="next" title="Vim移动快捷键">
-                <i class="fa fa-chevron-left"></i> Vim移动快捷键
+              <a href="/2016/08/29/lombok使用笔记/" rel="next" title="lombok使用笔记">
+                <i class="fa fa-chevron-left"></i> lombok使用笔记
               </a>
             
           </div>
@@ -644,7 +595,7 @@ public ServiceMethod build() {
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -652,7 +603,7 @@ public ServiceMethod build() {
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -705,7 +656,7 @@ public ServiceMethod build() {
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Retrofit发送请求的过程"><span class="nav-number">1.</span> <span class="nav-text">Retrofit发送请求的过程</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Retrofit核心源码解读"><span class="nav-number">1.</span> <span class="nav-text">Retrofit核心源码解读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建Retrofit对象"><span class="nav-number">1.1.</span> <span class="nav-text">1. 创建Retrofit对象</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
