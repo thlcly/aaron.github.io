@@ -80,26 +80,17 @@
 
 
 
-<meta name="description" content="Reading notes for CSAPP chapter 1
-1. 计算机中信息的本质
-源程序实际上就是一个由值0、1组成的位序列
-系统中所有的信息包括磁盘文件、存储器中的程序、存储器中存放的用户数据以及网上传送的数据都是由串位表示的. 区分不同数据对象的唯一办法是读到这些数据对象时的上下文, 简单的说就是由程序决定.所以一个同样的字节序列可能表示一个整数、浮点数、字符串、机器指令, 这都取">
+<meta name="description" content="Reading notes for CSAPP chapter 1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解计算机系统读书笔记 - 第一章">
 <meta property="og:url" content="http://thlcly.xyz/2017/03/03/csapp_1/index.html">
 <meta property="og:site_name" content="Monkey Coder">
-<meta property="og:description" content="Reading notes for CSAPP chapter 1
-1. 计算机中信息的本质
-源程序实际上就是一个由值0、1组成的位序列
-系统中所有的信息包括磁盘文件、存储器中的程序、存储器中存放的用户数据以及网上传送的数据都是由串位表示的. 区分不同数据对象的唯一办法是读到这些数据对象时的上下文, 简单的说就是由程序决定.所以一个同样的字节序列可能表示一个整数、浮点数、字符串、机器指令, 这都取">
+<meta property="og:description" content="Reading notes for CSAPP chapter 1">
 <meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/compiler.png">
-<meta property="og:updated_time" content="2017-03-04T08:53:16.000Z">
+<meta property="og:updated_time" content="2017-03-04T09:01:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解计算机系统读书笔记 - 第一章">
-<meta name="twitter:description" content="Reading notes for CSAPP chapter 1
-1. 计算机中信息的本质
-源程序实际上就是一个由值0、1组成的位序列
-系统中所有的信息包括磁盘文件、存储器中的程序、存储器中存放的用户数据以及网上传送的数据都是由串位表示的. 区分不同数据对象的唯一办法是读到这些数据对象时的上下文, 简单的说就是由程序决定.所以一个同样的字节序列可能表示一个整数、浮点数、字符串、机器指令, 这都取">
+<meta name="twitter:description" content="Reading notes for CSAPP chapter 1">
 <meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/compiler.png">
 
 
@@ -315,6 +306,7 @@
 
       
         <p>Reading notes for <em>CSAPP chapter 1</em></p>
+<a id="more"></a>
 <h3 id="1-计算机中信息的本质"><a href="#1-计算机中信息的本质" class="headerlink" title="1. 计算机中信息的本质"></a>1. 计算机中信息的本质</h3><ul>
 <li>源程序实际上就是一个由值0、1组成的位序列</li>
 <li>系统中所有的信息包括磁盘文件、存储器中的程序、存储器中存放的用户数据以及网上传送的数据都是由串位表示的. <strong>区分不同数据对象的唯一办法是读到这些数据对象时的上下文</strong>, 简单的说就是由程序决定.所以一个同样的字节序列可能表示一个整数、浮点数、字符串、机器指令, 这都取决于读取这个字节序列的程序.</li>

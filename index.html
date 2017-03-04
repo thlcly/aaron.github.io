@@ -308,30 +308,12 @@
 
       
         
-          
-            <p>Reading notes for <em>CSAPP chapter 1</em></p>
-<h3 id="1-计算机中信息的本质"><a href="#1-计算机中信息的本质" class="headerlink" title="1. 计算机中信息的本质"></a>1. 计算机中信息的本质</h3><ul>
-<li>源程序实际上就是一个由值0、1组成的位序列</li>
-<li>系统中所有的信息包括磁盘文件、存储器中的程序、存储器中存放的用户数据以及网上传送的数据都是由串位表示的. <strong>区分不同数据对象的唯一办法是读到这些数据对象时的上下文</strong>, 简单的说就是由程序决定.所以一个同样的字节序列可能表示一个整数、浮点数、字符串、机器指令, 这都取决于读取这个字节序列的程序.</li>
-</ul>
-<h3 id="2-源代码中的0、1是如何转换成高低电平控制计算机的"><a href="#2-源代码中的0、1是如何转换成高低电平控制计算机的" class="headerlink" title="2. 源代码中的0、1是如何转换成高低电平控制计算机的?"></a>2. 源代码中的0、1是如何转换成高低电平控制计算机的?</h3><p>其实这里一直有一个误区, 之前一直认为是源代码是0、1的二进制数据, 然后通过一系列”神奇的转换”变成高低电压从而控制计算机.<br>其实不是这样的. 其实源代码通过键盘输入计算机中时就已经是高低电压了, 所有的内容在计算机中的物理存储方式都是高低电压.<br>编译器只是将源代码的高低电压转换成可以控制计算机的高低电压.<br>想了解更多, <a href="https://www.zhihu.com/question/20492284" target="_blank" rel="external">请看这里</a></p>
-<h3 id="3-源代码转换成可执行代码"><a href="#3-源代码转换成可执行代码" class="headerlink" title="3. 源代码转换成可执行代码"></a>3. 源代码转换成可执行代码</h3><p><img src="http://o6qqyj17y.bkt.clouddn.com/compiler.png" alt="编译器将源代码转换成可执行文件"></p>
-<ul>
-<li><p>预处理阶段</p>
-<p>  将一些<code>#include</code>的文件的内容直接插入到程序文本中. 经过cpp处理的文件以<code>.i</code>作为文件扩展名</p>
-</li>
-<li><p>编译阶段</p>
-<p>  ccl将文本文件(<code>hello.i</code>)翻译成文本文件(<code>hello.s</code>), <code>hello.s</code>文件的内容是一个汇编语言程序. 所谓的汇编语言程序就是将低级机器语言指令用一种标准的文本格式确切的描述.</p>
-</li>
-<li><p>汇编阶段</p>
-<p>  as将<code>hello.s</code>翻译成机器语言指令, 把这些指令打包成可重定位目标程序的格式, 变成一个<code>hello.o</code>的二进制文件</p>
-</li>
-<li><p>链接阶段</p>
-<p>  链接阶段就是将程序中用到的其他的代码, 类库等合并到<code>hello.o</code>的程序中. ld的职责就是处理这种合并. ld会生成一个<code>hello</code>文件, 他是一个可执行目标文件</p>
-</li>
-</ul>
-
-          
+          <p>Reading notes for <em>CSAPP chapter 1</em></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/03/03/csapp_1/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
         
       
     </div>
