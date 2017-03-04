@@ -1,0 +1,724 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Anonymous-favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Maven experience series – profile">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Maven使用系列之Profile">
+<meta property="og:url" content="http://thlcly.xyz/2017/02/28/maven_profile/index.html">
+<meta property="og:site_name" content="Monkey Coder">
+<meta property="og:description" content="Maven experience series – profile">
+<meta property="og:updated_time" content="2017-02-28T07:50:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Maven使用系列之Profile">
+<meta name="twitter:description" content="Maven experience series – profile">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Maven使用系列之Profile | Monkey Coder </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Monkey Coder</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Maven使用系列之Profile
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-02-28T11:37:41+08:00" content="2017-02-28">
+              2017-02-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Maven/" itemprop="url" rel="index">
+                    <span itemprop="name">Maven</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/28/maven_profile/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/28/maven_profile/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>Maven</strong> experience series – <em>profile</em></p>
+<a id="more"></a>
+<h2 id="Profile介绍"><a href="#Profile介绍" class="headerlink" title="Profile介绍"></a>Profile介绍</h2><h3 id="1-Profile作用"><a href="#1-Profile作用" class="headerlink" title="1. Profile作用"></a>1. Profile作用</h3><p>profile是一组配置的集合, 这些配置可以设置或者覆写Maven build时的默认值. 使用profile可以根据不同条件自定义构建过程.例如根据是生产环境还是开发环境进行构建.</p>
+<h3 id="2-Profile类型-Profile可以出现的位置"><a href="#2-Profile类型-Profile可以出现的位置" class="headerlink" title="2. Profile类型(Profile可以出现的位置)"></a>2. Profile类型(Profile可以出现的位置)</h3><ul>
+<li>每个项目 (定义在pom.xml中)</li>
+<li>每个用户 (定义在<code>%USER_HOME%/.m2/settings.xml</code>中)</li>
+<li>全局 (定义在maven的安装目录中<code>${maven.home}/conf/settings.xml</code>)</li>
+<li>Profile描述符 (定义在项目根目录下(profiles.xml, 在maven 3以上的版本中不在支持))</li>
+</ul>
+<h2 id="Profile的使用"><a href="#Profile的使用" class="headerlink" title="Profile的使用"></a>Profile的使用</h2><h3 id="1-激活Profile"><a href="#1-激活Profile" class="headerlink" title="1. 激活Profile"></a>1. 激活Profile</h3><ul>
+<li><p>使用<code>-P</code>选项激活</p>
+<p>在命令行执行maven命令的时候可以使用<code>-P</code>选项激活指定的<code>profile</code></p>
+<p>eg: </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn <span class="tag">&lt;<span class="name">MAVEN</span> <span class="attr">COMMAND</span>&gt;</span> -P <span class="tag">&lt;<span class="name">profile</span> <span class="attr">id</span> <span class="attr">1</span>&gt;</span> <span class="tag">&lt;<span class="name">profile</span> <span class="attr">id</span> <span class="attr">2</span>&gt;</span>...</div></pre></td></tr></table></figure>
+</li>
+<li><p>在setting.xml中使用<code>&lt;activeProfiles&gt;</code>标签</p>
+<p>  在<activeprofiles>标签中的profile默认会被激活</activeprofiles></p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">settings</span>&gt;</span></div><div class="line"> ...</div><div class="line"> <span class="tag">&lt;<span class="name">activeProfiles</span>&gt;</span></div><div class="line">   <span class="tag">&lt;<span class="name">activeProfile</span>&gt;</span>profile id<span class="tag">&lt;/<span class="name">activeProfile</span>&gt;</span></div><div class="line"> <span class="tag">&lt;/<span class="name">activeProfiles</span>&gt;</span></div><div class="line"> ...</div><div class="line"><span class="tag">&lt;/<span class="name">settings</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>根据构建环境激活Profile</p>
+<p>  根据<code>&lt;activation&gt;</code>标签可以自动激活符合条件的profile</p>
+<p>  eg1: 根据jdk的版本激活</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">     <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">jdk</span>&gt;</span>1.4<span class="tag">&lt;/<span class="name">jdk</span>&gt;</span></div><div class="line">     <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">     ...</div><div class="line">   <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line"> <span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>说明: 如果构建使用的是jdk1.4以上的版本则这个profile会被激活, 例如如果构建的时候是jdk1.4.0_08, jdk1.4.2_07, jdk1.4, 那么这个profile就会被激活</p>
+<pre><code>eg2: 根据jdk的版本范围激活
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">jdk</span>&gt;</span>[1.3,1.6)<span class="tag">&lt;/<span class="name">jdk</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">      ...</div><div class="line">    <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div></pre></td></tr></table></figure>
+
+说明: 如果构建使用的jdk版本&gt;=1.3 &amp;&amp; &lt; 1.6, 则profile会被激活
+
+eg3: 根据操作系统类型激活
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">os</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>Windows XP<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">family</span>&gt;</span>Windows<span class="tag">&lt;/<span class="name">family</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">arch</span>&gt;</span>x86<span class="tag">&lt;/<span class="name">arch</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.2600<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">os</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">    ...</div><div class="line">  <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div></pre></td></tr></table></figure>
+
+说明: 如果构建的系统是window XP X86 version 5.1.2600的, 则profile会被激活
+
+eg4-1: 根据系统变量是否存在激活
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>debug<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">    ...</div><div class="line">  <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div></pre></td></tr></table></figure>
+
+说明: 如果系统中**存在**debug这个系统变量则profile被激活
+
+eg4-2: 
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>!debug<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">    ...</div><div class="line">  <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div></pre></td></tr></table></figure>
+
+说明: 如果系统中**不存在**debug这个系统变量则profile被激活
+
+eg4-3: 
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>debug<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>!true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">    ...</div><div class="line">  <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div></pre></td></tr></table></figure>
+
+说明: 如果系统中不存在debug变量或者存在debug变量且值不为true则profile被激活
+
+以下的命令可以激活这个profile
+
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">mvn</span> &lt;MAVEN COMMAND&gt;</div><div class="line">mvn &lt;MAVEN COMMAND&gt; -D<span class="literal">debug</span>=<span class="literal">false</span></div></pre></td></tr></table></figure>
+
+
+eg4-4: 
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">property</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>environment<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>test<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">    ...</div><div class="line">  <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div></pre></td></tr></table></figure>
+
+说明: 当系统中存在environment变量且值为test则profile被激活
+
+以下的命令可以激活这个profile
+
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">mvn </span>&lt;MAVEN COMMAND&gt; -Denvironment<span class="symbol">=test</span></div></pre></td></tr></table></figure>
+
+
+注意: 
+
+- 在maven3之后的版本, &lt;activation&gt;也可以出现在pom.xml中
+- 可以使用env.&lt;ENVIRONMENT NAME&gt;来访问系统变量
+</code></pre><ul>
+<li><p>eg5: 根据指定文件是否存在激活</p>
+  <figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="params">&lt;profiles&gt;</span></div><div class="line">  <span class="params">&lt;profile&gt;</span></div><div class="line">    <span class="params">&lt;activation&gt;</span></div><div class="line">      <span class="params">&lt;file&gt;</span></div><div class="line">        <span class="params">&lt;missing&gt;</span>target<span class="meta-keyword">/generated-sources/</span>axistools<span class="meta-keyword">/wsdl2java/</span>org<span class="meta-keyword">/apache/</span>maven<span class="params">&lt;/missing&gt;</span></div><div class="line">      <span class="params">&lt;/file&gt;</span></div><div class="line">    <span class="params">&lt;/activation&gt;</span></div><div class="line">    ...</div><div class="line">  <span class="params">&lt;/profile&gt;</span></div><div class="line"><span class="params">&lt;/profiles&gt;</span></div></pre></td></tr></table></figure>
+<p>  说明: 如果这个指定的文件不存在则激活profile</p>
+<p>  注意: 在maven2.0.9之后, <exists> 和 <missing> 的值可以设置成动态的, 支持系统变量, 例如: <code>${user.home}</code>, <code>${env.HOME}</code>. 但是要注意不能直接使用在POM定义的变量, 例如: <code>${project.build.directory}</code></missing></exists></p>
+</li>
+</ul>
+<h3 id="2-不激活Profile"><a href="#2-不激活Profile" class="headerlink" title="2. 不激活Profile"></a>2. 不激活Profile</h3><ul>
+<li>可以使用<code>!</code>或者<code>-</code>不激活Profile</li>
+</ul>
+<p>eg: </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn <span class="tag">&lt;<span class="name">MAVEN</span> <span class="attr">COMMAND</span>&gt;</span> -P !<span class="tag">&lt;<span class="name">PROFILE</span> <span class="attr">ID</span>&gt;</span>[,!<span class="tag">&lt;<span class="name">PROFILE</span> <span class="attr">ID</span>&gt;</span>]</div></pre></td></tr></table></figure>
+<p>说明: 不激活指定的profile</p>
+<p>注意: 如果是在mac下执行, 要在!前加\转义一下, 不然会报错</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn <span class="tag">&lt;<span class="name">MAVEN</span> <span class="attr">COMMAND</span>&gt;</span> -P \!<span class="tag">&lt;<span class="name">PROFILE</span> <span class="attr">ID</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="3-Profile所在的位置及其能使用的元素"><a href="#3-Profile所在的位置及其能使用的元素" class="headerlink" title="3. Profile所在的位置及其能使用的元素"></a>3. Profile所在的位置及其能使用的元素</h3><p>根据配置profile的位置不同, 可以使用的选项也不一样</p>
+<ul>
+<li><p>Profile在外部文件中</p>
+<p>  这里说的外部文件是指在setting.xml或profiles.xml文件中</p>
+<p>  在外部文件中只能使用<code>&lt;repositories&gt;</code>、<code>&lt;pluginRepositories&gt;</code>、<code>&lt;properties&gt;</code>这三个标签. 其中, <code>&lt;properties&gt;</code>标签中可以添加自定义的key-value对, 并且可以包含动态属性</p>
+</li>
+<li><p>Profile在POM文件中</p>
+<p>  在POM文件中的Profiles可以支持一下属性</p>
+  <figure class="highlight pf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="variable">&lt;repositories&gt;</span></div><div class="line"><span class="variable">&lt;pluginRepositories&gt;</span></div><div class="line"><span class="variable">&lt;dependencies&gt;</span></div><div class="line"><span class="variable">&lt;plugins&gt;</span></div><div class="line"><span class="variable">&lt;properties&gt;</span> (not actually available <span class="keyword">in</span> the main POM, but used behind the scenes)</div><div class="line"><span class="variable">&lt;modules&gt;</span></div><div class="line"><span class="variable">&lt;reporting&gt;</span></div><div class="line"><span class="variable">&lt;dependencyManagement&gt;</span></div><div class="line"><span class="variable">&lt;distributionManagement&gt;</span></div><div class="line">a subset of the <span class="variable">&lt;build&gt;</span> element, which consists of:</div><div class="line">	<span class="variable">&lt;defaultGoal&gt;</span></div><div class="line">	<span class="variable">&lt;resources&gt;</span></div><div class="line">	<span class="variable">&lt;testResources&gt;</span></div><div class="line">	<span class="variable">&lt;finalName&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/25/cpu_memory_disk_instruct/" rel="next" title="cpu、内存、硬盘、指令之间的关系">
+                <i class="fa fa-chevron-left"></i> cpu、内存、硬盘、指令之间的关系
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/03/csapp_1/" rel="prev" title="深入理解计算机系统读书笔记 - 第一章">
+                深入理解计算机系统读书笔记 - 第一章 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/28/maven_profile/"
+           data-title="Maven使用系列之Profile" data-url="http://thlcly.xyz/2017/02/28/maven_profile/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/Anonymous.jpg"
+               alt="Tony Hui" />
+          <p class="site-author-name" itemprop="name">Tony Hui</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/thlcly" target="_blank">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/tonyhui0717" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Profile介绍"><span class="nav-number">1.</span> <span class="nav-text">Profile介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Profile作用"><span class="nav-number">1.1.</span> <span class="nav-text">1. Profile作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Profile类型-Profile可以出现的位置"><span class="nav-number">1.2.</span> <span class="nav-text">2. Profile类型(Profile可以出现的位置)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Profile的使用"><span class="nav-number">2.</span> <span class="nav-text">Profile的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-激活Profile"><span class="nav-number">2.1.</span> <span class="nav-text">1. 激活Profile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-不激活Profile"><span class="nav-number">2.2.</span> <span class="nav-text">2. 不激活Profile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Profile所在的位置及其能使用的元素"><span class="nav-number">2.3.</span> <span class="nav-text">3. Profile所在的位置及其能使用的元素</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tony Hui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"thlcly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

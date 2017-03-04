@@ -239,6 +239,268 @@
             
               
                 
+                <a class="post-title-link" href="/2017/03/03/csapp_1/" itemprop="url">
+                  深入理解计算机系统读书笔记 - 第一章
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-03-03T11:47:51+08:00" content="2017-03-03">
+              2017-03-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/CSAPP/" itemprop="url" rel="index">
+                    <span itemprop="name">CSAPP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/03/csapp_1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/03/csapp_1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Reading notes for <em>CSAPP chapter 1</em></p>
+<h3 id="1-计算机中信息的本质"><a href="#1-计算机中信息的本质" class="headerlink" title="1. 计算机中信息的本质"></a>1. 计算机中信息的本质</h3><ul>
+<li>源程序实际上就是一个由值0、1组成的位序列</li>
+<li>系统中所有的信息包括磁盘文件、存储器中的程序、存储器中存放的用户数据以及网上传送的数据都是由串位表示的. <strong>区分不同数据对象的唯一办法是读到这些数据对象时的上下文</strong>, 简单的说就是由程序决定.所以一个同样的字节序列可能表示一个整数、浮点数、字符串、机器指令, 这都取决于读取这个字节序列的程序.</li>
+</ul>
+<h3 id="2-源代码中的0、1是如何转换成高低电平控制计算机的"><a href="#2-源代码中的0、1是如何转换成高低电平控制计算机的" class="headerlink" title="2. 源代码中的0、1是如何转换成高低电平控制计算机的?"></a>2. 源代码中的0、1是如何转换成高低电平控制计算机的?</h3><p>其实这里一直有一个误区, 之前一直认为是源代码是0、1的二进制数据, 然后通过一系列”神奇的转换”变成高低电压从而控制计算机.<br>其实不是这样的. 其实源代码通过键盘输入计算机中时就已经是高低电压了, 所有的内容在计算机中的物理存储方式都是高低电压.<br>编译器只是将源代码的高低电压转换成可以控制计算机的高低电压.<br>想了解更多, <a href="https://www.zhihu.com/question/20492284" target="_blank" rel="external">请看这里</a></p>
+<h3 id="3-源代码转换成可执行代码"><a href="#3-源代码转换成可执行代码" class="headerlink" title="3. 源代码转换成可执行代码"></a>3. 源代码转换成可执行代码</h3><p><img src="http://o6qqyj17y.bkt.clouddn.com/compiler.png" alt="编译器将源代码转换成可执行文件"></p>
+<ul>
+<li><p>预处理阶段</p>
+<p>  将一些<code>#include</code>的文件的内容直接插入到程序文本中. 经过cpp处理的文件以<code>.i</code>作为文件扩展名</p>
+</li>
+<li><p>编译阶段</p>
+<p>  ccl将文本文件(<code>hello.i</code>)翻译成文本文件(<code>hello.s</code>), <code>hello.s</code>文件的内容是一个汇编语言程序. 所谓的汇编语言程序就是将低级机器语言指令用一种标准的文本格式确切的描述.</p>
+</li>
+<li><p>汇编阶段</p>
+<p>  as将<code>hello.s</code>翻译成机器语言指令, 把这些指令打包成可重定位目标程序的格式, 变成一个<code>hello.o</code>的二进制文件</p>
+</li>
+<li><p>链接阶段</p>
+<p>  链接阶段就是将程序中用到的其他的代码, 类库等合并到<code>hello.o</code>的程序中. ld的职责就是处理这种合并. ld会生成一个<code>hello</code>文件, 他是一个可执行目标文件</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/28/maven_profile/" itemprop="url">
+                  Maven使用系列之Profile
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-02-28T11:37:41+08:00" content="2017-02-28">
+              2017-02-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Maven/" itemprop="url" rel="index">
+                    <span itemprop="name">Maven</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/28/maven_profile/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/28/maven_profile/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><strong>Maven</strong> experience series – <em>profile</em></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/02/28/maven_profile/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/02/25/cpu_memory_disk_instruct/" itemprop="url">
                   cpu、内存、硬盘、指令之间的关系
                 </a>
@@ -1199,250 +1461,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/21/数据库读现象解析/" itemprop="url">
-                  数据库中读现象解析
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-08-21T16:54:05+08:00" content="2016-08-21">
-              2016-08-21
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/21/数据库读现象解析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/21/数据库读现象解析/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>数据库读现象解析</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/08/21/数据库读现象解析/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/04/Thymeleaf遇到的坑总结/" itemprop="url">
-                  Thymeleaf中遇到的坑总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-08-04T17:39:02+08:00" content="2016-08-04">
-              2016-08-04
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Thymeleaf/" itemprop="url" rel="index">
-                    <span itemprop="name">Thymeleaf</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/04/Thymeleaf遇到的坑总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/04/Thymeleaf遇到的坑总结/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>This is experience from using thymeleaf in actual project </p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/08/04/Thymeleaf遇到的坑总结/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1488,7 +1506,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">23</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -1496,7 +1514,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>

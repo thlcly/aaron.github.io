@@ -80,21 +80,27 @@
 
 
 
-<meta name="description" content="This is a note about Setup Redis master/slave mode and cluster mode
-下面将介绍最简的Redis的主从搭建环境搭建和集群环境搭建">
+<meta name="description" content="Reading notes for CSAPP chapter 1
+1. 计算机中信息的本质
+源程序实际上就是一个由值0、1组成的位序列
+系统中所有的信息包括磁盘文件、存储器中的程序、存储器中存放的用户数据以及网上传送的数据都是由串位表示的. 区分不同数据对象的唯一办法是读到这些数据对象时的上下文, 简单的说就是由程序决定.所以一个同样的字节序列可能表示一个整数、浮点数、字符串、机器指令, 这都取">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Redis主从和集群搭建">
-<meta property="og:url" content="http://thlcly.xyz/2017/01/07/Redis主从和集群搭建/index.html">
+<meta property="og:title" content="深入理解计算机系统读书笔记 - 第一章">
+<meta property="og:url" content="http://thlcly.xyz/2017/03/03/csapp_1/index.html">
 <meta property="og:site_name" content="Monkey Coder">
-<meta property="og:description" content="This is a note about Setup Redis master/slave mode and cluster mode
-下面将介绍最简的Redis的主从搭建环境搭建和集群环境搭建">
-<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/redis_cluster.png">
-<meta property="og:updated_time" content="2017-01-09T07:16:49.000Z">
+<meta property="og:description" content="Reading notes for CSAPP chapter 1
+1. 计算机中信息的本质
+源程序实际上就是一个由值0、1组成的位序列
+系统中所有的信息包括磁盘文件、存储器中的程序、存储器中存放的用户数据以及网上传送的数据都是由串位表示的. 区分不同数据对象的唯一办法是读到这些数据对象时的上下文, 简单的说就是由程序决定.所以一个同样的字节序列可能表示一个整数、浮点数、字符串、机器指令, 这都取">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/compiler.png">
+<meta property="og:updated_time" content="2017-03-04T08:53:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Redis主从和集群搭建">
-<meta name="twitter:description" content="This is a note about Setup Redis master/slave mode and cluster mode
-下面将介绍最简的Redis的主从搭建环境搭建和集群环境搭建">
-<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/redis_cluster.png">
+<meta name="twitter:title" content="深入理解计算机系统读书笔记 - 第一章">
+<meta name="twitter:description" content="Reading notes for CSAPP chapter 1
+1. 计算机中信息的本质
+源程序实际上就是一个由值0、1组成的位序列
+系统中所有的信息包括磁盘文件、存储器中的程序、存储器中存放的用户数据以及网上传送的数据都是由串位表示的. 区分不同数据对象的唯一办法是读到这些数据对象时的上下文, 简单的说就是由程序决定.所以一个同样的字节序列可能表示一个整数、浮点数、字符串、机器指令, 这都取">
+<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/compiler.png">
 
 
 
@@ -112,7 +118,7 @@
   };
 </script>
 
-  <title> Redis主从和集群搭建 | Monkey Coder </title>
+  <title> 深入理解计算机系统读书笔记 - 第一章 | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -242,7 +248,7 @@
             
             
               
-                Redis主从和集群搭建
+                深入理解计算机系统读书笔记 - 第一章
               
             
           </h1>
@@ -254,8 +260,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2017-01-07T18:17:47+08:00" content="2017-01-07">
-              2017-01-07
+            <time itemprop="dateCreated" datetime="2017-03-03T11:47:51+08:00" content="2017-03-03">
+              2017-03-03
             </time>
           </span>
 
@@ -268,8 +274,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis</span>
+                  <a href="/categories/CSAPP/" itemprop="url" rel="index">
+                    <span itemprop="name">CSAPP</span>
                   </a>
                 </span>
 
@@ -284,8 +290,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/01/07/Redis主从和集群搭建/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/07/Redis主从和集群搭建/" itemprop="commentsCount"></span>
+                <a href="/2017/03/03/csapp_1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/03/csapp_1/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -308,48 +314,27 @@
       
 
       
-        <p>This is a note about <strong>Setup Redis master/slave mode and cluster mode</strong></p>
-<p>下面将介绍最简的Redis的主从搭建环境搭建和集群环境搭建</p>
-<a id="more"></a>
-<h2 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h2><p>使用的操作系统是os x系统, 已经安装了redis(我这里是使用brew进行安装).</p>
-<h2 id="redis主从环境搭建"><a href="#redis主从环境搭建" class="headerlink" title="redis主从环境搭建"></a>redis主从环境搭建</h2><p>这里假设搭建一个master, 一个slave的环境(多个slave的环境搭建类似)</p>
-<ol>
-<li>到<code>/usr/local/etc</code>目录下查找redis的配置文件, redis.conf文件</li>
-<li>拷贝redis.conf文件, 重命名成redis6380.conf</li>
-<li><p>修改redis6380.conf配置文件中的以下配置: </p>
- <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">port <span class="number">6380</span></div><div class="line">slaveof <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="number">6379</span></div><div class="line">  masterauth &lt;master-password&gt;(如果master主机设置了auth密码则要进行设置)</div></pre></td></tr></table></figure>
+        <p>Reading notes for <em>CSAPP chapter 1</em></p>
+<h3 id="1-计算机中信息的本质"><a href="#1-计算机中信息的本质" class="headerlink" title="1. 计算机中信息的本质"></a>1. 计算机中信息的本质</h3><ul>
+<li>源程序实际上就是一个由值0、1组成的位序列</li>
+<li>系统中所有的信息包括磁盘文件、存储器中的程序、存储器中存放的用户数据以及网上传送的数据都是由串位表示的. <strong>区分不同数据对象的唯一办法是读到这些数据对象时的上下文</strong>, 简单的说就是由程序决定.所以一个同样的字节序列可能表示一个整数、浮点数、字符串、机器指令, 这都取决于读取这个字节序列的程序.</li>
+</ul>
+<h3 id="2-源代码中的0、1是如何转换成高低电平控制计算机的"><a href="#2-源代码中的0、1是如何转换成高低电平控制计算机的" class="headerlink" title="2. 源代码中的0、1是如何转换成高低电平控制计算机的?"></a>2. 源代码中的0、1是如何转换成高低电平控制计算机的?</h3><p>其实这里一直有一个误区, 之前一直认为是源代码是0、1的二进制数据, 然后通过一系列”神奇的转换”变成高低电压从而控制计算机.<br>其实不是这样的. 其实源代码通过键盘输入计算机中时就已经是高低电压了, 所有的内容在计算机中的物理存储方式都是高低电压.<br>编译器只是将源代码的高低电压转换成可以控制计算机的高低电压.<br>想了解更多, <a href="https://www.zhihu.com/question/20492284" target="_blank" rel="external">请看这里</a></p>
+<h3 id="3-源代码转换成可执行代码"><a href="#3-源代码转换成可执行代码" class="headerlink" title="3. 源代码转换成可执行代码"></a>3. 源代码转换成可执行代码</h3><p><img src="http://o6qqyj17y.bkt.clouddn.com/compiler.png" alt="编译器将源代码转换成可执行文件"></p>
+<ul>
+<li><p>预处理阶段</p>
+<p>  将一些<code>#include</code>的文件的内容直接插入到程序文本中. 经过cpp处理的文件以<code>.i</code>作为文件扩展名</p>
 </li>
-</ol>
-<ol>
-<li>分别启动mater和slave, 启动时指定配置文件(不指定默认使用redis.conf)<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">redis-server &lt;PATH-TO-REDIS.<span class="keyword">CONF</span>&gt;/redis.<span class="keyword">conf</span>   <span class="comment">// 启动master</span></div><div class="line">redis-server &lt;PATH-TO-REDIS6380.<span class="keyword">CONF</span>&gt;/redis6380.<span class="keyword">conf</span> <span class="comment">// 启动slave</span></div></pre></td></tr></table></figure>
+<li><p>编译阶段</p>
+<p>  ccl将文本文件(<code>hello.i</code>)翻译成文本文件(<code>hello.s</code>), <code>hello.s</code>文件的内容是一个汇编语言程序. 所谓的汇编语言程序就是将低级机器语言指令用一种标准的文本格式确切的描述.</p>
 </li>
-</ol>
-<pre><code>master: 
-![redis-master](http://o6qqyj17y.bkt.clouddn.com/redis/redis_mater.png)
-
-slave: 
-![redis-slave](http://o6qqyj17y.bkt.clouddn.com/redis/redis-slave.png)
-</code></pre><ol>
-<li>使用客户端连接redis进行操作, 连接时要指定端口 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">redis-cli -<span class="selector-tag">p</span> <span class="number">6379</span> <span class="comment">// 连接到master</span></div><div class="line">redis-cli -<span class="selector-tag">p</span> <span class="number">6380</span> <span class="comment">// 连接到slave</span></div></pre></td></tr></table></figure>
+<li><p>汇编阶段</p>
+<p>  as将<code>hello.s</code>翻译成机器语言指令, 把这些指令打包成可重定位目标程序的格式, 变成一个<code>hello.o</code>的二进制文件</p>
 </li>
-</ol>
-<pre><code>注意: 默认情况下slave服务只能进行读操作, 要是想让slave也能进行写操作, 则需要修改`slave-read-only no`, 这样就能对slave进行写操作, 但是对slave的写操作不会同步到master中. 
-</code></pre><h2 id="redis集群搭建"><a href="#redis集群搭建" class="headerlink" title="redis集群搭建"></a>redis集群搭建</h2><ol>
-<li>新建3个目录, 目录名是端口号</li>
-<li>每一个目录中都放一份redis.server执行文件(方便后面的执行, 不是必要的)和一份redis.conf配置文件</li>
-<li><p>修改每个目录中的redis.conf配置文件中的以下属性</p>
-  <figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">cluster</span>-config-<span class="keyword">file</span> nodes-&lt;port&gt;.<span class="keyword">conf</span>(只要3个配置的文件名不一样即可)</div><div class="line">daemonize yes</div><div class="line"><span class="keyword">cluster</span>-enabled yes</div><div class="line"><span class="keyword">cluster</span>-node-timeout 5000</div></pre></td></tr></table></figure>
+<li><p>链接阶段</p>
+<p>  链接阶段就是将程序中用到的其他的代码, 类库等合并到<code>hello.o</code>的程序中. ld的职责就是处理这种合并. ld会生成一个<code>hello</code>文件, 他是一个可执行目标文件</p>
 </li>
-<li><p>进入到每个目录, 使用命令./redis-server redis.conf启动redis</p>
-</li>
-<li>安装ruby(已经安装的跳过, mac应该是自带ruby的)</li>
-<li>安装redis的ruby模块 [sudo] gem install redis</li>
-<li>从redis的源码中下载<a href="https://raw.githubusercontent.com/antirez/redis/unstable/src/redis-trib.rb" target="_blank" rel="external">src/redis-trib.rb</a>文件(这个ruby用于管理redis的集群, 例如slots的设置)</li>
-<li>启动集群, ruby <redis-trib.rd-path> create &lt;–replicas 1&gt;(用于创建master-slave 模式, 设置每个master有1个slave) 127.0.0.1:7000 127.0.0.1:7001…</redis-trib.rd-path></li>
-<li>使用redis-cli -p <port>指定任意一个端口, 就可以连接redis的集群了</port></li>
-</ol>
-<p>cluster: </p>
-<p><img src="http://o6qqyj17y.bkt.clouddn.com/redis_cluster.png" alt="redis-cluster"></p>
+</ul>
 
       
     </div>
@@ -373,17 +358,13 @@ slave:
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/12/31/Java Bridge Method/" rel="next" title="Bridge Method">
-                <i class="fa fa-chevron-left"></i> Bridge Method
+              <a href="/2017/02/28/maven_profile/" rel="next" title="Maven使用系列之Profile">
+                <i class="fa fa-chevron-left"></i> Maven使用系列之Profile
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/01/14/Jedis源码阅读之连接池/" rel="prev" title="Jedis源码阅读之连接池">
-                Jedis源码阅读之连接池 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -409,8 +390,8 @@ slave:
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/01/07/Redis主从和集群搭建/"
-           data-title="Redis主从和集群搭建" data-url="http://thlcly.xyz/2017/01/07/Redis主从和集群搭建/">
+      <div class="ds-thread" data-thread-key="2017/03/03/csapp_1/"
+           data-title="深入理解计算机系统读书笔记 - 第一章" data-url="http://thlcly.xyz/2017/03/03/csapp_1/">
       </div>
     
   </div>
@@ -516,7 +497,7 @@ slave:
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前期准备"><span class="nav-number">1.</span> <span class="nav-text">前期准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis主从环境搭建"><span class="nav-number">2.</span> <span class="nav-text">redis主从环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis集群搭建"><span class="nav-number">3.</span> <span class="nav-text">redis集群搭建</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-计算机中信息的本质"><span class="nav-number">1.</span> <span class="nav-text">1. 计算机中信息的本质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-源代码中的0、1是如何转换成高低电平控制计算机的"><span class="nav-number">2.</span> <span class="nav-text">2. 源代码中的0、1是如何转换成高低电平控制计算机的?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-源代码转换成可执行代码"><span class="nav-number">3.</span> <span class="nav-text">3. 源代码转换成可执行代码</span></a></li></ol></div>
             
           </div>
         </section>
