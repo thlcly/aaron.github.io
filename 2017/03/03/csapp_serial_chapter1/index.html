@@ -83,11 +83,20 @@
 <meta name="description" content="Reading notes for CSAPP chapter 1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解计算机系统读书笔记 - 第一章">
-<meta property="og:url" content="http://thlcly.xyz/2017/03/03/csapp_1/index.html">
+<meta property="og:url" content="http://thlcly.xyz/2017/03/03/csapp_serial_chapter1/index.html">
 <meta property="og:site_name" content="Monkey Coder">
 <meta property="og:description" content="Reading notes for CSAPP chapter 1">
 <meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/compiler.png">
-<meta property="og:updated_time" content="2017-03-04T09:01:51.000Z">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/Intel%20Pentium.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/hello_program.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/disk_to_memory.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/print.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/cache.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/storage_level.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/os_hierarchy.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/op_abstract.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/process_switch.png">
+<meta property="og:updated_time" content="2017-03-05T10:39:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解计算机系统读书笔记 - 第一章">
 <meta name="twitter:description" content="Reading notes for CSAPP chapter 1">
@@ -281,8 +290,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/03/03/csapp_1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/03/csapp_1/" itemprop="commentsCount"></span>
+                <a href="/2017/03/03/csapp_serial_chapter1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/03/csapp_serial_chapter1/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -327,6 +336,48 @@
 <p>  链接阶段就是将程序中用到的其他的代码, 类库等合并到<code>hello.o</code>的程序中. ld的职责就是处理这种合并. ld会生成一个<code>hello</code>文件, 他是一个可执行目标文件</p>
 </li>
 </ul>
+<h3 id="4-系统的硬件组成"><a href="#4-系统的硬件组成" class="headerlink" title="4. 系统的硬件组成"></a>4. 系统的硬件组成</h3><p><img src="http://o6qqyj17y.bkt.clouddn.com/Intel%20Pentium.png" alt="Intel Pentium系列产品"></p>
+<ul>
+<li><p>总线</p>
+<p>  总线是贯穿整个系统的一组电子管道, 其主要功能是在各个计算机部件之间传送字节信息. 通常总线被设计成传送定长的字节块, 称为<strong>字</strong>. 字中的字节数(即字长)是一个基本的系统参数, 这个在不同的系统中不一致.</p>
+</li>
+<li><p>I/O设备</p>
+<p>  I/O设备是系统与外部世界联系的通道. 上面的图中一共有4个I/O设备. 鼠标(输入设备)、键盘(输入设备)、显示器(输出设备)、磁盘(输入输出设备)、主存储器(输入输出设备)<br>  每个I/O设备都通过一个控制器或者适配器与I/O总线相连. 控制器和适配器的区别是它们的封装方式. 控制器是位于I/O设备本身或者系统的主板上的芯片组, 而适配器是一块插在主板插槽上的卡. 但是它们的功能都是在I/O和I/O设备之间传递信息.</p>
+</li>
+<li><p>主存</p>
+<p>  主存是一个临时的存储设备(计算机断电之后主存中的数据会丢失, 所以不能用主存长期存储数据). 在cpu执行程序时, 主存用于存放程序和程序处理的数据.<br>  从物理上说, 主存是一组DRAM芯片组成的. 从逻辑上来说, 存储器是一个线性的字节数据, 每个字节都有其唯一的地址(可以看成是数组索引)</p>
+</li>
+<li><p>处理器</p>
+<p>  CPU用于执行存储在<strong>主存</strong>中指令. CPU的核心部件是程序计数器(PC), PC的内容始终指向某条指令在内存中的地址.<br>  CPU按照一个指令执行模型来操作, 这个模型是有指令集结构决定的(不同的平台这个指令集不一样, 例如Intel和AMD的指令集就不一样). 在这个模型中, 指令按照严格的顺序执行, 而执行一条指令包含执行一系列的操作.操作是围绕主存、寄存器文件(register file)和算术/逻辑单元(ALU)进行的. 寄存器文件是一个小的<strong>存储设备</strong>, 有一些1字长的寄存器组成, 每个寄存器都有一个唯一的名字. CPU在指令的要求下可能会执行以下指令:</p>
+<ul>
+<li>加载: 把一个字节或者一个字从主存复制到寄存器, 覆盖原来寄存器的值</li>
+<li>存储: 把一个字节或者一个字从寄存器复制到主存, 覆盖原来主存的值</li>
+<li>操作: 把两个寄存器中的值复制到ALU, 进行算术或者逻辑操作之后将结果存放到一个寄存器中</li>
+<li>跳转: 从指令中抽取一个字, 将这个字复制到PC寄存器, 以覆盖PC寄存器原来的值</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-运行hello程序"><a href="#4-1-运行hello程序" class="headerlink" title="4.1 运行hello程序"></a>4.1 运行hello程序</h3><p><img src="http://o6qqyj17y.bkt.clouddn.com/hello_program.png" alt="hello程序运行的过程"></p>
+<ul>
+<li>刚开始, shell执行, 等待我们输入一个命令. </li>
+<li>当我们输入<code>./hello</code>后, shell成将字符逐一读入到寄存器文件, 然后再把它放到内存中. </li>
+<li>当我们在键盘上敲回车键时, shell知道我们的命令输入完毕, 然后就开始执行一系列的指令来加载可执行的hello文件, 将hello文件从磁盘读取到内存中. 利用<strong>直接存储器存取(DMA)的技术</strong>, 数据可以<strong>不通过CPU而直接从磁盘到达主存</strong>(这是操作系统可以支持多进程或者多线程加快执行速度的基础, 因为读取外部设备不需要cpu操作, 因此这时cpu可以去处理其他的指令, 等到DMA读取完数据之后再通知cpu).</li>
+<li>目标文件hello中的代码和数据加载到主存之后, 处理器就开始执行hello程序的main函数中的机器语言指令.</li>
+</ul>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/disk_to_memory.png" alt="disk-&gt;memory"></p>
+<p>使用DMA技术不通过cpu将磁盘中的数据读取到内存中</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/print.png" alt="print"></p>
+<p>cpu执行指令将数据打印到显示器上</p>
+<h3 id="5-高速存储"><a href="#5-高速存储" class="headerlink" title="5. 高速存储"></a>5. 高速存储</h3><p><img src="http://o6qqyj17y.bkt.clouddn.com/cache.png" alt="cache"></p>
+<p>因为现在cpu和主存的速度相差太大, 因此有必要在cpu和主存之间加上高速缓存存储器作为暂时的集结区域. 利用程序的访问局部性原理, 可以将可能经常访问的数据的存储在缓存中, 以后cpu读取指令和数据可以直接从缓存中读取而不需要从内存中读取, 这样可以加快读取速度</p>
+<h3 id="5-1-存储设备形成的层次结构"><a href="#5-1-存储设备形成的层次结构" class="headerlink" title="5.1 存储设备形成的层次结构"></a>5.1 存储设备形成的层次结构</h3><p><img src="http://o6qqyj17y.bkt.clouddn.com/storage_level.png" alt="storage_level"></p>
+<p>存储结构”金字塔”</p>
+<h3 id="6-操作系统管理硬件"><a href="#6-操作系统管理硬件" class="headerlink" title="6. 操作系统管理硬件"></a>6. 操作系统管理硬件</h3><p><img src="http://o6qqyj17y.bkt.clouddn.com/os_hierarchy.png" alt="计算机分层视图"></p>
+<p>操作系统对硬件进行了一层封装, 将硬件的细节对应用程序进行了屏蔽, 应用程序不直接访问硬件而是通过操作系统提供的服务操控硬件.</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/op_abstract.png" alt="操作系统提供的抽象表示"></p>
+<p>操作系统的两个基本功能: 1) 防止硬件被应用程序滥用 2)向应用程序提供简单一致的机制来控制复杂而又大相径庭的低级硬件设备. 操作系统通过几个基本的抽象概念(进程、虚拟存储器、文件)来实现这两个功能</p>
+<h3 id="6-1-进程"><a href="#6-1-进程" class="headerlink" title="6.1 进程"></a>6.1 进程</h3><p>进程是操作系统对正在运行的程序的一种抽象. 在一个系统上可以同时运行多个进程, 而每个进程都好像是在独占使用硬件.并发执行指的是一个进程的指令和另一个进程的指令是交错执行的. 这是通过cpu在进程之间切换来实现的. 操作系统实现这种机制称为上下文切换.<br>操作系统保持跟踪进程运行所需的所有的状态信息. 这种状态也就是上下文, 它包括许多信息, 例如PC和寄存器的值, 以及主存的内容. 当操作系统决定要把当前进程转移到某个新进程时, 就会进行上下文切换, 具体的操作是: 保存当前进程的上下文、恢复新进程的剩下我, 然后将控制权传递到新进程. 新进程就会从上次停止的地方开始继续执行.</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/process_switch.png" alt="process_switch"></p>
 
       
     </div>
@@ -386,8 +437,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/03/03/csapp_1/"
-           data-title="深入理解计算机系统读书笔记 - 第一章" data-url="http://thlcly.xyz/2017/03/03/csapp_1/">
+      <div class="ds-thread" data-thread-key="2017/03/03/csapp_serial_chapter1/"
+           data-title="深入理解计算机系统读书笔记 - 第一章" data-url="http://thlcly.xyz/2017/03/03/csapp_serial_chapter1/">
       </div>
     
   </div>
@@ -493,7 +544,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-计算机中信息的本质"><span class="nav-number">1.</span> <span class="nav-text">1. 计算机中信息的本质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-源代码中的0、1是如何转换成高低电平控制计算机的"><span class="nav-number">2.</span> <span class="nav-text">2. 源代码中的0、1是如何转换成高低电平控制计算机的?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-源代码转换成可执行代码"><span class="nav-number">3.</span> <span class="nav-text">3. 源代码转换成可执行代码</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-计算机中信息的本质"><span class="nav-number">1.</span> <span class="nav-text">1. 计算机中信息的本质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-源代码中的0、1是如何转换成高低电平控制计算机的"><span class="nav-number">2.</span> <span class="nav-text">2. 源代码中的0、1是如何转换成高低电平控制计算机的?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-源代码转换成可执行代码"><span class="nav-number">3.</span> <span class="nav-text">3. 源代码转换成可执行代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-系统的硬件组成"><span class="nav-number">4.</span> <span class="nav-text">4. 系统的硬件组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-运行hello程序"><span class="nav-number">5.</span> <span class="nav-text">4.1 运行hello程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-高速存储"><span class="nav-number">6.</span> <span class="nav-text">5. 高速存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-存储设备形成的层次结构"><span class="nav-number">7.</span> <span class="nav-text">5.1 存储设备形成的层次结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-操作系统管理硬件"><span class="nav-number">8.</span> <span class="nav-text">6. 操作系统管理硬件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-进程"><span class="nav-number">9.</span> <span class="nav-text">6.1 进程</span></a></li></ol></div>
             
           </div>
         </section>
