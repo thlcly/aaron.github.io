@@ -80,16 +80,16 @@
 
 
 
-<meta name="description" content="This is a continuous updating learning notes for Java Reference">
+<meta name="description" content="Reading notes for Clean Code">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java中的四种引用">
-<meta property="og:url" content="http://thlcly.xyz/2016/07/07/Java中的四种引用/index.html">
+<meta property="og:title" content="Clean Code读书笔记1 -- 命名和函数">
+<meta property="og:url" content="http://thlcly.xyz/2017/03/05/2017-03-05/index.html">
 <meta property="og:site_name" content="Monkey Coder">
-<meta property="og:description" content="This is a continuous updating learning notes for Java Reference">
-<meta property="og:updated_time" content="2016-07-09T04:06:59.000Z">
+<meta property="og:description" content="Reading notes for Clean Code">
+<meta property="og:updated_time" content="2017-03-05T06:59:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java中的四种引用">
-<meta name="twitter:description" content="This is a continuous updating learning notes for Java Reference">
+<meta name="twitter:title" content="Clean Code读书笔记1 -- 命名和函数">
+<meta name="twitter:description" content="Reading notes for Clean Code">
 
 
 
@@ -107,7 +107,7 @@
   };
 </script>
 
-  <title> Java中的四种引用 | Monkey Coder </title>
+  <title> Clean Code读书笔记1 -- 命名和函数 | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -237,7 +237,7 @@
             
             
               
-                Java中的四种引用
+                Clean Code读书笔记1 -- 命名和函数
               
             
           </h1>
@@ -249,8 +249,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-07T10:25:38+08:00" content="2016-07-07">
-              2016-07-07
+            <time itemprop="dateCreated" datetime="2017-03-05T13:36:04+08:00" content="2017-03-05">
+              2017-03-05
             </time>
           </span>
 
@@ -263,8 +263,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/Clean-Code/" itemprop="url" rel="index">
+                    <span itemprop="name">Clean Code</span>
                   </a>
                 </span>
 
@@ -279,8 +279,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/07/Java中的四种引用/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/07/Java中的四种引用/" itemprop="commentsCount"></span>
+                <a href="/2017/03/05/2017-03-05/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/05/2017-03-05/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -303,12 +303,68 @@
       
 
       
-        <p>This is a continuous updating learning notes for <em>Java Reference</em><br><a id="more"></a></p>
-<h3 id="1-强引用-StrongReference"><a href="#1-强引用-StrongReference" class="headerlink" title="1. 强引用 (StrongReference)"></a>1. 强引用 (StrongReference)</h3><p>强引用是级别最高，也是最常用的引用。<strong>拥有强引用的对象绝不会被垃圾回收器回收。</strong></p>
-<h3 id="2-软引用-SoftReference"><a href="#2-软引用-SoftReference" class="headerlink" title="2. 软引用 (SoftReference)"></a>2. 软引用 (SoftReference)</h3><p>如果一个对象只具有软引用，则内存空间足够，垃圾回收器就不会回收它；<strong>如果内存空间不足了，就会回收这些对象的内存。</strong></p>
-<h3 id="3-弱引用-WeakReference"><a href="#3-弱引用-WeakReference" class="headerlink" title="3. 弱引用 (WeakReference)"></a>3. 弱引用 (WeakReference)</h3><p>只具有弱引用的对象拥有更短暂的生命周期。<strong>在执行gc的时候会被回收。</strong></p>
-<h3 id="4-虚引用-PhantomReference"><a href="#4-虚引用-PhantomReference" class="headerlink" title="4. 虚引用 (PhantomReference)"></a>4. 虚引用 (PhantomReference)</h3><p>“虚引用”顾名思义，就是形同虚设，虚引用并不会决定对象的生命周期。如果一个对象仅持有虚引用，那么它就和没有任何引用一样，在任何时候都可能被垃圾回收器回收。<strong>仅用于在发生gc时接收一个系统通知。</strong></p>
+        <p>Reading notes for <em>Clean Code</em></p>
+<a id="more"></a>
+<h2 id="1-命名"><a href="#1-命名" class="headerlink" title="1. 命名"></a>1. 命名</h2><p>众所周知, 编程中最难的两件事情, 一个是缓存, 另一个就是命名. 一个好的命名可以省去很多的理解成本, 一个不好的命名可能与要描述的事实背道而驰, 由此可见一个好的命名是多么的重要.</p>
+<p>一个好的命名需要遵守的原则包括但不仅限于以下几点</p>
+<ul>
+<li><p>名副其实</p>
+<p>一个名字要表达的意思应该就是它的字面意思, 而不需要用注释进行解释, 否则这样的命名就是存在问题的. </p>
+</li>
+<li><p>做有意义的区分</p>
+<p>  要给名字这个字段取变量名应该直接用<code>name</code>, 而不需要是<code>nameString</code>, 加上<code>String</code>作为限定没有任何的意思. 在我们自己的代码中有的时候会这样取名</p>
+  <figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">List</span>&lt;Doctor&gt; doctorList = <span class="keyword">new</span> ArrayList();</div></pre></td></tr></table></figure>
+<p>  其实加上<code>List</code>作限定没要必要, 可以直接取名为 <code>List&lt;Doctor&gt; doctors</code></p>
+</li>
+<li><p>使用可以搜索的名称</p>
+<p>  这个也可以描述成不要在代码中存在魔数, 应该使用常量跟踪.<br>  例如: 使用<code>WORK_DAYS_PER_WEEK</code>来替代魔数<code>5</code>.    </p>
+</li>
+<li><p>不需要使用成员前缀来标明成员变量</p>
+<p>  例如对于一个成员变量, 不需要在变量名前面加上<code>m_</code>来表示</p>
+</li>
+<li><p>类名和对象名应该是名词或者是名词短语, 不应该是动词</p>
+</li>
+<li>方法名应该是动词或者是动词短语.</li>
+<li><p>每个概念对应一个词</p>
+<p>  在特定的业务中可能有多个词汇可以表示同一个意思, 但是要选定一个词汇来表示并且以后都使用同一个词汇来表示<br>  例如: 杏仁号就是使用<code>serial</code>来表示, 而不应该是在privdoc是用<code>serial</code>, 在clinic是使用<code>xingrenNo</code>.</p>
+</li>
+</ul>
+<h2 id="2-函数"><a href="#2-函数" class="headerlink" title="2. 函数"></a>2. 函数</h2><p>函数可以说是一个程序中最重要的组件, 写代码可以说很大一部分时间是在编写函数, 因此函数编写的好坏直接决定了代码编写的好坏</p>
+<ul>
+<li><p>短小</p>
+<p>  函数需要短小再短小, 精炼再精炼, 如果一个函数就有几百行, 那就说明这个函数功能太复杂, 职责太多, 干了太多的事情, 抽象程度不够.</p>
+</li>
+<li><p>只做一件事</p>
+<p>  函数应该只做一件事情. 也就是所谓的单一原则(SRP). 这个原则和上一条原则也是相互补充的, 如果一个函数只做一件事情那这个函数应该是短小的, 反之就有可能做了不止一件事情.</p>
+</li>
+<li><p>自顶向下规则</p>
+<p>  函数调用者和被调用者之间的距离应该尽可能的小, 而不应该根据类别进行划分, 这样在阅读代码的时候可以快速的在函数之间查看.<br>  在我们自己的代码中之前是将一个类中的私有方法放到类的最下面和其他的方法进行区分, 经过讨论之后决定采用自顶向下原则, 将私有方法和其他方法同等对待, 放在调用者的下面.</p>
+</li>
+<li><p>switch语句</p>
+<p>  <code>switch</code>语句的出现一般就表示这个地方以后可能会需要更改了, 而且可能有其他的一些地方会用到相同的<code>switch</code>语句. 因此<code>switch</code>语句的出现就要考虑是否需要使用工厂模式了, 将变化控制在一个地方而不是分散到系统的各个角落中.</p>
+</li>
+<li><p>函数参数</p>
+<p>  一个函数的参数需要进行控制, 不能无限制的增长, 如果一个函数的参数太多, 对于这个函数的调用者来说也是很不友好的. 一般函数的参数以3个以下为宜, 如果再多可以考虑封装成一个对象.</p>
+</li>
+<li><p>无副作用</p>
+<p>  一个函数中做的事情就应该仅仅是函数名中提及到的事情, 如果函数在承诺只做一件事情的前提下又去更新其他的东西并且这个更新操作用户是不知情的, 那么这个函数就违背了SRP原则并且产生了副作用. 要避免这样的情况发生.</p>
+</li>
+<li><p>别重复自己</p>
+<p>  编写一个良好的函数的原则之一就是不要写重复的代码, 即DRY原则, 一旦违反了DRY原则就意味着以后要修改的时候可能就要修改很多处地方, 而且不能遗漏, 一旦遗漏一处就会造成bug的产生.</p>
+</li>
+<li><p>分离指令与询问</p>
+<p>  即CQS原则. 也就是说函数要么做什么事情, 要么回答什么事情, 但是不能同时做两件事情.<br>  例如: </p>
+  <figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public boolean <span class="keyword">set</span>(<span class="keyword">String</span> <span class="keyword">attribute</span>, <span class="keyword">String</span> <span class="keyword">value</span>);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>该函数的作用是设置某个指定的属性, 如果成功就返回true, 如果属性不存在返回false, 所以就会出现以下的语句
 
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(<span class="keyword">set</span>(<span class="string">"username"</span>, <span class="string">"xingren"</span>));</div></pre></td></tr></table></figure>
+
+这样的语句会让人认为判断的是`&quot;username&quot;`属性是否成功, 这就和本意不一致了. 要解决这个问题可以使用CQS原则, 将指令和查询分开
+
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(attributeExist(<span class="string">"username"</span>)) &#123;</div><div class="line">	<span class="keyword">set</span>(<span class="string">"username"</span>, <span class="string">"xingren"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre>
       
     </div>
     
@@ -331,17 +387,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/07/ThreadLocal/" rel="next" title="ThreadLocal学习笔记">
-                <i class="fa fa-chevron-left"></i> ThreadLocal学习笔记
+              <a href="/2017/03/03/csapp_1/" rel="next" title="深入理解计算机系统读书笔记 - 第一章">
+                <i class="fa fa-chevron-left"></i> 深入理解计算机系统读书笔记 - 第一章
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/07/Java8学习笔记/" rel="prev" title="Java8学习笔记">
-                Java8学习笔记 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -367,8 +419,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/07/Java中的四种引用/"
-           data-title="Java中的四种引用" data-url="http://thlcly.xyz/2016/07/07/Java中的四种引用/">
+      <div class="ds-thread" data-thread-key="2017/03/05/2017-03-05/"
+           data-title="Clean Code读书笔记1 -- 命名和函数" data-url="http://thlcly.xyz/2017/03/05/2017-03-05/">
       </div>
     
   </div>
@@ -474,7 +526,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-强引用-StrongReference"><span class="nav-number">1.</span> <span class="nav-text">1. 强引用 (StrongReference)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-软引用-SoftReference"><span class="nav-number">2.</span> <span class="nav-text">2. 软引用 (SoftReference)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-弱引用-WeakReference"><span class="nav-number">3.</span> <span class="nav-text">3. 弱引用 (WeakReference)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-虚引用-PhantomReference"><span class="nav-number">4.</span> <span class="nav-text">4. 虚引用 (PhantomReference)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-命名"><span class="nav-number">1.</span> <span class="nav-text">1. 命名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-函数"><span class="nav-number">2.</span> <span class="nav-text">2. 函数</span></a></li></ol></div>
             
           </div>
         </section>
