@@ -1,0 +1,655 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Anonymous-favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Reading notes for Clean Code – serial 2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Monkey Coder">
+<meta property="og:url" content="http://thlcly.xyz/2017/03/11/clean_code_serial2/index.html">
+<meta property="og:site_name" content="Monkey Coder">
+<meta property="og:description" content="Reading notes for Clean Code – serial 2">
+<meta property="og:updated_time" content="2017-03-11T08:28:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Monkey Coder">
+<meta name="twitter:description" content="Reading notes for Clean Code – serial 2">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title>  | Monkey Coder </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Monkey Coder</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-03-11T14:50:56+08:00" content="2017-03-11">
+              2017-03-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Clean-Code/" itemprop="url" rel="index">
+                    <span itemprop="name">Clean Code</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/11/clean_code_serial2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/11/clean_code_serial2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Reading notes for <em>Clean Code</em> – serial 2</p>
+<a id="more"></a>
+<h2 id="1-对象和数据结构"><a href="#1-对象和数据结构" class="headerlink" title="1. 对象和数据结构"></a>1. 对象和数据结构</h2><ul>
+<li><p>对象和数据结构的定义和不同</p>
+<p>  对象的职责是把数据隐藏于抽象之后, 暴露操作数据的接口, 使外界不直接操作其内部的数据.<br>  数据结构是暴露其数据, 不提供有意义的函数.<br>  两者的职责和功能要分清</p>
+</li>
+<li><p>面向过程式的代码和面向对象式的代码</p>
+<p>  例子(面向过程): </p>
+  <figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> class Square &#123;</div><div class="line">    <span class="keyword">public</span> Point topLeft;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">double</span> side;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> class Rectangle &#123;</div><div class="line">    <span class="keyword">public</span> Point topLeft;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">double</span> <span class="built_in">height</span>;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">double</span> <span class="built_in">width</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> class Circle &#123;</div><div class="line">    <span class="keyword">public</span> Point center;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">double</span> radius;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> class Geometry &#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">double</span> <span class="literal">PI</span> = <span class="number">3.141592653589793</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">double</span> area(<span class="keyword">Object</span> <span class="built_in">shape</span>) <span class="keyword">throws</span> NoSuchShapeException &#123;</div><div class="line">        <span class="keyword">if</span> (<span class="built_in">shape</span> <span class="keyword">instanceof</span> Square) &#123;</div><div class="line">            Square s = (Square) <span class="built_in">shape</span>;</div><div class="line">            <span class="keyword">return</span> s.side * s.side;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">shape</span> <span class="keyword">instanceof</span> Rectangle) &#123;</div><div class="line">            Rectangle r = (Rectangle) <span class="built_in">shape</span>;</div><div class="line">            <span class="keyword">return</span> r.<span class="built_in">height</span> * r.<span class="built_in">width</span>;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">shape</span> <span class="keyword">instanceof</span> Circle) &#123;</div><div class="line">            Circle c = (Circle) <span class="built_in">shape</span>;</div><div class="line">            <span class="keyword">return</span> <span class="literal">PI</span> * c.radius * c.radius;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchShapeException();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>  可以看到, 使用过程式代码, 如果要添加一个新的数据结构(例如triangle), 那就必须修改Geometry类, 添加一个新的判断分支, 这样就违背了开放原则.<br>  但是面向过程式的代码在添加新的函数的时候可以不用修改原来的数据结构, 例如在Geometry类中添加一个新的函数的时候, 其他的数据结构不需要进行任何的修改.</p>
+<p>  例子(面向对象):</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Square</span> <span class="keyword">implements</span> <span class="title">Shape</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Point topLeft;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> side;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">area</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> side * side;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> <span class="keyword">implements</span> <span class="title">Shape</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Point topLeft;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> height;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> width;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">area</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> height * width;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Circle</span> <span class="keyword">implements</span> <span class="title">Shape</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Point center;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">double</span> radius;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">double</span> PI = <span class="number">3.141592653589793</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">area</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> PI * radius * radius;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>  可以看到, 使用面向对象式的代码, 如果要添加一个新的数据结构, 只要实现Shape接口就可以了, 原本的对象不需要进行任何的改变.<br>  但是, 如果要添加新的函数(行为), 例如在Shape接口中添加一个新的函数, 那么其他几个实现类都需要进行修改.</p>
+</li>
+<li><p>Demeter法则</p>
+<p>  模块不需要了解其所操作对象的内部情形(具体的数据结构), 而只需要操作对象暴露的接口即可.<br>  Demeter法则任务, 类C的方法f值应该调用以下对象的方法: </p>
+<ul>
+<li>类C中的方法</li>
+<li>由f创建的对象中的方法</li>
+<li>f参数中的对象方法</li>
+<li>C中成员对象中的方法</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-边界"><a href="#2-边界" class="headerlink" title="2. 边界"></a>2. 边界</h2><p>一个项目中的边界有很多, 第三放代码, 其他人未实现的代码等都是项目的边界.</p>
+<ul>
+<li><p>浏览和学习边界</p>
+<p>  这里涉及到的边界是指程序中的第三方代码. 在实现自己的程序的时候秉持不重复造轮子的原则, 或多或少都会涉及到第三方代码, 我们应该要事先考虑第三方代码和自己的代码之间的关系, 和第三方代码在自己项目中的渗透度.</p>
+<p>  在使用第三方代码的时候, 首先要对边界有一定的了解. 因此有必要对边界进行学习. <strong>学习性测试</strong>是了解和学习边界的一个有效的办法. 我们可以在将第三方代码用到项目中之前先编写测试用例来学习第三方代码, 在测试用例中对要在真正代码中使用的功能进行调用, 也可以进入第三方代码中, 研究其具体实现和原理, 在对第三方代码有比较深入的了解之后如果以后在真正代码中使用时遇到问题也可以快速的解决问题. </p>
+<p>  使用<strong>学习性测试</strong>的另外一个好处是当第三放代码升级之后, 可以运行之前的测试用例, 看看哪些功能被改变了, 评估升级的风险.</p>
+</li>
+<li><p>使用尚不存在的代码</p>
+<p>  这里涉及到的边界就是其他人未实现的代码. 在一个项目开发过程中, 每个模块之间肯定需要进行交互, 模块和模块之间势必存在依赖关系. 如果自己开发的模块所依赖的模块还没有就绪的时候该怎么办? </p>
+<p>  我们可以自己先实现对应的模块, 但是自己实现模块的返回值都是一个fake的值, 这样我们自己的模块就可以使用这个fake的模块继续进行开发了. 等真正的模块被提供的时候再将其替换成真正的模块. 因为fake的模块和真正的模块提供的接口可能不会一模一样, 所以可以使用Adapter模式接入真正的模块. </p>
+</li>
+<li><p>关于第三方类库的一点总结</p>
+<p>  在使用第三方代码的时候, 可以在第三方代码之上封装一层而不是之间使用第三方代码, 因为如果这个第三方代码在自己的代码中渗透的比较广泛之后, 如果要对第三方代码进行升级而且升级之后改动较大就会造成要修改很多地方的情况. 如果是在第三方代码之上封装了一层, 在程序中使用的都是我们封装之后代码, 那升级的时候也只需要修改我们封装的代码就可以了. 也就是说升级对于项目本身是透明的.</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/05/clean_code_serial1/" rel="next" title="Clean Code读书笔记1 -- 命名和函数">
+                <i class="fa fa-chevron-left"></i> Clean Code读书笔记1 -- 命名和函数
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/11/clean_code_serial2/"
+           data-title="" data-url="http://thlcly.xyz/2017/03/11/clean_code_serial2/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/Anonymous.jpg"
+               alt="Tony Hui" />
+          <p class="site-author-name" itemprop="name">Tony Hui</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/thlcly" target="_blank">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/tonyhui0717" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-对象和数据结构"><span class="nav-number">1.</span> <span class="nav-text">1. 对象和数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-边界"><span class="nav-number">2.</span> <span class="nav-text">2. 边界</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tony Hui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"thlcly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
