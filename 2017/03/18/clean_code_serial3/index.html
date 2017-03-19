@@ -80,16 +80,16 @@
 
 
 
-<meta name="description" content="This is a continuous updating learning notes for Java Reference">
+<meta name="description" content="Reading notes for Clean Code – serial 3">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java中的四种引用">
-<meta property="og:url" content="http://thlcly.xyz/2016/07/07/Java中的四种引用/index.html">
+<meta property="og:title" content="Clean Code读书笔记3 -- 单元测试和类">
+<meta property="og:url" content="http://thlcly.xyz/2017/03/18/clean_code_serial3/index.html">
 <meta property="og:site_name" content="Monkey Coder">
-<meta property="og:description" content="This is a continuous updating learning notes for Java Reference">
-<meta property="og:updated_time" content="2016-07-09T04:06:59.000Z">
+<meta property="og:description" content="Reading notes for Clean Code – serial 3">
+<meta property="og:updated_time" content="2017-03-19T06:31:43.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java中的四种引用">
-<meta name="twitter:description" content="This is a continuous updating learning notes for Java Reference">
+<meta name="twitter:title" content="Clean Code读书笔记3 -- 单元测试和类">
+<meta name="twitter:description" content="Reading notes for Clean Code – serial 3">
 
 
 
@@ -107,7 +107,7 @@
   };
 </script>
 
-  <title> Java中的四种引用 | Monkey Coder </title>
+  <title> Clean Code读书笔记3 -- 单元测试和类 | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -237,7 +237,7 @@
             
             
               
-                Java中的四种引用
+                Clean Code读书笔记3 -- 单元测试和类
               
             
           </h1>
@@ -249,8 +249,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-07T10:25:38+08:00" content="2016-07-07">
-              2016-07-07
+            <time itemprop="dateCreated" datetime="2017-03-18T21:01:14+08:00" content="2017-03-18">
+              2017-03-18
             </time>
           </span>
 
@@ -263,8 +263,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/Clean-Code/" itemprop="url" rel="index">
+                    <span itemprop="name">Clean Code</span>
                   </a>
                 </span>
 
@@ -279,8 +279,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/07/Java中的四种引用/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/07/Java中的四种引用/" itemprop="commentsCount"></span>
+                <a href="/2017/03/18/clean_code_serial3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/18/clean_code_serial3/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -303,11 +303,40 @@
       
 
       
-        <p>This is a continuous updating learning notes for <em>Java Reference</em><br><a id="more"></a></p>
-<h3 id="1-强引用-StrongReference"><a href="#1-强引用-StrongReference" class="headerlink" title="1. 强引用 (StrongReference)"></a>1. 强引用 (StrongReference)</h3><p>强引用是级别最高，也是最常用的引用。<strong>拥有强引用的对象绝不会被垃圾回收器回收。</strong></p>
-<h3 id="2-软引用-SoftReference"><a href="#2-软引用-SoftReference" class="headerlink" title="2. 软引用 (SoftReference)"></a>2. 软引用 (SoftReference)</h3><p>如果一个对象只具有软引用，则内存空间足够，垃圾回收器就不会回收它；<strong>如果内存空间不足了，就会回收这些对象的内存。</strong></p>
-<h3 id="3-弱引用-WeakReference"><a href="#3-弱引用-WeakReference" class="headerlink" title="3. 弱引用 (WeakReference)"></a>3. 弱引用 (WeakReference)</h3><p>只具有弱引用的对象拥有更短暂的生命周期。<strong>在执行gc的时候会被回收。</strong></p>
-<h3 id="4-虚引用-PhantomReference"><a href="#4-虚引用-PhantomReference" class="headerlink" title="4. 虚引用 (PhantomReference)"></a>4. 虚引用 (PhantomReference)</h3><p>“虚引用”顾名思义，就是形同虚设，虚引用并不会决定对象的生命周期。如果一个对象仅持有虚引用，那么它就和没有任何引用一样，在任何时候都可能被垃圾回收器回收。<strong>仅用于在发生gc时接收一个系统通知。</strong></p>
+        <p>Reading notes for <em>Clean Code</em> – serial 3</p>
+<a id="more"></a>
+<h2 id="1-单元测试"><a href="#1-单元测试" class="headerlink" title="1. 单元测试"></a>1. 单元测试</h2><ul>
+<li>TDD</li>
+</ul>
+<p><a href="https://en.wikipedia.org/wiki/Test-driven_development" target="_blank" rel="external">TDD</a>是一个测试驱动开发的软件开发过程. 在编写代码之前先编写测试用例, 然后的编写的代码用于通过测试用例且仅仅只需要通过当前的测试用例即可, 然后依此循环. 这样的好处是生产代码和测试代码可以一起编写, 且测试代码可以覆盖所有的生产代码.<br>但是这样的缺点是测试代码的规模和生产代码的规模是一样的, 所以管理测试代码也是一个问题.</p>
+<ul>
+<li>保持测试代码的整洁</li>
+</ul>
+<p>测试代码和生产代码是同等重要的, 测试代码也需要保持整洁. 如果测试代码是混乱不堪的则不利于添加新的测试代码以完成对新的生产代码的测试. 或者修改生产代码之后原先的测试就不能运行, 丧失了测试代码原来的功能. 久而久之测试代码的维护成本越来越高, 最后可能导致放弃整个测试代码以赶上项目的进度. 但是没有了测试代码生产代码的质量就不能保证, 因此产生了恶性循环.</p>
+<ul>
+<li>测试带来的好处</li>
+</ul>
+<p>测试带来的最大的好处就是可以对原来代码进行任意的重构而不用但是破坏原来代码的功能, 因为只要运行测试用例并且通过测试用例就可以保证重构是没有问题的. 可以想象如果没有测试代码, 那在对原先的代码重构的时候真可谓是如履薄冰, 因为害怕改坏了原先的代码, 正是因为害怕改坏原来的代码可能就会导致不敢进行重构, 最后导致代码不断的腐化, 直到不能进行维护要推倒重来. 但是一个好的测试就可以防止这种坏结果的发生, 使代码保持在一个比较好的状态.</p>
+<ul>
+<li>测试的F.I.R.S.T原则</li>
+</ul>
+<p>Fast: 测试用例运行应该要快, 因为运行测试用例不应该过多的占用开发的时间, 而且如果测试用例运行慢就不会想经常运行. </p>
+<p>Independent: 测试用例之间不应该存在依赖关系, 每个测试用例之间都应该可以独立运行.</p>
+<p>Repeatable: 测试应该可以在任意的环境中运行, 而不是仅能在特定的环境中才能运行.</p>
+<p>Self-Validating: 测试用例应该可以自行判断测试是否成功而不需要人工进行判断.</p>
+<p>Timely: 应该及时编写测试用例, 而不应该是在功能完成之后才补测试用例, 因为这样测试用例发挥的作用会打折扣, 而且功能完成之后也可能不再编写测试用例.</p>
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><ul>
+<li>类应该短小</li>
+</ul>
+<p>函数是对一个行为的封装, 类是对一类相似行为的封装, 因此二者有一定的相似性, 编写函数和类的一些原则也有一定的相似性. 其中之一就是类也要短小. 如何判断一个类是否短小呢? 是看类中的函数的数量? 还是看类的代码行数? 这些都不准确, 因为即使一个只有很少的方法这个类还是不够短小, 即使一个类有比较多的方法这个类已经算是短小的了. 这个判断的标准是看类是否符合<code>SRP</code>原则. 一个类应该只有一个职责, 应该只有一个修改该类的理由, 如果一个类满足了这个要求, 那么这个类就是短小的.</p>
+<ul>
+<li>内聚</li>
+</ul>
+<p>一个类中的成员应该和这个类是高内聚的. 一个类中应该只有少数的实体变量, 且类中的函数都应该操作一个或多个这种变量. 一般而言, 一个函数操作的变量越多就这个函数就越聚合到这个类上.</p>
+<ul>
+<li>隔离修改</li>
+</ul>
+<p>随着需求的改变, 代码也需要进行改变. 因此需要隔离变化的部分, 抽取出不变的部分. 可以使用抽象类实现不变的部分, 而将变化的部分转移到子类中进行实现. 之后需要改变的时候就新增子类而不是在原来的代码基础上进行修改, 这样也符合OCP原则.</p>
 
       
     </div>
@@ -331,17 +360,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/07/Jackson学习笔记/" rel="next" title="Jackson学习笔记">
-                <i class="fa fa-chevron-left"></i> Jackson学习笔记
+              <a href="/2017/03/13/google_search_skills/" rel="next" title="Google搜索技巧">
+                <i class="fa fa-chevron-left"></i> Google搜索技巧
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/02/JavaScript变量作用域/" rel="prev" title="JavaScript变量作用域">
-                JavaScript变量作用域 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -367,8 +392,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/07/Java中的四种引用/"
-           data-title="Java中的四种引用" data-url="http://thlcly.xyz/2016/07/07/Java中的四种引用/">
+      <div class="ds-thread" data-thread-key="2017/03/18/clean_code_serial3/"
+           data-title="Clean Code读书笔记3 -- 单元测试和类" data-url="http://thlcly.xyz/2017/03/18/clean_code_serial3/">
       </div>
     
   </div>
@@ -474,7 +499,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-强引用-StrongReference"><span class="nav-number">1.</span> <span class="nav-text">1. 强引用 (StrongReference)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-软引用-SoftReference"><span class="nav-number">2.</span> <span class="nav-text">2. 软引用 (SoftReference)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-弱引用-WeakReference"><span class="nav-number">3.</span> <span class="nav-text">3. 弱引用 (WeakReference)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-虚引用-PhantomReference"><span class="nav-number">4.</span> <span class="nav-text">4. 虚引用 (PhantomReference)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-单元测试"><span class="nav-number">1.</span> <span class="nav-text">1. 单元测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类"><span class="nav-number">2.</span> <span class="nav-text">类</span></a></li></ol></div>
             
           </div>
         </section>
