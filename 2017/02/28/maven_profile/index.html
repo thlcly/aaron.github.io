@@ -86,7 +86,7 @@
 <meta property="og:url" content="http://thlcly.xyz/2017/02/28/maven_profile/index.html">
 <meta property="og:site_name" content="Monkey Coder">
 <meta property="og:description" content="Maven experience series – profile">
-<meta property="og:updated_time" content="2017-02-28T07:50:21.000Z">
+<meta property="og:updated_time" content="2017-04-02T03:25:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Maven使用系列之Profile">
 <meta name="twitter:description" content="Maven experience series – profile">
@@ -305,12 +305,12 @@
       
         <p><strong>Maven</strong> experience series – <em>profile</em></p>
 <a id="more"></a>
-<h2 id="Profile介绍"><a href="#Profile介绍" class="headerlink" title="Profile介绍"></a>Profile介绍</h2><h3 id="1-Profile作用"><a href="#1-Profile作用" class="headerlink" title="1. Profile作用"></a>1. Profile作用</h3><p>profile是一组配置的集合, 这些配置可以设置或者覆写Maven build时的默认值. 使用profile可以根据不同条件自定义构建过程.例如根据是生产环境还是开发环境进行构建.</p>
+<h2 id="Profile介绍"><a href="#Profile介绍" class="headerlink" title="Profile介绍"></a>Profile介绍</h2><h3 id="1-Profile作用"><a href="#1-Profile作用" class="headerlink" title="1. Profile作用"></a>1. Profile作用</h3><p><code>profile</code>是一组配置的集合, 这些配置可以设置或者覆写Maven build时的默认值. 使用<code>profile</code>可以根据不同条件自定义构建过程.例如根据是生产环境还是开发环境进行构建.</p>
 <h3 id="2-Profile类型-Profile可以出现的位置"><a href="#2-Profile类型-Profile可以出现的位置" class="headerlink" title="2. Profile类型(Profile可以出现的位置)"></a>2. Profile类型(Profile可以出现的位置)</h3><ul>
 <li>每个项目 (定义在pom.xml中)</li>
 <li>每个用户 (定义在<code>%USER_HOME%/.m2/settings.xml</code>中)</li>
 <li>全局 (定义在maven的安装目录中<code>${maven.home}/conf/settings.xml</code>)</li>
-<li>Profile描述符 (定义在项目根目录下(profiles.xml, 在maven 3以上的版本中不在支持))</li>
+<li><code>Profile</code>描述符 (定义在项目根目录下(profiles.xml, 在maven 3以上的版本中不在支持))</li>
 </ul>
 <h2 id="Profile的使用"><a href="#Profile的使用" class="headerlink" title="Profile的使用"></a>Profile的使用</h2><h3 id="1-激活Profile"><a href="#1-激活Profile" class="headerlink" title="1. 激活Profile"></a>1. 激活Profile</h3><ul>
 <li><p>使用<code>-P</code>选项激活</p>
@@ -335,7 +335,7 @@
 
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">jdk</span>&gt;</span>[1.3,1.6)<span class="tag">&lt;/<span class="name">jdk</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line">      ...</div><div class="line">    <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></div></pre></td></tr></table></figure>
 
-说明: 如果构建使用的jdk版本&gt;=1.3 &amp;&amp; &lt; 1.6, 则profile会被激活
+说明: 如果构建使用的jdk版本**&gt;=1.3 &amp;&amp; &lt; 1.6**, 则profile会被激活
 
 eg3: 根据操作系统类型激活
 
