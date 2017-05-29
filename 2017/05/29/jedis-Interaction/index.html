@@ -1,0 +1,653 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Anonymous-favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="This is a note that reading source code for Jedis interact with redis server
+这是Jedis源码阅读的第二篇–底层交互, 具体介绍了jedis是如何与redis server建立连接, 如何向redis发送命令并得到相应结果的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jedis源码阅读之底层交互">
+<meta property="og:url" content="http://thlcly.xyz/2017/05/29/jedis-Interaction/index.html">
+<meta property="og:site_name" content="Monkey Coder">
+<meta property="og:description" content="This is a note that reading source code for Jedis interact with redis server
+这是Jedis源码阅读的第二篇–底层交互, 具体介绍了jedis是如何与redis server建立连接, 如何向redis发送命令并得到相应结果的">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/redis/redis-connection.jpg">
+<meta property="og:updated_time" content="2017-05-29T07:36:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jedis源码阅读之底层交互">
+<meta name="twitter:description" content="This is a note that reading source code for Jedis interact with redis server
+这是Jedis源码阅读的第二篇–底层交互, 具体介绍了jedis是如何与redis server建立连接, 如何向redis发送命令并得到相应结果的">
+<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/redis/redis-connection.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Jedis源码阅读之底层交互 | Monkey Coder </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Monkey Coder</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Jedis源码阅读之底层交互
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-05-29T12:02:49+08:00" content="2017-05-29">
+              2017-05-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/05/29/jedis-Interaction/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/29/jedis-Interaction/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>This is a note that reading source code for <em>Jedis interact with redis server</em></p>
+<p>这是Jedis源码阅读的第二篇–底层交互, 具体介绍了jedis是如何与redis server建立连接, 如何向redis发送命令并得到相应结果的</p>
+<a id="more"></a>
+<h3 id="1-host和port的设置"><a href="#1-host和port的设置" class="headerlink" title="1. host和port的设置"></a>1. host和port的设置</h3><p>众所周知, 和一个网络服务建立连接的关键参数就是服务的地址和端口号, 与redis server建立连接也不例外. </p>
+<p>在Jedis中, 使用<code>HostAndPortUtil</code>来管理和redis server的host和port. 默认情况下可以使用localhost这个host和6379这个port</p>
+<p>源码: </p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">public</span> <span class="selector-tag">final</span> <span class="selector-tag">class</span> <span class="selector-tag">HostAndPortUtil</span> &#123;</div><div class="line">  </div><div class="line">  ...</div><div class="line">  <span class="selector-tag">other</span> <span class="selector-tag">code</span></div><div class="line">  ...</div><div class="line">  </div><div class="line">  <span class="selector-tag">static</span> &#123;</div><div class="line">  		<span class="comment">// host: localhost, port: 6379</span></div><div class="line">    redisHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, Protocol.DEFAULT_PORT));</div><div class="line">    redisHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, Protocol.DEFAULT_PORT + <span class="number">1</span>));</div><div class="line">    redisHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, Protocol.DEFAULT_PORT + <span class="number">2</span>));</div><div class="line">    redisHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, Protocol.DEFAULT_PORT + <span class="number">3</span>));</div><div class="line">    redisHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, Protocol.DEFAULT_PORT + <span class="number">4</span>));</div><div class="line">    redisHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, Protocol.DEFAULT_PORT + <span class="number">5</span>));</div><div class="line">    redisHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, Protocol.DEFAULT_PORT + <span class="number">6</span>));</div><div class="line"></div><div class="line">		<span class="comment">// 哨兵模式下的地址和端口</span></div><div class="line">    sentinelHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, Protocol.DEFAULT_SENTINEL_PORT));</div><div class="line">    sentinelHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, Protocol.DEFAULT_SENTINEL_PORT + <span class="number">1</span>));</div><div class="line">    sentinelHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, Protocol.DEFAULT_SENTINEL_PORT + <span class="number">2</span>));</div><div class="line">    sentinelHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, Protocol.DEFAULT_SENTINEL_PORT + <span class="number">3</span>));</div><div class="line"></div><div class="line">		<span class="comment">// 集群模式下的地址和端口</span></div><div class="line">    clusterHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, <span class="number">7379</span>));</div><div class="line">    clusterHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, <span class="number">7380</span>));</div><div class="line">    clusterHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, <span class="number">7381</span>));</div><div class="line">    clusterHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, <span class="number">7382</span>));</div><div class="line">    clusterHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, <span class="number">7383</span>));</div><div class="line">    clusterHostAndPortList<span class="selector-class">.add</span>(new HostAndPort(<span class="string">"localhost"</span>, <span class="number">7384</span>));</div><div class="line"></div><div class="line">   &#125;</div><div class="line">  </div><div class="line">  ...</div><div class="line">  <span class="selector-tag">other</span> <span class="selector-tag">code</span></div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当然, 如果不想使用Jedis提供的这些默认的host和port, 可以通过<code>HostAndPortUtil.parseHosts()</code>这个方法来设置自己的host和port</p>
+<h3 id="2-建立连接"><a href="#2-建立连接" class="headerlink" title="2. 建立连接"></a>2. 建立连接</h3><p>在设置完成redis server的host和port之后, 自然而然的就是和redis server建立连接.<br>在阅读连接的源代码之前, 先看一下和连接相关的UML图<br><img src="http://o6qqyj17y.bkt.clouddn.com/redis/redis-connection.jpg" alt="UML"><br>可以看到<code>BinaryJedis</code>中含有<code>Client</code>的引用, 而<code>Client</code>又实现了<code>Connection</code>, 而实际上与redis server建立连接的是<code>Connection</code>, 所以只要创建<code>Jedis</code>对象, 然后使用<code>Client</code>与redis server建立连接就可以了. </p>
+<p>接下来看下源码: </p>
+<p>1) 初始化<code>Jedis</code>对象</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 创建Jedis对象, 实际上创建Jedis对象的过程中最重要的是初始化Client对象</span></div><div class="line">Jedis jedis = <span class="keyword">new</span> Jedis(hnp.getHost(), hnp.getPort(), <span class="number">500</span>);</div><div class="line"></div><div class="line"><span class="comment">// Jedis构造函数中调用父类的构造函数, 在父类的构造函数中创建Client对象</span></div><div class="line"><span class="keyword">public</span> BinaryJedis(<span class="keyword">final</span> String host, <span class="keyword">final</span> <span class="keyword">int</span> port, <span class="keyword">final</span> <span class="keyword">int</span> timeout) &#123;</div><div class="line">    <span class="keyword">client</span> = <span class="keyword">new</span> Client(host, port);</div><div class="line">    <span class="keyword">client</span>.setConnectionTimeout(timeout);</div><div class="line">    <span class="keyword">client</span>.setSoTimeout(timeout);</div><div class="line">  &#125;</div><div class="line">  </div><div class="line"> <span class="comment">// 同样初始化Client时会调用Connection的构造函数, 初始化Connection对象, 这是最关键的一步, 因为后面会使用Connection对象与redis server真正建立连接</span></div><div class="line"> <span class="keyword">public</span> Connection(<span class="keyword">final</span> String host, <span class="keyword">final</span> <span class="keyword">int</span> port) &#123;</div><div class="line">    <span class="keyword">this</span>.host = host;</div><div class="line">    <span class="keyword">this</span>.port = port;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>2) 与redis server建立连接</p>
+<p>前面提到与redis server建立连接实际上是由<code>Connection</code>完成的, 因此把重点放到<code>Connection</code>的连接方法上.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 通过jedis对象调用connect()</span></div><div class="line">jedis.connect();</div><div class="line"></div><div class="line"><span class="comment">// 经过一系列的内部调用最终会调用Connection的Connection方法</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!isConnected()) &#123;</div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">      	<span class="comment">// 创建Socket对象以及设置socket的一些参数</span></div><div class="line">        socket = <span class="keyword">new</span> Socket();</div><div class="line">        <span class="comment">// -&gt;@wjw_add</span></div><div class="line">        socket.setReuseAddress(<span class="literal">true</span>);</div><div class="line">        socket.setKeepAlive(<span class="literal">true</span>);         </div><div class="line">        socket.setTcpNoDelay(<span class="literal">true</span>);         </div><div class="line">        socket.setSoLinger(<span class="literal">true</span>, <span class="number">0</span>); </div><div class="line">        socket.connect(<span class="keyword">new</span> InetSocketAddress(host, port), connectionTimeout);</div><div class="line">        socket.setSoTimeout(soTimeout);</div><div class="line">			</div><div class="line">			...</div><div class="line">			other code</div><div class="line">			...</div><div class="line">			</div><div class="line">			</div><div class="line">		<span class="comment">// 这里是关键的地方, 初始化与redis通信的input stream和output stream, 之后的将参数发送给redis server和接受redis server的命令执行结果就是通过这两个输入输出流</span></div><div class="line">        outputStream = <span class="keyword">new</span> RedisOutputStream(socket.getOutputStream());</div><div class="line">        inputStream = <span class="keyword">new</span> RedisInputStream(socket.getInputStream());</div><div class="line">      &#125; <span class="keyword">catch</span> (IOException ex) &#123;</div><div class="line">        broken = <span class="literal">true</span>;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> JedisConnectionException(<span class="string">"Failed connecting to host "</span> </div><div class="line">            + host + <span class="string">":"</span> + port, ex);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<h3 id="3-与redis进行交互"><a href="#3-与redis进行交互" class="headerlink" title="3. 与redis进行交互"></a>3. 与redis进行交互</h3><p>与redis server建立连接之后, 就可以与redis server进行交互了, 也就是可以向redis server发送指令了. 与redis server进行交互实际上可以通过<code>Connection</code>这个类进行控制</p>
+<p>为了避免不必要的干扰, 这里采用较为简单的String的<code>getSet</code>命令说明与redis server的交互, 其他的命令的交互也相识. </p>
+<p>通过之前的UML图可以知道<code>Client</code>还实现了<code>Commands</code>接口, 这个接口中定义了redis中支持的所有的命令, 由此可知jedis对象所有的命令调用在内部都是通过<code>client</code>对象进行调用的. </p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Jedis.java</span></div><div class="line">@Override</div><div class="line"><span class="keyword">public</span> <span class="keyword">String</span> getSet(<span class="keyword">final</span> <span class="keyword">String</span> <span class="built_in">key</span>, <span class="keyword">final</span> <span class="keyword">String</span> value) &#123;</div><div class="line">	...</div><div class="line">	other code</div><div class="line">	...</div><div class="line">	<span class="comment">// 调用client的getSet命令</span></div><div class="line">	client.getSet(<span class="built_in">key</span>, value);</div><div class="line">	<span class="comment">// 获取redis server的响应</span></div><div class="line">	<span class="keyword">return</span> client.getBulkReply();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在client的<code>getSet</code>方法中, 首先会先将命令进行编码, 也就是将字符串类型的命令转成字节形式(因为和redis server的交互是通过socket的, 也就是说是通过字节的形式在网络中进行传输的, 因此要先把命令转成字节形式)</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// Client.java</span></div><div class="line">@Override</div><div class="line"> <span class="keyword">public</span> <span class="keyword">void</span> getSet(<span class="keyword">final</span> <span class="keyword">String</span> <span class="built_in">key</span>, <span class="keyword">final</span> <span class="keyword">String</span> value) &#123;</div><div class="line"></div><div class="line">	  <span class="comment">// 对命令进行编码(转成字节形式)</span></div><div class="line">    getSet(SafeEncoder.encode(<span class="built_in">key</span>), SafeEncoder.encode(value));</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>最后会调用<code>Connection</code>的<code>sendCommand()</code>方法发送命令给redis server</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Connection.java</span></div><div class="line"><span class="comment">// 真正向redis-server发送请求</span></div><div class="line">  <span class="keyword">public</span> <span class="function">Connection <span class="title">sendCommand</span><span class="params">(<span class="keyword">final</span> ProtocolCommand cmd, <span class="keyword">final</span> <span class="keyword">byte</span>[]... args)</span> </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">    	<span class="comment">// 这里会再次试着连接redis server, 也是调用之前的connect方法</span></div><div class="line">      connect();</div><div class="line">      <span class="comment">// 通过Protocol发送命令, 可以看见这里使用的是之前创建的outputStream</span></div><div class="line">      Protocol.sendCommand(outputStream, cmd, args);</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">    &#125; <span class="keyword">catch</span> (JedisConnectionException ex) &#123;</div><div class="line">    		...</div><div class="line">    		错误处理</div><div class="line">    		... 	    </div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Protocol.java</span></div><div class="line"><span class="comment">// 实际上就是和其他的网络通信一样通过流向socket中写入数据, 这样就把数据发送给redis server了</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> sendCommand(<span class="keyword">final</span> RedisOutputStream os, <span class="keyword">final</span> ProtocolCommand command,</div><div class="line">      <span class="keyword">final</span> <span class="keyword">byte</span>[]... args) &#123;</div><div class="line">    sendCommand(os, command.getRaw(), args);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> sendCommand(<span class="keyword">final</span> RedisOutputStream os, <span class="keyword">final</span> <span class="keyword">byte</span>[] command,</div><div class="line">      <span class="keyword">final</span> <span class="keyword">byte</span>[]... args) &#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      os.<span class="keyword">write</span>(ASTERISK_BYTE);</div><div class="line">      os.writeIntCrLf(args.length + <span class="number">1</span>);</div><div class="line">      os.<span class="keyword">write</span>(DOLLAR_BYTE);</div><div class="line">      os.writeIntCrLf(command.length);</div><div class="line">      os.<span class="keyword">write</span>(command);</div><div class="line">      os.writeCrLf();</div><div class="line"></div><div class="line">      <span class="keyword">for</span> (<span class="keyword">final</span> <span class="keyword">byte</span>[] arg : args) &#123;</div><div class="line">        os.<span class="keyword">write</span>(DOLLAR_BYTE);</div><div class="line">        os.writeIntCrLf(arg.length);</div><div class="line">        os.<span class="keyword">write</span>(arg);</div><div class="line">        os.writeCrLf();</div><div class="line">      &#125;</div><div class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> JedisConnectionException(e);</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>前面就是发送命令给redis server的流程, 但是细心的同学有没有发现, <code>outputStream</code>没有<code>flush</code>方法. 我们都知道像<code>RedisOutputStream</code>(继承了<code>FilterOutputStream</code>)这种高级输出流都是有缓存的, 所以如果没有调用<code>flush</code>之类的方法数据是不会发送的, 所以这里只是把命令放到了输出流的缓存中, 但是并没有发送给远程的redis server. 那具体是在什么时候将数据发送到redis server呢, 肯定是在调用flush的时候, 那什么时候调用<code>flush</code>方法呢, 让我们看一下从redis server获取命令执行结果的方法. </p>
+<p>之前的<code>Jedis.getSet()</code>方法中发送完命令之后, 紧接着就调用了<code>client.getBulkReply()</code>方法, 不出意外, 这个方法是从<code>Connection</code>中继承的一个方法. </p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Connection.java</span></div><div class="line"><span class="keyword">public</span> <span class="function">String <span class="title">getBulkReply</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">final</span> <span class="keyword">byte</span>[] result = getBinaryBulkReply();</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">null</span> != result) &#123;</div><div class="line">      <span class="function"><span class="keyword">return</span> SafeEncoder.<span class="title">encode</span><span class="params">(result)</span></span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">public</span> <span class="keyword">byte</span>[] getBinaryBulkReply() &#123;</div><div class="line">  	  <span class="comment">// 就是在这里调用了flush()方法</span></div><div class="line">    flush();</div><div class="line">    <span class="comment">// 读入redis server的响应结果</span></div><div class="line">    <span class="keyword">return</span> (<span class="keyword">byte</span>[]) readProtocolWithCheckingBroken();</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">flush</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">    	<span class="comment">// 发送数据给redis server</span></div><div class="line">      outputStream.flush();</div><div class="line">    &#125; <span class="keyword">catch</span> (IOException ex) &#123;</div><div class="line">      broken = <span class="keyword">true</span>;</div><div class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> JedisConnectionException(ex);</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>上面可以看到, Jedis实际上是在读取redis server返回的结果之前才将命令发送给redis server, 至于为什么要这么做, 我想可能是与redis的<code>multi</code>和<code>pipeline</code>有关.</p>
+<p>最后再来看一下如何从redis server读取响应结果的. 从上面可以看见读取redis server的数据是调用了<code>readProtocolWithCheckingBroken</code>方法</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> <span class="function">Object <span class="title">readProtocolWithCheckingBroken</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">    	<span class="comment">// 调用Protocol的read方法, 可以看见这里使用的是之前创建的inputStream, 也就是redis server会将响应结果打到inputStream, 然后Jedis从inputStream读取数据就可以了</span></div><div class="line">      <span class="function"><span class="keyword">return</span> Protocol.<span class="title">read</span><span class="params">(inputStream)</span></span>;</div><div class="line">    &#125; <span class="keyword">catch</span> (JedisConnectionException exc) &#123;</div><div class="line">      broken = <span class="keyword">true</span>;</div><div class="line">      <span class="keyword">throw</span> exc;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>读取响应结果的过程就是如上所述, 但是读取的一些细节这里没有指明, 可以通过阅读<code>Protocol.read()</code>和<code>Protocol.process()</code>方法了解.</p>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4.     总结"></a>4.     总结</h3><p>可以看见Jedis底层和redis server的交互还是通过基本的<code>socket</code>连接实现的, 忽略实现的细节其实Jedis和redis server就是一个网络应答系统. 所以说看一个框架表面上功能有多强大有多灵活, 其实具体实现的原理都是一些基础的东西, 所以说基础这个东西还是很重要的, 越往底层研究越重要.</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/18/clean_code_serial3/" rel="next" title="Clean Code读书笔记3 -- 单元测试和类">
+                <i class="fa fa-chevron-left"></i> Clean Code读书笔记3 -- 单元测试和类
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/05/29/jedis-Interaction/"
+           data-title="Jedis源码阅读之底层交互" data-url="http://thlcly.xyz/2017/05/29/jedis-Interaction/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/Anonymous.jpg"
+               alt="Tony Hui" />
+          <p class="site-author-name" itemprop="name">Tony Hui</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/thlcly" target="_blank">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/tonyhui0717" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-host和port的设置"><span class="nav-number">1.</span> <span class="nav-text">1. host和port的设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-建立连接"><span class="nav-number">2.</span> <span class="nav-text">2. 建立连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-与redis进行交互"><span class="nav-number">3.</span> <span class="nav-text">3. 与redis进行交互</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4.     总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tony Hui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"thlcly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -86,7 +86,7 @@
 <meta property="og:url" content="http://thlcly.xyz/paper/MYSQL学习笔记.html">
 <meta property="og:site_name" content="Monkey Coder">
 <meta property="og:description" content="This is a continuous updating learning notes for Mysql">
-<meta property="og:updated_time" content="2016-07-09T04:07:38.000Z">
+<meta property="og:updated_time" content="2017-04-05T03:58:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql学习笔记">
 <meta name="twitter:description" content="This is a continuous updating learning notes for Mysql">
@@ -226,7 +226,16 @@
     
     
       <p>This is a continuous updating learning notes for <em>Mysql</em><br><a id="more"></a></p>
-<h3 id="1-Mysql-exists的用法"><a href="#1-Mysql-exists的用法" class="headerlink" title="1. Mysql exists的用法"></a>1. Mysql exists的用法</h3>
+<h3 id="1-Mysql-exists的用法"><a href="#1-Mysql-exists的用法" class="headerlink" title="1. Mysql exists的用法"></a>1. Mysql exists的用法</h3><h3 id="2-Mysql-column定义了not-null-default-‘’-插入NULL报错"><a href="#2-Mysql-column定义了not-null-default-‘’-插入NULL报错" class="headerlink" title="2. Mysql column定义了not null default ‘’, 插入NULL报错"></a>2. Mysql column定义了not null default ‘’, 插入NULL报错</h3><p>eg:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="string">`stockunit`</span></div><div class="line"><span class="keyword">ADD</span> <span class="keyword">COLUMN</span> <span class="string">`alias`</span> <span class="built_in">VARCHAR</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span> <span class="keyword">COMMENT</span> <span class="string">'别名'</span> <span class="keyword">AFTER</span> <span class="string">`unittype`</span>,</div></pre></td></tr></table></figure>
+<p>虽然设置了DEFAULT ‘’ 但是如果插入的record存在NULL, 还是会报错</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">INSERT INTO `stockunit` (`id`, `warehouseid`, `stocktype`, `unitid`, `unittype`, `alias`, `aliaspinyin`, `cost`, `price`, `consumed`, `locked`, `remaining`, `quantityunit`, `comment`, `safelevel`, `restocklevel`, `alarmlevel`, `status`, `doctorincomeratio`, `created`, `updated`, `deleted`)</div><div class="line">VALUES</div><div class="line"><span class="symbol">	(15562, 1, 2, 10000, 1, NULL, NULL, 0, 0, 0, 0, 0, NULL, NULL, 100, 30, 0, 0, 0.0, '2017-04-05 11:22:38', '2017-04-05 11:22:</span><span class="number">38</span>', <span class="number">0</span>)<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>这个和mysql使用的mode有关:</p>
+<ul>
+<li>如果mysql使用的是strict mode, Mysql会报错, 如果mode是transaction的, 则会回滚, 如果想要插入默认值, 可以用DEFAULT代替column的value</li>
+<li>如果mysql使用的不是strict mode, 那mysql就会使用隐含的default value</li>
+</ul>
+
     
   </div>
 
@@ -275,7 +284,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-count">28</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
