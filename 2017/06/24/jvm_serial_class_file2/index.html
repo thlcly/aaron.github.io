@@ -1,0 +1,708 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Anonymous-favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Mini JVM in Action">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mini JVM系列之解析Class File(2)——常量池">
+<meta property="og:url" content="http://thlcly.xyz/2017/06/24/jvm_serial_class_file2/index.html">
+<meta property="og:site_name" content="Monkey Coder">
+<meta property="og:description" content="Mini JVM in Action">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/constant-pool.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/tag.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/access-flag.png">
+<meta property="og:updated_time" content="2017-06-24T16:54:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mini JVM系列之解析Class File(2)——常量池">
+<meta name="twitter:description" content="Mini JVM in Action">
+<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/constant-pool.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Mini JVM系列之解析Class File(2)——常量池 | Monkey Coder </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Monkey Coder</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mini JVM系列之解析Class File(2)——常量池
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-06-24T14:47:50+08:00" content="2017-06-24">
+              2017-06-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/06/24/jvm_serial_class_file2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/24/jvm_serial_class_file2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Mini JVM in Action</p>
+<a id="more"></a>
+<blockquote>
+<p>引子: 前面已经解析了一个class文件的魔数和class文件的版本号, 这篇文章重点要解析的就是class文件中的一个重要的部分——————常量池.<br>class文件中的所有字面常量(包括类名, 方法名,字段名, 字段类型等等都是放在常量池中的)这样做的目的是因为class文件的其他部分可能都要使用到这些内容, 如果每个地方用到都保存一份那么太浪费空间, 所以把这些数据都放到常量池中, 其他地方要引用就直接引用常量池就可以了. 所以常量池是class文件中很重要的一部分.</p>
+</blockquote>
+<h3 id="1-常量池结构"><a href="#1-常量池结构" class="headerlink" title="1. 常量池结构"></a>1. 常量池结构</h3><p>首先直观的看一个常量池到底长什么样(其实在class文件都是一堆的字节, 只不过每个字节在特定的上下文都代表指定的意思)</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/constant-pool.png" alt="CONSTANT-POOL"></p>
+<div style="margin-left:200px">图1-1</div>
+
+<p>可以看到class文件的版本号后紧跟的就是常量池. 常量池的头两个字节表明了常量池中常量项的个数, 因为只有两个字节所以常量项是有数量限制的. 具体多少个可以自行计算. 常量项个数后面紧跟的就是各个常量项了. 每个常量项都有一个1个字节的tag标志位, 用于表示这个常量项具体代表的内容, 从图中可以看到如果tag是07的话就表示这是一个Class Info的常量项, 从名字就可以看出来这是一个表示Class信息的常量项.<br>用专业一点的术语描述的话常量池中保存的内容就是字面量和符号引用. 字面量就像类似于文本字符串, 声明为final的常量值. 符号引用包括3类常量类和接口的全限定名, 字段名称和描述符, 方法名称和描述符.<br>特别要注意的一点是常量池中的常量项的<strong>索引是从1开始的</strong>, 这样做的目的是满足后面其他结构中需要表明不引用任何一个常量项的含义, 这个时候就将索引值置为0.</p>
+<h3 id="2-常量项的表示"><a href="#2-常量项的表示" class="headerlink" title="2. 常量项的表示"></a>2. 常量项的表示</h3><p>从前面的描述可以总结出来, 所有的常量池项都具有如下通用格式:</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="section">cp_info</span> &#123;   <span class="attribute">u1</span> tag;   <span class="attribute">u1</span> <span class="literal">info</span>[]; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>常量池中,每个cp_info项(也就是常量项)的格式必须相同,它们都以一个表示cp_info类型的单字节”tag”项开头. 后面info[]项的内容由tag的类型所决定.</p>
+<p>tag的类型有如下几种<br><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/tag.png" alt="TAG"></p>
+<div style="margin-left:200px">图1-2</div>
+
+<h3 id="3-常用的常量项"><a href="#3-常用的常量项" class="headerlink" title="3. 常用的常量项"></a>3. 常用的常量项</h3><ol>
+<li><p>Class Info</p>
+ <figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="section">CONSTANT_Class_Info</span> &#123;</div><div class="line">	<span class="attribute">u1</span> tag;</div><div class="line">	<span class="attribute">u2</span> name_index;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>- tag的值为7
+- name_index指向了常量池中索引为name_index的常量项
+</code></pre><ol>
+<li><p>UTF8 Info </p>
+ <figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="section">CONSTANT_UTF8_Info</span> &#123;</div><div class="line">	<span class="attribute">u1</span> tag;</div><div class="line">	<span class="attribute">u2</span> length;</div><div class="line">	<span class="attribute">u1</span> bytes[length];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>- tag的值为1
+- length表示这个UTF8编码的字符串的字节数
+- bytes[length]表示length长度的具体的字符串数据
+
+注意: 因为class文件中的方法名, 字段名等都是要引用UTF8 Info的, 但是UTF8 Info的数据长度就是2个字节, 所以方法名, 字段名的长度最大就是65535.
+</code></pre><ol>
+<li><p>String Info</p>
+ <figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="section">CONSTANT_String_INFO</span> &#123;</div><div class="line">	<span class="attribute">u1</span> tag;</div><div class="line">	<span class="attribute">u2</span> string_index;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>- tag的值为8
+- string_index指向了常量池中索引为string_index的常量项
+</code></pre><ol>
+<li><p>Field_Ref Info</p>
+ <figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="section">CONSTANT_Fieldref_Info</span> &#123;</div><div class="line">	<span class="attribute">u1</span> tag;</div><div class="line">	<span class="attribute">u2</span> class_index;</div><div class="line">	<span class="attribute">u2</span> name_and_type_index;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>tag的值为9</li>
+<li>class_index指向了常量池中索引为class_index的常量项, 且这个常量项必须为Class Info类型</li>
+<li>name_and_type_index指向了常量池中索引为name_and_type_index的常量项, 且这个常量项必须为Name And Type Info类型</li>
+</ul>
+</li>
+<li><p>Method_Ref Info</p>
+ <figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="section">CONSTANT_Methodref_Info</span> &#123;</div><div class="line">	<span class="attribute">u1</span> tag;</div><div class="line">	<span class="attribute">u2</span> class_index;</div><div class="line">	<span class="attribute">u2</span> name_and_type_index;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>- tag的值为10
+- class_index指向了常量池中索引为class_index的常量项, 且这个常量项必须为Class Info类型
+- name_and_type_index指向了常量池中索引为name_and_type_index的常量项, 且这个常量项必须为Name And Type Info类型
+</code></pre><ol>
+<li><p>NameAndType Info</p>
+ <figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="section">CONSTANT_NameAndType_Info</span> &#123;</div><div class="line">	<span class="attribute">u1</span> tag;</div><div class="line">	<span class="attribute">u2</span> name_index;</div><div class="line">	<span class="attribute">u2</span> descriptor_index;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>- tag的值为12
+- name_index指向了常量池中索引为name_index的常量项
+- descriptor_index指向了常量池中索引为descriptor_index的常量项
+</code></pre><p>以上这些就是常用的常量项, 或者说在我的mini jvm中常用的常量项, 至于其他的常量项也是类似, 可以参考<a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4" target="_blank" rel="external">oracle关于常量项的定义</a>自行分析</p>
+<h3 id="3-具体实现"><a href="#3-具体实现" class="headerlink" title="3. 具体实现"></a>3. 具体实现</h3><p>因为我使用的java实现jvm, 所以以上的常量项其实就相当于是一个个的类, 解析的过程就是初始化一个一个的类. 具体的代码实现就不在这里讲述了, 请参考代码中的<code>com.aaront.exercise.jvm.constant</code>这个包下的内容和<code>ClassParser</code>这个类的实现 </p>
+<h3 id="4-访问标志、类和接口"><a href="#4-访问标志、类和接口" class="headerlink" title="4. 访问标志、类和接口"></a>4. 访问标志、类和接口</h3><p>这三个内容是紧跟在常量池之后的, 而且比较简单, 所以在这里简单介绍一下</p>
+<ol>
+<li>访问标志</li>
+</ol>
+<p>访问标志实际上就是当前class的修饰符, 看一下访问标志的定义就知道了</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/access-flag.png" alt="access-flag"></p>
+<div style="margin-left:200px">图1-3</div>
+
+<p>访问标志由2个字节表示, 这个class有哪个修饰符对应的位就置为1, 非常的简单</p>
+<ol>
+<li>类</li>
+</ol>
+<p>紧接在访问标志后面的是this class和super class, 这两个的值都是指向常量池的中某一个常量项同时所指向的常量项必须是Class Info类型</p>
+<ol>
+<li>接口</li>
+</ol>
+<p>紧接在类后面的是接口, 因为一个class可以实现多个接口, 所以和类不同的是接口需要有一个字段来标明这个类实现了多少个接口, 所以开头的两个字节是表明class实现的接口数量, class实现了几个接口后面就有几个接口数量, 这和class一样都是指向常量池中的某个常量项同时常量项的类型必须是Class Info类型.</p>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><p>常量的解析到此就结束了, 常量池是一个非常重要的结构, 整个class文件的各个部分包括后面要提到的字段, 方法, 属性中都有对常量池的引用, 也正是因为有了常量池class文件才可以节省一大部分的空间.</p>
+<h3 id="5-代码地址"><a href="#5-代码地址" class="headerlink" title="5. 代码地址"></a>5. <a href="https://github.com/thlcly/Mini-JVM" target="_blank" rel="external">代码地址</a></h3>
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/12/jvm_serial_class_file_1/" rel="next" title="Mini JVM系列之解析Class File(1)——初探">
+                <i class="fa fa-chevron-left"></i> Mini JVM系列之解析Class File(1)——初探
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/24/jvm_serial_class_file3/" rel="prev" title="Mini JVM系列之解析Class File(3)————字段、方法、属性">
+                Mini JVM系列之解析Class File(3)————字段、方法、属性 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/06/24/jvm_serial_class_file2/"
+           data-title="Mini JVM系列之解析Class File(2)——常量池" data-url="http://thlcly.xyz/2017/06/24/jvm_serial_class_file2/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/Anonymous.jpg"
+               alt="Tony Hui" />
+          <p class="site-author-name" itemprop="name">Tony Hui</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/thlcly" target="_blank">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/tonyhui0717" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-常量池结构"><span class="nav-number">1.</span> <span class="nav-text">1. 常量池结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-常量项的表示"><span class="nav-number">2.</span> <span class="nav-text">2. 常量项的表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-常用的常量项"><span class="nav-number">3.</span> <span class="nav-text">3. 常用的常量项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-具体实现"><span class="nav-number">4.</span> <span class="nav-text">3. 具体实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-访问标志、类和接口"><span class="nav-number">5.</span> <span class="nav-text">4. 访问标志、类和接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-总结"><span class="nav-number">6.</span> <span class="nav-text">4. 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-代码地址"><span class="nav-number">7.</span> <span class="nav-text">5. 代码地址</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tony Hui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"thlcly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

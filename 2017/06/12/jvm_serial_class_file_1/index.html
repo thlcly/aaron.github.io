@@ -1,0 +1,664 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Anonymous-favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Mini JVM in Action
+
+“真正了不起的程序员对自己的程序的每一个字节都了如指掌”
+–《程序员的自我修养》">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mini JVM系列之解析Class File(1)——初探">
+<meta property="og:url" content="http://thlcly.xyz/2017/06/12/jvm_serial_class_file_1/index.html">
+<meta property="og:site_name" content="Monkey Coder">
+<meta property="og:description" content="Mini JVM in Action
+
+“真正了不起的程序员对自己的程序的每一个字节都了如指掌”
+–《程序员的自我修养》">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/class-file.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/source-file.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/class-file-struct.png">
+<meta property="og:updated_time" content="2017-06-24T16:54:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mini JVM系列之解析Class File(1)——初探">
+<meta name="twitter:description" content="Mini JVM in Action
+
+“真正了不起的程序员对自己的程序的每一个字节都了如指掌”
+–《程序员的自我修养》">
+<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/class-file.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Mini JVM系列之解析Class File(1)——初探 | Monkey Coder </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Monkey Coder</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mini JVM系列之解析Class File(1)——初探
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-06-12T19:22:56+08:00" content="2017-06-12">
+              2017-06-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/06/12/jvm_serial_class_file_1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/12/jvm_serial_class_file_1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Mini JVM in Action</p>
+<blockquote>
+<p>“真正了不起的程序员对自己的程序的每一个字节都了如指掌”</p>
+<div style="margin-left:400px">–《程序员的自我修养》</div>
+
+</blockquote>
+<a id="more"></a>
+<blockquote>
+<p>引子: 写了这么久的Java, 也看了一些关于JVM的书籍, 但是总感觉对JVM理解的还不是很够, 不能很清楚的理解书中对常量池, 本地变量表, 操作数栈, 堆等的一些解释, 因为只看文字总是不形象的, 对于程序员来说还是代码来的直观, 所以这次就来造一个大轮子, 自己动手写一个Mini JVM, 而且是用Java来写一个JVM. 这个JVM真的非常Mini, 里面不会实现垃圾回收, 也不会实现jdk中的类库(因为是用Java来实现, 所以直接调用Java的类库就可以了, 其实道理是一样的, 如果是用C++来实现JVM肯定调用的是C++的类库). 这里用Java来实现Java虚拟机有一种自包含或者说递归的感觉, 因为用Java实现的虚拟机是可以跨平台的, 但是运行这个Mini JVM又需要一个Java环境, 也就是Java虚拟机, 这个虚拟机是真正的oracle实现的虚拟机, 所以实际上这个Mini JVM只是在真正的虚拟机上虚拟了一个JVM.</p>
+</blockquote>
+<h3 id="1-Class-File的文件结构"><a href="#1-Class-File的文件结构" class="headerlink" title="1. Class File的文件结构"></a>1. Class File的文件结构</h3><h4 id="1-1-总览"><a href="#1-1-总览" class="headerlink" title="1.1 总览"></a>1.1 总览</h4><p>因为实现的是Mini JVM, 所以直接从解析class文件作为起点, 而不是从将java源文件编译成class文件开始(这个就相当于实现一个java编译器, 这个轮子造的就大发了。。。).</p>
+<p>首先直观的看一下一个具体的class文件的内容长什么样子</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/class-file.png" alt="class-file"></p>
+<div style="margin-left:200px">图1-1</div>        
+
+
+<p>这个class文件对应的java源文件</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/source-file.png" alt="source-file"></p>
+<div style="margin-left:200px">图1-2</div>    
+
+<p>mini jvm就是要执行这个java程序. (之后的mini jvm会支持条件判断, 循环等功能)</p>
+<h4 id="1-2-class文件的组成"><a href="#1-2-class文件的组成" class="headerlink" title="1.2 class文件的组成"></a>1.2 class文件的组成</h4><p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/class-file-struct.png" alt="class-file-struct"></p>
+<div style="margin-left:200px">图1-3</div>    
+
+<p>这里要注意一下, 因为class文件实际上就是一个紧凑的字节码文件, 所以如果当一个数据大于一个字节的时候, 是使用无符号大端模式进行存储的, <a href="https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82%E5%BA%8F" target="_blank" rel="external">大小端模式的区别请看这里</a>. </p>
+<h3 id="2-解析ClassFile"><a href="#2-解析ClassFile" class="headerlink" title="2. 解析ClassFile"></a>2. 解析ClassFile</h3><p>注: 接下来的解析会以我们要执行的EmployeeV1的class文件为例进行讲解.</p>
+<h4 id="2-1-魔数"><a href="#2-1-魔数" class="headerlink" title="2.1 魔数"></a>2.1 魔数</h4><p>每个class文件的前四个字节称为魔数, 它的作用是确定这个文件是否是一个能被虚拟机接受的Class文件. 虚拟机会对class文件进行校验, 但是不仅仅是校验一个class文件魔数, 还会校验比如其方法的字节码指令是否是支持的等等. 而如果一个文件是class文件, 那么它的魔数就是<strong>CAFEBABE</strong>, 图1-1可以看到确实如此.</p>
+<h4 id="2-2-Class文件的版本号"><a href="#2-2-Class文件的版本号" class="headerlink" title="2.2 Class文件的版本号"></a>2.2 Class文件的版本号</h4><p>接下的四个字节是class文件的版本号, 也就是编译出这个class文件的编译器的版本号, 顺序是前两个字节是次版本号, 后两个字节是版本号.<br>这里简单介绍一个java的版本号. java的版本号是从45开始的, jdk1.0~jdk1.1的版本号比较特殊是45.0~45.3, 之后每一个大版本发布版本号就加1(也就是jdk1.2的版本号是46), 所以在jdk1.1~jdk1.2之间的小版本号可以有65535个(也就是jdk1.1的可以支持的版本范围是45.0~45.65535), 至于为什么是65535应该很容易就可以知道, 因为存储小版本号的空间是2个字节, 所以2个字节的无符号范围就是0~65535.同时jdk保持了向下兼容性, 也就是高版本的jdk可以兼容也就是执行低版本的class文件. </p>
+<p>从图1-1可以看到, 我使用的版本号是0x000034, 转成十进制也就是次版本号是0, 主版本号是52,<br>所以计算一下就是jdk1.8(jdk1.2是46, 所以+6就是jdk8的版本号是52). 没错, 我就是用jdk1.8编译这个java源文件的.</p>
+<p><a href="https://en.wikipedia.org/wiki/Java_class_file#General_layout" target="_blank" rel="external">具体的class文件版本号的对应关系可以看这里</a></p>
+<h3 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h3><p>这篇文章是解析class文件的开端, 也是整个class文件中最简单的部分, 后面就会开始解析class文件中几个最重要的部分的其中一个————常量池. 常量池对整个class文件的结构组成至关重要, 要是没有这个常量池, 我们编译出来的class文件的大小将会大很多很多.</p>
+<h3 id="4-代码地址"><a href="#4-代码地址" class="headerlink" title="4. 代码地址"></a>4. <a href="https://github.com/thlcly/Mini-JVM" target="_blank" rel="external">代码地址</a></h3>
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/29/jedis-Interaction/" rel="next" title="Jedis源码阅读之底层交互">
+                <i class="fa fa-chevron-left"></i> Jedis源码阅读之底层交互
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/24/jvm_serial_class_file2/" rel="prev" title="Mini JVM系列之解析Class File(2)——常量池">
+                Mini JVM系列之解析Class File(2)——常量池 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/06/12/jvm_serial_class_file_1/"
+           data-title="Mini JVM系列之解析Class File(1)——初探" data-url="http://thlcly.xyz/2017/06/12/jvm_serial_class_file_1/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/Anonymous.jpg"
+               alt="Tony Hui" />
+          <p class="site-author-name" itemprop="name">Tony Hui</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/thlcly" target="_blank">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/tonyhui0717" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Class-File的文件结构"><span class="nav-number">1.</span> <span class="nav-text">1. Class File的文件结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-总览"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 总览</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-class文件的组成"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 class文件的组成</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-解析ClassFile"><span class="nav-number">2.</span> <span class="nav-text">2. 解析ClassFile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-魔数"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 魔数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-Class文件的版本号"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Class文件的版本号</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-总结"><span class="nav-number">3.</span> <span class="nav-text">3. 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-代码地址"><span class="nav-number">4.</span> <span class="nav-text">4. 代码地址</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tony Hui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"thlcly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

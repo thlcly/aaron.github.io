@@ -1,0 +1,725 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Anonymous-favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Mini JVM in Action">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mini JVM系列之解析Class File(3)————字段、方法、属性">
+<meta property="og:url" content="http://thlcly.xyz/2017/06/24/jvm_serial_class_file3/index.html">
+<meta property="og:site_name" content="Monkey Coder">
+<meta property="og:description" content="Mini JVM in Action">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/field-access-flag.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/descriptor.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/method-access-flag.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/attribute1.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/attribute2.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/attribute3.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/code-attribute.png">
+<meta property="og:updated_time" content="2017-06-24T16:54:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mini JVM系列之解析Class File(3)————字段、方法、属性">
+<meta name="twitter:description" content="Mini JVM in Action">
+<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/field-access-flag.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Mini JVM系列之解析Class File(3)————字段、方法、属性 | Monkey Coder </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Monkey Coder</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mini JVM系列之解析Class File(3)————字段、方法、属性
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-06-24T17:24:56+08:00" content="2017-06-24">
+              2017-06-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/06/24/jvm_serial_class_file3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/24/jvm_serial_class_file3/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Mini JVM in Action</p>
+<a id="more"></a>
+<blockquote>
+<p>引子: 在常量池, 访问修饰符, 类和接口后面紧跟的内容是字段和方法, 这两个结构是最复杂的, 因为其里面包含有属性这个成员, 而属性又是可以嵌套的.</p>
+</blockquote>
+<h3 id="1-字段"><a href="#1-字段" class="headerlink" title="1. 字段"></a>1. 字段</h3><p>和之前的常量池一样, 因为每个class中字段的数量是不确定的, 所以字段部分的开头两个字节用于表示当前class文件中的字段的个数, 紧跟着的才是具体的字段.</p>
+<p>先来看一下字段的结构</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="section">Field_Info</span> &#123;</div><div class="line">	<span class="attribute">u2</span> access_flag;</div><div class="line">	<span class="attribute">u2</span> name_index;</div><div class="line">	<span class="attribute">u2</span> descriptor_index;</div><div class="line">	<span class="attribute">u2</span> attribute_count;</div><div class="line">	<span class="attribute">attribute_info</span> attributes[attribute_count];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>access_flag表示该字段的访问修饰符, 字段的访问修饰符和类的表示方式相似, 但是具体的内容不一样</p>
+<p>  字段的访问标识</p>
+<p>  <img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/field-access-flag.png" alt="FIELD-ACCESS-FLAG"></p>
+  <div style="margin-left:200px">图1-1</div>
+</li>
+<li><p>name_index指向常量池中的name_index索引的常量项</p>
+</li>
+<li>descriptor_index指向常量池中的descriptor_index索引的常量项</li>
+<li>attribute_count表示该字段的属性个数</li>
+<li>attributes[attribute_count]表示该字段的具体的属性</li>
+</ul>
+<p>注意: 这里字段的descriptor代表的字段的类型, 但是类型不是写代码的时候int, String这样整个单词的, 它是一些字符的简写, 如下:</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/descriptor.png" alt="DESCRIPTOR"></p>
+<div style="margin-left:200px">图1-2</div>
+
+<p>所以, 举个例子如果字段是String类型, 那么它的descriptor就是<code>Ljava/lang/Object;</code>如果字段是int[][], 那么它的descriptor就是<code>[[I</code></p>
+<p>对于属性的解释放到和方法属性一起</p>
+<h3 id="2-方法"><a href="#2-方法" class="headerlink" title="2. 方法"></a>2. 方法</h3><p>方法和字段一样, 也需要有一个表示方法个数的字段, 同时这个字段后面紧跟的就是具体的方法</p>
+<p>同样, 来看一下方法的结构:</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="section">Method_Info</span> &#123;</div><div class="line">	<span class="attribute">u2</span> access_flag;</div><div class="line">	<span class="attribute">u2</span> name_index;</div><div class="line">	<span class="attribute">u2</span> descriptor_index;</div><div class="line">	<span class="attribute">u2</span> attribute_count;</div><div class="line">	<span class="attribute">attribute_info</span> attributes[attribute_count]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>access_flag的意义和之前field一样, 只不过取值不同, method的access flag可以取的值如下: </p>
+<p>  <img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/method-access-flag.png" alt="method-access-flag"></p>
+</li>
+</ul>
+<div style="margin-left:200px">图1-3</div>
+
+<ul>
+<li>name_index的意义和field的也一样, 表示了方法的名称</li>
+<li><p>descriptor_index的意义和field也一样, 只不过其表示方法不同, 让我们来看一下它是如何表示的:</p>
+<p>  method的descriptor由两部分组成, 一部分是参数的descriptor, 一部分是返回值的descriptor, 所以method的descriptor的形式如下:</p>
+  <figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">( <span class="name">ParameterDescriptor*</span> ) ReturnDescriptor</div></pre></td></tr></table></figure>
+<p>  而参数的descriptor就是field的descriptor. 返回值的descriptor也是field的descriptor但是多了一个类型就是void类型, 其的descriptor如下</p>
+  <figure class="highlight avrasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">VoidDescriptor:</span>V</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>所以举个例子, 如果一个方法的签名是
+
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="type">Object</span> m(<span class="built_in">int</span> i, double d, <span class="type">Thread</span> t) <span class="meta">&#123;..&#125;</span></div></pre></td></tr></table></figure>
+
+那么它的descriptor就是
+
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(IDLjava<span class="regexp">/lang/</span>Thread;)Ljava<span class="regexp">/lang/</span>Object;</div></pre></td></tr></table></figure>
+</code></pre><ul>
+<li>attribute_count的意义和field一样表示属性的个数</li>
+<li>attributes[attribute_count]和field也一样表示具体的属性, 属性的个数由attribute_count决定</li>
+</ul>
+<h3 id="3-属性"><a href="#3-属性" class="headerlink" title="3. 属性"></a>3. 属性</h3><h4 id="3-1-属性结构"><a href="#3-1-属性结构" class="headerlink" title="3.1 属性结构"></a>3.1 属性结构</h4><p>属性这个数据结构可以出现在class文件, 字段表, 方法表中. 有些属性是特有的, 有些属性是三个共有的. </p>
+<p>属性的描述如下:</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/attribute1.png" alt="ATTRIBUTE1"></p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/attribute2.png" alt="ATTRIBUTE2"></p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/attribute3.png" alt="ATTRIBUTE"></p>
+<div style="margin-left:200px">图1-4</div>
+
+<p>这里我不会详细解释每一个属性, 我只解释一个对于实现mini jvm最重要的属性, Code Attribute, 为什么说它重要, 因为我们的函数的代码就是在Code Attribute中(实际上存储的是指令). 其他属性的一些解释可以参考<a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7" target="_blank" rel="external">oracle的jvm规范中的描述</a></p>
+<h4 id="3-2-Code-Attribute"><a href="#3-2-Code-Attribute" class="headerlink" title="3.2 Code Attribute"></a>3.2 Code Attribute</h4><p>首先来看一下Code Attribute的结构</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">Code_attribute &#123;</div><div class="line">    u2 attribute_name_index<span class="comment">;</span></div><div class="line">    u4 attribute_length<span class="comment">;</span></div><div class="line">    u2 max_stack<span class="comment">;</span></div><div class="line">    u2 max_locals<span class="comment">;</span></div><div class="line">    u4 code_length<span class="comment">;</span></div><div class="line">    u1 code[code_length]<span class="comment">;</span></div><div class="line">    u2 exception_table_length<span class="comment">;</span></div><div class="line">    &#123;   u2 start_pc<span class="comment">;</span></div><div class="line">        u2 end_pc<span class="comment">;</span></div><div class="line">        u2 handler_pc<span class="comment">;</span></div><div class="line">        u2 catch_type<span class="comment">;</span></div><div class="line">    &#125; exception_table[exception_table_length]<span class="comment">;</span></div><div class="line">    u2 attributes_count<span class="comment">;</span></div><div class="line">    attribute_info attributes[attributes_count]<span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到Code Attribute属性是非常复杂的, 下面解释一些每个成员的意义.</p>
+<ul>
+<li>attribute_name_index指向的常量池中常量项的索引, 而且这个常量项的类型必须是UTF8 Info, 值必须是”Code”</li>
+<li>attribute_length表示这个属性的长度, 但是不包括开始的6个字节</li>
+<li>max_stack表示Code属性所在的方法在运行时形成的函数栈帧中的操作数栈的最大深度(真是不得不佩服java编译器, 连一个函数运行时需要的操作数栈的深度都可以计算的出来)</li>
+<li>max_locals表示最大局部变量表的长度</li>
+<li>code_length表示Code属性所在的方法的长度(这个长度是方法代码编译成字节后字节的长度)</li>
+<li><strong>code[length]表示的就是具体的代码</strong>, 所以说java函数的代码长度是有限制的, 编译出来的字节指令的长度只能是4个字所能代表的最大值. 所以一个函数的代码不能太长, 否者是不能编译的.</li>
+<li>exception_table_length表示方法会抛出的异常数量</li>
+<li>exception_table[exception_table_length]表示具体的异常</li>
+<li>attributes_count表示Code属性中子属性的长度, 之所以说属性复杂就是因为属性中还可以嵌套属性</li>
+<li>attributes[attributes_count]代表具体的属性</li>
+</ul>
+<p>现在来直观的看一下Code Attribute的组成</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/code-attribute.png" alt="CODE-ATTRIBUTE"></p>
+<div style="margin-left:200px">图1-5</div>
+
+<h4 id="3-3-Code-Attribute的两个子属性"><a href="#3-3-Code-Attribute的两个子属性" class="headerlink" title="3.3 Code Attribute的两个子属性"></a>3.3 Code Attribute的两个子属性</h4><p>Code Attribute中的两个子属性对于这次的mini jvm的实现可能不是很重要, 但是它们对于调试程序是非常重要的, 不知道大家有没有想过为什么我们用IDE运行程序出错时, IDE可以准确的定位到是哪一行代码出错了? 为什么我们在断点调试的时候可以看到每一个变量的值? 很关键的原因就在于Code属性的这两个子属性. </p>
+<h5 id="3-3-1-LineNumberTable"><a href="#3-3-1-LineNumberTable" class="headerlink" title="3.3.1 LineNumberTable"></a>3.3.1 LineNumberTable</h5><p>LineNumberTable的结构</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">LineNumberTable_attribute &#123;</div><div class="line">    u2 attribute_name_index<span class="comment">;</span></div><div class="line">    u4 attribute_length<span class="comment">;</span></div><div class="line">    u2 line_number_table_length<span class="comment">;</span></div><div class="line">    &#123;   u2 start_pc<span class="comment">;</span></div><div class="line">        u2 line_number<span class="comment">;	</span></div><div class="line">    &#125; line_number_table[line_number_table_length]<span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们着重要看的是line_number_table这个成语, 可以看到这个成员表示的就是<strong>字节码指令和源码的对应关系</strong>, 其中start_pc是Code Attribute中的code[]数组的索引值, line_number是源文件的行号</p>
+<h5 id="3-3-1-LocalVariableTable"><a href="#3-3-1-LocalVariableTable" class="headerlink" title="3.3.1 LocalVariableTable"></a>3.3.1 LocalVariableTable</h5><p>LocalVariableTable的结构</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">LocalVariableTable_attribute &#123;</div><div class="line">    u2 attribute_name_index<span class="comment">;</span></div><div class="line">    u4 attribute_length<span class="comment">;</span></div><div class="line">    u2 local_variable_table_length<span class="comment">;</span></div><div class="line">    &#123;   u2 start_pc<span class="comment">;</span></div><div class="line">        u2 length<span class="comment">;</span></div><div class="line">        u2 name_index<span class="comment">;</span></div><div class="line">        u2 descriptor_index<span class="comment">;</span></div><div class="line">        u2 index<span class="comment">;</span></div><div class="line">    &#125; local_variable_table[local_variable_table_length]<span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中最关键的成员大家也可以想到, 肯定是<code>local_variable_table[local_variable_table_length]</code></p>
+<ul>
+<li>start_pc和length表示局部变量的索引范围([start_pc, start_pc + length))</li>
+<li>name_index表示变量名在常量池中的索引</li>
+<li>descriptor_index表示变量描述符在常量池中的索引</li>
+<li>index表示此局部变量在局部变量表中的索引</li>
+</ul>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><p>至于对字段, 方法, 属性的解析的代码实现这里就不描述了, 大家直接看代码实现吧.<br>到这篇为止, class文件的结构和解析已经全部介绍完了, 接下来的就是运行程序了, 也就是实现一个执行引擎了, 所以接下来的才是整个jvm的重点.</p>
+<h3 id="5-代码地址"><a href="#5-代码地址" class="headerlink" title="5. 代码地址"></a>5. <a href="https://github.com/thlcly/Mini-JVM" target="_blank" rel="external">代码地址</a></h3>
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/24/jvm_serial_class_file2/" rel="next" title="Mini JVM系列之解析Class File(2)——常量池">
+                <i class="fa fa-chevron-left"></i> Mini JVM系列之解析Class File(2)——常量池
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/24/jvm_serial_execution_engine/" rel="prev" title="Mini JVM系列之执行引擎">
+                Mini JVM系列之执行引擎 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/06/24/jvm_serial_class_file3/"
+           data-title="Mini JVM系列之解析Class File(3)————字段、方法、属性" data-url="http://thlcly.xyz/2017/06/24/jvm_serial_class_file3/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/Anonymous.jpg"
+               alt="Tony Hui" />
+          <p class="site-author-name" itemprop="name">Tony Hui</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/thlcly" target="_blank">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/tonyhui0717" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-字段"><span class="nav-number">1.</span> <span class="nav-text">1. 字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-方法"><span class="nav-number">2.</span> <span class="nav-text">2. 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-属性"><span class="nav-number">3.</span> <span class="nav-text">3. 属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-属性结构"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 属性结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-Code-Attribute"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Code Attribute</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-Code-Attribute的两个子属性"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 Code Attribute的两个子属性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-1-LineNumberTable"><span class="nav-number">3.3.1.</span> <span class="nav-text">3.3.1 LineNumberTable</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-1-LocalVariableTable"><span class="nav-number">3.3.2.</span> <span class="nav-text">3.3.1 LocalVariableTable</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4. 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-代码地址"><span class="nav-number">5.</span> <span class="nav-text">5. 代码地址</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tony Hui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"thlcly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

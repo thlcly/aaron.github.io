@@ -1,0 +1,658 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Anonymous-favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Mini JVM in Action">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mini JVM系列之执行引擎">
+<meta property="og:url" content="http://thlcly.xyz/2017/06/24/jvm_serial_execution_engine/index.html">
+<meta property="og:site_name" content="Monkey Coder">
+<meta property="og:description" content="Mini JVM in Action">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/runtime_struct.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/instruction.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/invokespecial.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/aload_n.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/astore_n.png">
+<meta property="og:updated_time" content="2017-06-26T05:07:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mini JVM系列之执行引擎">
+<meta name="twitter:description" content="Mini JVM in Action">
+<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/runtime_struct.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Mini JVM系列之执行引擎 | Monkey Coder </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Monkey Coder</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mini JVM系列之执行引擎
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-06-24T21:43:30+08:00" content="2017-06-24">
+              2017-06-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/06/24/jvm_serial_execution_engine/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/24/jvm_serial_execution_engine/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Mini JVM in Action</p>
+<a id="more"></a>
+<blockquote>
+<p>引子: 这是本系列的最后一篇文章(后面如果有必要的话会写一篇关于mini jvm代码实现, 类结构的文章, 让大家更好的理解), 介绍一下jvm的执行引擎. 其实一个执行引擎要做的事情就是找到class的main方法, 然后从main方法开始执行整个程序, 直到程序结束. 而执行的代码就在之前解析的方法数据结构中的Code Attribute属性中.</p>
+</blockquote>
+<h3 id="1-运行时栈帧结构"><a href="#1-运行时栈帧结构" class="headerlink" title="1. 运行时栈帧结构"></a>1. 运行时栈帧结构</h3><p>之前解析的class文件都是一些静态的结构, 当执行引擎运行的时候需要把之前静态的结构转成运行时的结构. 先来看一看JVM的运行时结构</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/runtime_struct.png" alt="RUNTIME_STRUCT"></p>
+<div style="margin-left:200px">图1-1</div>
+
+<p>因为JVM是一个基于栈的虚拟机, 所以基本上所有的操作都是需要通过对栈的操作完成的. 执行的过程就是从main函数开始(一开始就会为main函数创建一个函数栈帧), 执行main函数的指令(在Code Attribute中), 如果要调用方法就创建一个新的函数栈帧, 如果函数执行完成就弹出第一个函数栈帧.</p>
+<h3 id="2-JVM的指令"><a href="#2-JVM的指令" class="headerlink" title="2. JVM的指令"></a>2. JVM的指令</h3><p>不管你在java源文件中写了什么函数, 用了什么NB的算法, 经过编译器的编译, 到了class文件中都是一个个的字节, 而Code Attribute中的code[]字段中的字节就是函数翻译过来的字节码指令. </p>
+<p>JVM支持的指令大致上可以分成3种没有操作数的, 1个操作数的, 2个操作数的. 因为JVM用一个字节来表示指令, 所以指令的最多只有256个. </p>
+<p>JVM指令通用形式如下:</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/instruction.png" alt="INSTRUCTION"></p>
+<p>所以mini jvm就是要用java来执行JVM的指令来完成功能</p>
+<h3 id="3-几个常用的指令解析"><a href="#3-几个常用的指令解析" class="headerlink" title="3. 几个常用的指令解析"></a>3. 几个常用的指令解析</h3><p>因为jvm的指令太多了, 在这里不可能全部都解析一遍, 所以就选择了几个mini jvm中比较关键的也已经实现了的指令进行解析</p>
+<h4 id="3-1-invokespecial"><a href="#3-1-invokespecial" class="headerlink" title="3.1 invokespecial"></a>3.1 invokespecial</h4><p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/invokespecial.png" alt="INVOKESPECIAL"></p>
+<p>说明: invokespecial用于调用实例方法, 专门用来处理调用超类方法、私有方法和实例初始化方法.</p>
+<p>indexByte1和indexByte2用于组成常量池中的索引((indexbyte1 &lt;&lt; 8)|indexbyte2). 所指向的常量项必须是MethodRef Info类型. 同时该条指令还会创建一个函数栈帧, 然后从当前的操作数栈中出栈被调用的方法的参数, 并且将其放到被调用方法的函数栈帧的本地变量表中.</p>
+<h4 id="3-2-aload-n"><a href="#3-2-aload-n" class="headerlink" title="3.2 aload_n"></a>3.2 aload_n</h4><p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/aload_n.png" alt="ALOAD_N"> </p>
+<p>说明: aload_n从局部变量表加载一个 reference 类型值到操作数栈中. 至于从当前函数栈帧的本地变量表中加载哪个变量是有N的值决定的.</p>
+<h4 id="3-3-astore-n"><a href="#3-3-astore-n" class="headerlink" title="3.3 astore_n"></a>3.3 astore_n</h4><p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/astore_n.png" alt="ASTORE_N"></p>
+<p>说明: 将一个 reference 类型数据保存到局部变量表中. 至于保存在局部变量表的哪个位置就由N的值决定.</p>
+<p>好了, 指令就介绍到这里, 要看所有指令的说明可以看<a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.1" target="_blank" rel="external">oracle的jvm指令集</a>. 里面有对每一个指令的详细说明. </p>
+<p>所以执行引擎要做的工作就是根据每一个指令要执行的功能进行对应的实现.<br>至于到底是怎么做的就请大家看代码吧, 这里就不详述了. </p>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><p>对于真正的jvm, 现在实现的mini jvm的功能真的是太弱太弱了, 但是即使是实现这么弱的功能也花费了我大概一个月的时间, 可想而知真正的jvm的功能的强大以及其的复杂度.<br>这次的mini jvm主要是对之前看的一些jvm的文章书籍的一次实战演练, 虽然实现的功能比较弱, 但是更加形象的了解了jvm的组成, java代码的执行流程, 虽然还不能像第一篇文章开头说的那样对自己写的每一个字节都了如指掌, 但是相比较以前也是有了长足的进步.<br>总之, 这次的mini jvm自己是受益良多. 其中代码中留下的一些todo在后面也会慢慢的补充, 如果有同学感兴趣的话欢迎一起来完善这个”小玩意”. </p>
+<h3 id="5-代码地址"><a href="#5-代码地址" class="headerlink" title="5. 代码地址"></a>5. <a href="https://github.com/thlcly/Mini-JVM" target="_blank" rel="external">代码地址</a></h3><h3 id="6-参考"><a href="#6-参考" class="headerlink" title="6. 参考"></a>6. 参考</h3><blockquote>
+<ol>
+<li><p><a href="https://docs.oracle.com/javase/specs/jvms/se8/html/index.html" target="_blank" rel="external">The Java® Virtual Machine Specification</a></p>
+</li>
+<li><p>深入理解Java虚拟机：JVM高级特性与最佳实践（第2版）</p>
+</li>
+<li><p>深入java虚拟机第二版</p>
+</li>
+</ol>
+</blockquote>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/24/jvm_serial_class_file3/" rel="next" title="Mini JVM系列之解析Class File(3)————字段、方法、属性">
+                <i class="fa fa-chevron-left"></i> Mini JVM系列之解析Class File(3)————字段、方法、属性
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/06/24/jvm_serial_execution_engine/"
+           data-title="Mini JVM系列之执行引擎" data-url="http://thlcly.xyz/2017/06/24/jvm_serial_execution_engine/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/Anonymous.jpg"
+               alt="Tony Hui" />
+          <p class="site-author-name" itemprop="name">Tony Hui</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/thlcly" target="_blank">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/tonyhui0717" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-运行时栈帧结构"><span class="nav-number">1.</span> <span class="nav-text">1. 运行时栈帧结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-JVM的指令"><span class="nav-number">2.</span> <span class="nav-text">2. JVM的指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-几个常用的指令解析"><span class="nav-number">3.</span> <span class="nav-text">3. 几个常用的指令解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-invokespecial"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 invokespecial</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-aload-n"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 aload_n</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-astore-n"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 astore_n</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4. 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-代码地址"><span class="nav-number">5.</span> <span class="nav-text">5. 代码地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-参考"><span class="nav-number">6.</span> <span class="nav-text">6. 参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tony Hui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"thlcly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
