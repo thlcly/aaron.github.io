@@ -1,0 +1,653 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Anonymous-favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Mini JVM in Action">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Monkey Coder">
+<meta property="og:url" content="http://thlcly.xyz/2017/07/31/jvm_serial_source_code_analyze/index.html">
+<meta property="og:site_name" content="Monkey Coder">
+<meta property="og:description" content="Mini JVM in Action">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/class-file.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/constant-pool-uml-zoom-out.png">
+<meta property="og:updated_time" content="2017-07-31T08:43:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Monkey Coder">
+<meta name="twitter:description" content="Mini JVM in Action">
+<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/class-file.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title>  | Monkey Coder </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Monkey Coder</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-07-31T10:13:35+08:00" content="2017-07-31">
+              2017-07-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/07/31/jvm_serial_source_code_analyze/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/31/jvm_serial_source_code_analyze/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Mini JVM in Action</p>
+<a id="more"></a>
+<blockquote>
+<p>对于之前分析的Mini JVM的实现原理, 这里再加几篇关于源码的分析, 目的是为了可以更形象的展现之前所说的内容, 同时在分析源码的同时如果有同学有更好的实现的方法也可以提出来一起交流.</p>
+</blockquote>
+<h3 id="1-解析常量池"><a href="#1-解析常量池" class="headerlink" title="1. 解析常量池"></a>1. 解析常量池</h3><p>在之前的文章中已经提到过, 常量池是整个class文件中十分重要的一部分, 其存在的意思主要是可以减少class中的重复数据, 使class文件可以更加的小. 同时执行引擎在执行的时候也会引用到常量池中的内容. 所以常量池的解析对于整个JVM来说是很关键的一步.</p>
+<p>首先再来看一下常量池在class存在的形式</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/class-file.png" alt="class-file"></p>
+<div style="margin-left:200px">图1-1</div>
+
+<p>嗯, 没错, 都是一些二进制数值, 所以解析常量池的工作其实就是将这个数值根据规则转成java中的一个一个的类. </p>
+<h4 id="1-1-常量池类结构图"><a href="#1-1-常量池类结构图" class="headerlink" title="1.1 常量池类结构图"></a>1.1 常量池类结构图</h4><p>之前常量池的文章中介绍过, 常量池就是由一个个的常量项组成的, 因此可以得出以下的类结构图</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/constant-pool-uml-zoom-out.png" alt="constant-pool-uml"></p>
+<div style="margin-left:200px">图1-1 constant-pool-uml (点击看大图)</div>
+
+<p>这个结构应该很容易就可以想到, 下面来看一下代码是如何实现的.</p>
+<h4 id="1-2-代码实现"><a href="#1-2-代码实现" class="headerlink" title="1.2 代码实现"></a>1.2 代码实现</h4><p>解析常量池:<br>传入的参数就是class文件的字节码数组</p>
+<figure class="highlight hsp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div></pre></td><td class="code"><pre><div class="line">private <span class="keyword">int</span> _parseConstantPool(byte[] contents) &#123;</div><div class="line">	   <span class="comment">// 由class文件的结构规范可知, 常量吃的长度在class文件的第8个字节到第10(不包括)个字节记节</span></div><div class="line">	   <span class="comment">// 所以这里的CONSTANT_POOL_LENGTH_START和CONSTANT_POOL_LENGTH_END分别是8和10</span></div><div class="line">    Integer constantPoolLength = byte2Int(Arrays.copyOfRange(contents, CONSTANT_POOL_LENGTH_START, CONSTANT_POOL_LENGTH_END))<span class="comment">;</span></div><div class="line">    <span class="comment">// 常量池长度数据之后紧接着就是常量池的具体内容, 所以pos的值就是10</span></div><div class="line">    <span class="keyword">int</span> <span class="keyword">pos</span> = CONSTANT_POOL_START<span class="comment">;</span></div><div class="line">    List&lt;AbstractConstant&gt; abstractConstant = new ArrayList&lt;&gt;()<span class="comment">;</span></div><div class="line">    ConstantPool pool = new ConstantPool(abstractConstant)<span class="comment">;</span></div><div class="line">    <span class="comment">// 因为常量池中常量项的序号是从1开始的, 所以遍历的时候需要是常量项长度-1</span></div><div class="line">    <span class="comment">// 同时保留的第0项用于表示不引用任何的常量项, 因此这里一开始就创建一个NullConstant</span></div><div class="line">    abstractConstant.add(new NullConstant())<span class="comment">;</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span><span class="comment">; i &lt; constantPoolLength - 1; i++) &#123;</span></div><div class="line">        byte tag = contents[<span class="keyword">pos</span>]<span class="comment">;</span></div><div class="line">        <span class="keyword">pos</span> = <span class="keyword">pos</span> + <span class="number">1</span><span class="comment">;</span></div><div class="line">        <span class="comment">// 根据tag的值来判断接下来的常量项是到底是什么类型</span></div><div class="line">        <span class="comment">// 不同的常量项的具体数据内容不同, 需要进行单独的解析</span></div><div class="line">        <span class="comment">// 解析完每一个常量项都需要更新pos的值, 其一直指向下一个常量项的tag位置</span></div><div class="line">        <span class="comment">// 每一个常量项的数据格式定义可以参考oracle jvm规范</span></div><div class="line">        <span class="keyword">switch</span> (tag) &#123;</div><div class="line">            <span class="keyword">case</span> CONSTANT_UTF8: &#123;</div><div class="line">                <span class="keyword">int</span> <span class="keyword">length</span> = byte2Int(Arrays.copyOfRange(contents, <span class="keyword">pos</span>, <span class="keyword">pos</span> + <span class="number">2</span>))<span class="comment">;</span></div><div class="line">                byte[] content = Arrays.copyOfRange(contents, <span class="keyword">pos</span> + <span class="number">2</span>, <span class="keyword">pos</span> + <span class="number">2</span> + <span class="keyword">length</span>)<span class="comment">;</span></div><div class="line">                UTF8Constant utf8Constant = new UTF8Constant(pool, tag, <span class="keyword">length</span>, content)<span class="comment">;</span></div><div class="line">                abstractConstant.add(utf8Constant)<span class="comment">;</span></div><div class="line">                <span class="keyword">pos</span> += (<span class="number">2</span> + <span class="keyword">length</span>)<span class="comment">;</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_INTEGER: &#123;</div><div class="line">                <span class="comment">// <span class="doctag">TODO:</span> 17/6/6 后序添加</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_FLOAT: &#123;</div><div class="line">                <span class="comment">// <span class="doctag">TODO:</span> 17/6/6 后序添加</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_LONG: &#123;</div><div class="line">                <span class="comment">// <span class="doctag">TODO:</span> 17/6/6 后序添加</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_DOUBLE: &#123;</div><div class="line">                <span class="comment">// <span class="doctag">TODO:</span> 17/6/6 后序添加</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_CLASS: &#123;</div><div class="line">                <span class="keyword">int</span> nameIndex = byte2Int(Arrays.copyOfRange(contents, <span class="keyword">pos</span>, <span class="keyword">pos</span> + <span class="number">2</span>))<span class="comment">;</span></div><div class="line">                ClassConstant classConstant = new ClassConstant(pool, tag, nameIndex)<span class="comment">;</span></div><div class="line">                abstractConstant.add(classConstant)<span class="comment">;</span></div><div class="line">                <span class="keyword">pos</span> += <span class="number">2</span><span class="comment">;</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_STRING: &#123;</div><div class="line">                Integer stringIndex = byte2Int(Arrays.copyOfRange(contents, <span class="keyword">pos</span>, <span class="keyword">pos</span> + <span class="number">2</span>))<span class="comment">;</span></div><div class="line">                StringConstant stringConstant = new StringConstant(pool, tag, stringIndex)<span class="comment">;</span></div><div class="line">                abstractConstant.add(stringConstant)<span class="comment">;</span></div><div class="line">                <span class="keyword">pos</span> += <span class="number">2</span><span class="comment">;</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_FIELD_REF: &#123;</div><div class="line">                Integer classIndex = byte2Int(Arrays.copyOfRange(contents, <span class="keyword">pos</span>, <span class="keyword">pos</span> + <span class="number">2</span>))<span class="comment">;</span></div><div class="line">                Integer nameAndTypeIndex = byte2Int(Arrays.copyOfRange(contents, <span class="keyword">pos</span> + <span class="number">2</span>, <span class="keyword">pos</span> + <span class="number">4</span>))<span class="comment">;</span></div><div class="line">                FieldRefConstant fieldRefConstant = new FieldRefConstant(pool, tag, classIndex, nameAndTypeIndex)<span class="comment">;</span></div><div class="line">                abstractConstant.add(fieldRefConstant)<span class="comment">;</span></div><div class="line">                <span class="keyword">pos</span> += <span class="number">4</span><span class="comment">;</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_METHOD_REF: &#123;</div><div class="line">                Integer classIndex = byte2Int(Arrays.copyOfRange(contents, <span class="keyword">pos</span>, <span class="keyword">pos</span> + <span class="number">2</span>))<span class="comment">;</span></div><div class="line">                Integer nameAndTypeIndex = byte2Int(Arrays.copyOfRange(contents, <span class="keyword">pos</span> + <span class="number">2</span>, <span class="keyword">pos</span> + <span class="number">4</span>))<span class="comment">;</span></div><div class="line">                MethodRefConstant methodRefConstant = new MethodRefConstant(pool, tag, classIndex, nameAndTypeIndex)<span class="comment">;</span></div><div class="line">                abstractConstant.add(methodRefConstant)<span class="comment">;</span></div><div class="line">                <span class="keyword">pos</span> += <span class="number">4</span><span class="comment">;</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_INTERFACE_METHOD_REF: &#123;</div><div class="line">                <span class="comment">// <span class="doctag">TODO:</span> 17/6/6 后序添加</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_NAME_AND_TYPE: &#123;</div><div class="line">                Integer nameIndex = byte2Int(Arrays.copyOfRange(contents, <span class="keyword">pos</span>, <span class="keyword">pos</span> + <span class="number">2</span>))<span class="comment">;</span></div><div class="line">                Integer descriptorIndex = byte2Int(Arrays.copyOfRange(contents, <span class="keyword">pos</span> + <span class="number">2</span>, <span class="keyword">pos</span> + <span class="number">4</span>))<span class="comment">;</span></div><div class="line">                NameAndTypeConstant nameAndTypeConstant = new NameAndTypeConstant(pool, tag, nameIndex, descriptorIndex)<span class="comment">;</span></div><div class="line">                abstractConstant.add(nameAndTypeConstant)<span class="comment">;</span></div><div class="line">                <span class="keyword">pos</span> += <span class="number">4</span><span class="comment">;</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_METHOD_HANDLE: &#123;</div><div class="line">                <span class="comment">// <span class="doctag">TODO:</span> 17/6/6 后序添加</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_METHOD_TYPE: &#123;</div><div class="line">                <span class="comment">// <span class="doctag">TODO:</span> 17/6/6 后序添加</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">case</span> CONSTANT_INVOKE_DYNAMIC: &#123;</div><div class="line">                <span class="comment">// <span class="doctag">TODO:</span> 17/6/6 后序添加</span></div><div class="line">                <span class="keyword">break</span><span class="comment">;</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">default</span>:</div><div class="line">                throw new RuntimeException(<span class="string">"class文件常量池结构不正确"</span>)<span class="comment">;</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    classFile.setConstantPool(pool)<span class="comment">;</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">pos</span><span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="2-解析访问标志"><a href="#2-解析访问标志" class="headerlink" title="2. 解析访问标志"></a>2. 解析访问标志</h3><p>由之前的class文件的结构可知, 常量池之后紧跟着的就是类的访问标志, 也就是那些<code>private</code>, <code>abstract</code>之类的东西. class文件中使用2个字节来表示这些内容, 具体的说是用16bit来表示这些内容, 因为这两个字节的每一位都是有意义的, 当某一位的值为1时就表示有某个修饰符. 所以解析访问标志实际上就是判断每一位是否是1.</p>
+<p>代码如下:</p>
+<p>class修饰符的枚举定义:</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * @author tonyhui</div><div class="line"> * @since 17/6/5</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> ClassAccessFlag &#123;</div><div class="line">	 <span class="comment">// 每一个对于类合法的修饰符都会在这里进行定义, code代表的就是该修饰符具体所在的bit</span></div><div class="line">    ACC_PUBLIC(<span class="number">0X0001</span>, <span class="string">"PUBLIC"</span>),</div><div class="line">    ACC_FINAL(<span class="number">0x0010</span>, <span class="string">"FINAL"</span>),</div><div class="line">    ACC_SUPER(<span class="number">0x0020</span>, <span class="string">"SUPER"</span>),</div><div class="line">    ACC_ABSTRACT(<span class="number">0x0400</span>, <span class="string">"ABSTRACT"</span>),</div><div class="line">    ACC_SYNTHETIC(<span class="number">0x1000</span>, <span class="string">"SYNTHETIC"</span>),</div><div class="line">    ACC_ANNOTATION(<span class="number">0x2000</span>, <span class="string">"ANNOTATION"</span>),</div><div class="line">    ACC_ENUM(<span class="number">0x4000</span>, <span class="string">"ENUM"</span>);</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> code;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">String</span> name;</div><div class="line"></div><div class="line">    ClassAccessFlag(<span class="keyword">int</span> code, <span class="keyword">String</span> name) &#123;</div><div class="line">        <span class="keyword">this</span>.code = code;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> getCode() &#123;</div><div class="line">        <span class="built_in">return</span> code;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">String</span> getName() &#123;</div><div class="line">        <span class="built_in">return</span> name;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>解析class的修饰符</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">   * 解析Class的修饰符</div><div class="line">   */</div><div class="line">  <span class="keyword">private</span> <span class="built_in">int</span> _parseClassAccessFlag(<span class="built_in">byte</span>[] contents, <span class="built_in">int</span> accessFlagStart) &#123;</div><div class="line">      <span class="built_in">int</span> accessFlag = byte2Int(Arrays.copyOfRange(contents, accessFlagStart, accessFlagStart + <span class="number">2</span>));</div><div class="line">      <span class="comment">// 由上面的分析可以知道, 只要将正在解析的类的修饰符的值与上面定义的枚举进行位运算就可以知道该类有哪些修饰符</span></div><div class="line">      <span class="comment">// 写到这里突然发现这个过程可以不用一个一个if进行判断而是可以通过一个循环进行实现, 所以写文章的好处之一就是有的时候会灵光一现, 想到其他的更好的实现方法</span></div><div class="line">      List&lt;ClassAccessFlag&gt; classAccessFlags = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">      <span class="keyword">if</span> ((accessFlag &amp; ACC_PUBLIC.getCode()) != <span class="number">0</span>) &#123;</div><div class="line">          classAccessFlags.<span class="built_in">add</span>(ACC_PUBLIC);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span> ((accessFlag &amp; ACC_FINAL.getCode()) != <span class="number">0</span>) &#123;</div><div class="line">          classAccessFlags.<span class="built_in">add</span>(ACC_FINAL);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span> ((accessFlag &amp; ACC_SUPER.getCode()) != <span class="number">0</span>) &#123;</div><div class="line">          classAccessFlags.<span class="built_in">add</span>(ACC_SUPER);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span> ((accessFlag &amp; ACC_ABSTRACT.getCode()) != <span class="number">0</span>) &#123;</div><div class="line">          classAccessFlags.<span class="built_in">add</span>(ACC_ABSTRACT);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span> ((accessFlag &amp; ACC_SYNTHETIC.getCode()) != <span class="number">0</span>) &#123;</div><div class="line">          classAccessFlags.<span class="built_in">add</span>(ACC_SYNTHETIC);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span> ((accessFlag &amp; ACC_ENUM.getCode()) != <span class="number">0</span>) &#123;</div><div class="line">          classAccessFlags.<span class="built_in">add</span>(ACC_ENUM);</div><div class="line">      &#125;</div><div class="line">      classFile.setAccessFlag(classAccessFlags);</div><div class="line">      <span class="keyword">return</span> accessFlagStart + <span class="number">2</span>;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<h3 id="3-解析类的索引"><a href="#3-解析类的索引" class="headerlink" title="3. 解析类的索引"></a>3. 解析类的索引</h3><p>解析类的索引可以说是很简单的了, 其实就是找到该类和其父类在常量池中的索引项, 也就是找到该类和其父类在常量池中的索引. 这些内容在常量项中本身就存在, 这里仅仅是引用一下, 但是jvm规范单独将这部分数据提取出来表示我想是为了之后获取类的信息可以更加的方便, 而不用再到常量池中一个个的找. 毕竟类的信息对于解析一个类是时常要用到的. </p>
+<p>解析类的索引</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">    * 解析Class和其父类在常量池中的索引</div><div class="line">    */</div><div class="line">   <span class="keyword">private</span> <span class="keyword">int</span> _parseClassIndex(<span class="keyword">byte</span>[] contents, <span class="keyword">int</span> classIndexStart) &#123;</div><div class="line">       <span class="keyword">int</span> thisClassIndex = byte2Int(Arrays.copyOfRange(contents, classIndexStart, classIndexStart + <span class="number">2</span>));</div><div class="line">       <span class="keyword">int</span> superClassIndex = byte2Int(Arrays.copyOfRange(contents, classIndexStart + <span class="number">2</span>, classIndexStart + <span class="number">4</span>));</div><div class="line">       ClassIndex classIndex = <span class="keyword">new</span> ClassIndex(thisClassIndex, superClassIndex);</div><div class="line">       classFile.setClassIndex(classIndex);</div><div class="line">       <span class="built_in">return</span> classIndexStart + <span class="number">4</span>;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>这段代码没什么好解释的, 可以说是简单的到不能再简单了, thisClassIndex和superClassIndex的值一定是常量池的某个常量项的索引值(如果这个class是合法的). </p>
+<p>其实在解析完class index后紧跟的是interface index, 也就是这个类实现的接口的索引, 但是我的这个mini jvm要解析的类没有实现接口, 所以这个就不剖析了, 但是其实现的方式和解析class index实际上是一样的. </p>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><p>整个mini jvm的代码实现还不是很完整, 即使是已经实现的功能也还有很多可以优化的地方. 之后的计划是一遍完善功能一遍继续解析mini jvm的代码, 后面解析方法和字段的代码也是很关键的, 还有最后的执行引擎的实现是整个mini jvm的核心. 最后如果有必要再对一些Miscellaneous的实现进行解析一下.</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/30/jdk_source_code_Integer/" rel="next" title="Integer源码阅读笔记">
+                <i class="fa fa-chevron-left"></i> Integer源码阅读笔记
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/11/telegram-bot/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/07/31/jvm_serial_source_code_analyze/"
+           data-title="" data-url="http://thlcly.xyz/2017/07/31/jvm_serial_source_code_analyze/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/Anonymous.jpg"
+               alt="Tony Hui" />
+          <p class="site-author-name" itemprop="name">Tony Hui</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">35</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/thlcly" target="_blank">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/tonyhui0717" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-解析常量池"><span class="nav-number">1.</span> <span class="nav-text">1. 解析常量池</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-常量池类结构图"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 常量池类结构图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-代码实现"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 代码实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-解析访问标志"><span class="nav-number">2.</span> <span class="nav-text">2. 解析访问标志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-解析类的索引"><span class="nav-number">3.</span> <span class="nav-text">3. 解析类的索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4. 总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tony Hui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"thlcly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

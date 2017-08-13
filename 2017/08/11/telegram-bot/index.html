@@ -1,0 +1,671 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/Anonymous-favicon.png?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Develop a Telegram Bot in Action">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Monkey Coder">
+<meta property="og:url" content="http://thlcly.xyz/2017/08/11/telegram-bot/index.html">
+<meta property="og:site_name" content="Monkey Coder">
+<meta property="og:description" content="Develop a Telegram Bot in Action">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/telegram.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/ngrok.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/dude.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/express1.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/BotFather.png">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/trick.png">
+<meta property="og:updated_time" content="2017-08-13T01:32:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Monkey Coder">
+<meta name="twitter:description" content="Develop a Telegram Bot in Action">
+<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/telegram.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title>  | Monkey Coder </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Monkey Coder</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Talk is cheap, Show me the code</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-08-11T13:42:00+08:00" content="2017-08-11">
+              2017-08-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Miscellaneous/" itemprop="url" rel="index">
+                    <span itemprop="name">Miscellaneous</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/08/11/telegram-bot/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/08/11/telegram-bot/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Develop a Telegram Bot in Action</p>
+<a id="more"></a>
+<h3 id="1-Telegram"><a href="#1-Telegram" class="headerlink" title="1. Telegram"></a>1. Telegram</h3><p>在介绍Telegram Bot之前先认识一下Telegram这个聊天工具. </p>
+<p>先来一个直观的感受, 看一下这个Telegram长什么样</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/telegram.png" alt="Telegram"></p>
+<p>相信很多同学都应该听说过或者用过这个软件, 这个软件简单的说就是一个简版的微信, 但是和微信不同的是这个软件的安全性更加的高, 这里所说的安全性是指你聊天的内容不容易泄露. 当然, 你知道的, 在一个聊天比较安全的环境下就会有一些比较”劲爆”的内容. 这些就不展开讨论了, 有兴趣的同学自行去发现吧. 最近这个软件比较火热, 我觉得有一部分原因是国内的小密圈被封了, 所以很多业界的网红程序员都开了telegram, 比如池建强, 冯大辉等等. 这里有两篇关于Telegram更加详细的介绍, 有兴趣的可以看一下</p>
+<blockquote>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODQ2MDIyMA==&amp;mid=2650713414&amp;idx=1&amp;sn=2333b4c238569e2cb42747429c9bb3f8&amp;chksm=bec0631589b7ea03fb224612c5fec68050aa25097098cc82ff8d993dad1706461b7c0df92d2c&amp;mpshare=1&amp;scene=1&amp;srcid=0811jMGw2tOvzdFNgtK3ohQe&amp;key=17be3897f3d91f51b10425198971da13a2d52773e5ebba6a7b60200f922be9753c8502a1434a777a1412f7aaa0e0fb3660a7db98af1e89afdf76767c5db8b097504b940acb045a2de16a2d892d6fbe45&amp;ascene=0&amp;uin=MTE4ODA2NjUwOA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.12.5+build(16F73" target="_blank" rel="external">Telegram，隐秘通道(池建强)</a>&amp;version=12020810&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=DcfDLqEGG5dyi%2FPQXlfwsGRjhxV46MJdxi0JmVQbbyeX7lGnExzNNry8%2FxmsW5Gf)<br><a href="https://mp.weixin.qq.com/s?__biz=MjM5MTE4Nzk1NA==&amp;mid=209920091&amp;idx=1&amp;sn=b8b2902ac086f28101631ffe4a9ce501&amp;mpshare=1&amp;scene=1&amp;srcid=08111xEeDvG076EqNJl9VJDH&amp;key=71223cfe280ce2562c91b283c998773730157e083c29b19e6a4c9eac8328741971d1c548b420a7cebe61c40641343dabdbd28fb4a56aceb5b21e5976c373c000934d702a1e4a4badb316d493702041ae&amp;ascene=0&amp;uin=MTE4ODA2NjUwOA%3D%3D&amp;devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.12.5+build(16F73" target="_blank" rel="external">Telegram传奇：俄罗斯富豪、黑客高手、极权和阴谋…(霍炬)</a>&amp;version=12020810&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=DcfDLqEGG5dyi%2FPQXlfwsGRjhxV46MJdxi0JmVQbbyeX7lGnExzNNry8%2FxmsW5Gf)</p>
+</blockquote>
+<h3 id="2-开发Telegram-Bot之前的准备工作"><a href="#2-开发Telegram-Bot之前的准备工作" class="headerlink" title="2. 开发Telegram Bot之前的准备工作"></a>2. 开发Telegram Bot之前的准备工作</h3><p>介绍完Telegram之后, Telegram Bot是干嘛的大家看名字就清楚了, 其实就是一个程序, Telegram会将用户发送的信息发送到你配置的一个webhook url上, 这样程序就可以根据用户发送的信息做出响应, 就是这么简单.</p>
+<p>Telegram官方或者第三方已经有一些Bot可以使用了, 但是作为有强迫症什么都要亲自做一遍的程序员来说, 自己写一个Bot是肯定的了.</p>
+<p>首先, 要写一个能使用的Bot以下的东西是必须要有的</p>
+<ul>
+<li><p>Bot Token<br>  这个简单, 这个Token可以直接到BotFather(后面会介绍)申请</p>
+</li>
+<li><p>一个Bot程序<br>  这个是肯定要有的, 这个程序就是对用户消息做出响应的程序. 这个也简单, 直接写一个可以接受Http请求的web程序就可以了(我们每天都在做的事情)</p>
+</li>
+<li><p>支持https的公网地址<br>你写的程序肯定是要放到公网上Telegram才能将消息发到你的程序, 而且Telegram要求这个公网地址必须是Https的. 这个要求就有点高了, 难不成为了写了一个Bot还得搞一台云服务器, 买个Https的证书吗? 如果这个Bot是商用或者要推广的这个是必须要的, 但是我的Bot只是为了满足我的强迫症啊!! 所以是时候祭出这个大杀器了 — <a href="https://ngrok.com/" target="_blank" rel="external">ngrok</a>. 这个工具可以将你本地的地址映射成公网的一个地址, 而且它还<strong>支持Https</strong>. 一起来看一下这个杀器</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/ngrok.png" alt="ngrok"></p>
+</li>
+</ul>
+<p>这样就把一个公网网址映射到你本地的程序了, 所以只要同时启动你的程序和ngrok, Telegram就可以将消息发送到你本地的程序了. 嗯, 简直完美!</p>
+<h3 id="3-正式开发一个Telegram-Bot"><a href="#3-正式开发一个Telegram-Bot" class="headerlink" title="3. 正式开发一个Telegram Bot"></a>3. 正式开发一个Telegram Bot</h3><p>万事俱备只欠东风, 这个东风就是Bot程序. 所以我开发了一个叫dude的MiscellaneousBot</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/dude.png" alt="MiscellaneousBot"></p>
+<p>看这个名字就知道这个Bot可以做很多事情, 但是现在只有一个查询快递物流的功能.</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/express1.png" alt="express"></p>
+<p>嗯, 界面是难看了一点, 但是目的是达到了. Telegram Bot接口支持html, 所以这个界面可以改的更加的好看和友好一点.</p>
+<h4 id="3-1-实现"><a href="#3-1-实现" class="headerlink" title="3.1 实现"></a>3.1 实现</h4><p>这个Bot的思路很简单, 这里说一下(至于具体的实现可以直接看代码, 非常简单.): </p>
+<ol>
+<li><p>首先Bot程序要有一个接口用于Telegram回调(也就是之前说的webhook url), 这个webhook url的后面会再解释一下, 由于我们所处的这个网络环境, 用网上的那个curl或者程序的方式设置webhook url基本都是不行的(一直是请求超时), 所以我用了一个比较trick的方式</p>
+</li>
+<li><p>但程序里接收用户的消息之后, 对用户的消息进行校验提取出快递商户名和快递单号,  对于提取方式其实是自定义的, 因为程序会让用户记录一定的格式发送要查询的消息, 我制定的规则是”快递商户名,快递单号”. 有了这两个信息就可以查询快递物流信息了. 这里我用的是<a href="http://www.kdniao.com/" target="_blank" rel="external">快递鸟</a>这个免费api, 所以之后要做的就是对接快递鸟提供的api接口了. 这些正是我们每天都在做的事情, 这里就不在赘述了. </p>
+</li>
+<li><p>获取到用户的快递信息之后就可以给用户响应了, 我这里是直接将快递信息返回了, 实际在操作的时候应该要对数据进行格式化之后再返回, Telegram Bot api支持markdown, html等格式, 所以灵活度是很高的.</p>
+</li>
+</ol>
+<p>这样,一个Bot的查询快递的完整流程就完成了.</p>
+<h3 id="4-Miscellaneous"><a href="#4-Miscellaneous" class="headerlink" title="4. Miscellaneous"></a>4. Miscellaneous</h3><h4 id="4-1-BotFather"><a href="#4-1-BotFather" class="headerlink" title="4.1 BotFather"></a>4.1 BotFather</h4><p>BotFather的作用就是帮你初始化一个Bot, 只要在Telegram和BotFather发起聊天, 它就会给你提示, 你只要一步一步按要求回答它的问题, 比如输入Bot名字等等, 一个Bot就创建好了</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/BotFather.png" alt="BotFather"></p>
+<h4 id="4-2-设置webhook-url"><a href="#4-2-设置webhook-url" class="headerlink" title="4.2 设置webhook url"></a>4.2 设置webhook url</h4><p>网上设置webhook url的方式基本都是使用官方的curl(因为我们之间使用ngrok获取了一个https的域名, 如果是自己搭建的服务, 设置webhook url要更加复杂, 具体看官方文档). </p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">curl</span> -X POST -H <span class="string">"Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"</span> -F <span class="string">"url=https://你的webhook url"</span> <span class="string">"https://api.telegram.org/bot你的token/setWebhook"</span></div></pre></td></tr></table></figure>
+<p>这样执行基本上就是超时</p>
+<p>所以在我都快绝望的时候, 看到官网上有这么一段描述:</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/telegram-bot/trick.png" alt="trick"></p>
+<p> 然后我抱着试一试的心理(比较网上没说这样可以做, 在官网上我也没找到可以这样做的例子),<br> 用了这种方法:</p>
+ <figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https:<span class="regexp">//</span>api.telegram.org<span class="regexp">/bot你的token/</span>setWebhook?url=https:<span class="regexp">//</span>你的域名</div></pre></td></tr></table></figure>
+<p> 没想到设置成功了. 也因此有了这个dude Bot</p>
+<h3 id="5-最后"><a href="#5-最后" class="headerlink" title="5. 最后"></a>5. 最后</h3><p>Telegram在我个人看来体验还是很好的,界面很清爽, 作为实时通讯的软件各个功能也都有了, 还是值得用一用的. 其实对于Telegram来说, bot只是它锦上添花的一部分, 最重要的是它的安全性, 而这个安全性的基石MTProto协议应该是值得研究的(虽然我还没有研究…).<br>基于我们所处的网络环境, 如果想要用一用Telegram, 你先要找把梯子.<br>如果要开发Bot, 那就看一看<a href="https://core.telegram.org/bots/api" target="_blank" rel="external">Telegram Bot Api</a><br>最后, 我的Bot的<a href="https://github.com/thlcly/Dude" target="_blank" rel="external">源代码</a></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/31/jvm_serial_source_code_analyze/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/08/11/telegram-bot/"
+           data-title="" data-url="http://thlcly.xyz/2017/08/11/telegram-bot/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/Anonymous.jpg"
+               alt="Tony Hui" />
+          <p class="site-author-name" itemprop="name">Tony Hui</p>
+          <p class="site-description motion-element" itemprop="description">Talk is cheap, Show me the code</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">35</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/thlcly" target="_blank">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/tonyhui0717" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Telegram"><span class="nav-number">1.</span> <span class="nav-text">1. Telegram</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-开发Telegram-Bot之前的准备工作"><span class="nav-number">2.</span> <span class="nav-text">2. 开发Telegram Bot之前的准备工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-正式开发一个Telegram-Bot"><span class="nav-number">3.</span> <span class="nav-text">3. 正式开发一个Telegram Bot</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-实现"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Miscellaneous"><span class="nav-number">4.</span> <span class="nav-text">4. Miscellaneous</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-BotFather"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 BotFather</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-设置webhook-url"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 设置webhook url</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-最后"><span class="nav-number">5.</span> <span class="nav-text">5. 最后</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tony Hui</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"thlcly"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
