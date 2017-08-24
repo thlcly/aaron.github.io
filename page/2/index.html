@@ -239,6 +239,128 @@
             
               
                 
+                <a class="post-title-link" href="/2017/03/13/google_search_skills/" itemprop="url">
+                  Google搜索技巧
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-03-13T17:09:14+08:00" content="2017-03-13">
+              2017-03-13
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Basic-Skill/" itemprop="url" rel="index">
+                    <span itemprop="name">Basic Skill</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/13/google_search_skills/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/13/google_search_skills/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>使用Google搜索可以说是程序员最基本的技能了, 本篇文章汇总了一些使用Google的技巧, 使用好的搜索技巧技巧可以加快我们解决问题的速度, 提高工作效率.</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/03/13/google_search_skills/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/03/11/clean_code_serial2/" itemprop="url">
                   Clean Code读书笔记2 -- 对象、数据结构和边界
                 </a>
@@ -1319,129 +1441,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/12/12/自定义RequestMappingHandlerMapping避免PathVariable的性能低下/" itemprop="url">
-                  自定义RequestMappingHandlerMapping避免PathVariable的性能低下
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-12-12T19:27:46+08:00" content="2016-12-12">
-              2016-12-12
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/12/12/自定义RequestMappingHandlerMapping避免PathVariable的性能低下/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/12/自定义RequestMappingHandlerMapping避免PathVariable的性能低下/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Using hacker method to avoid performance problem for @PathVariable</p>
-<p>背景: 由于公司最近在做一个广告系统, 其中我负责的广告跟踪模块有一个记录用户点击数的Api接口, 接口的url <code>/api/event/click/{userId}</code>, 接口中使用了路径变量, 因此在处理的方法中就要用<code>@PathVariable</code>进行处理. 之前一直没有关注路径变量和参数变量(<code>@RequestParam</code>)在性能上的区别, 但是这个参与的广告系统对请求的响应要求很高. 因此在代码review的时候, 架构师发了一篇达达科技的文章, 里面提到了路径变量和参数变量在性能上的区别, 同时提出了相应的解决思路. 因此就按照达达科技的思路对原本的广告系统的实现进行了改造. 具体的达达科技提到的思路<a href="https://tech.imdada.cn/2015/12/23/springmvc-restful-optimize/">请看这里</a></p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/12/12/自定义RequestMappingHandlerMapping避免PathVariable的性能低下/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1487,7 +1486,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">35</span>
+              <span class="site-state-item-count">36</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>

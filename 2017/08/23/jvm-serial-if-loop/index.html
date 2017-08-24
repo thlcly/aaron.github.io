@@ -82,20 +82,24 @@
 
 <meta name="description" content="Mini JVM in Action">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mini JVM系列(4)之执行引擎">
-<meta property="og:url" content="http://thlcly.xyz/2017/06/24/jvm_serial_execution_engine/index.html">
+<meta property="og:title" content="Mini JVM系列(6)之控制流 -- 条件判断和循环">
+<meta property="og:url" content="http://thlcly.xyz/2017/08/23/jvm-serial-if-loop/index.html">
 <meta property="og:site_name" content="Monkey Coder">
 <meta property="og:description" content="Mini JVM in Action">
-<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/runtime_struct.png">
-<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/instruction.png">
-<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/invokespecial.png">
-<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/aload_n.png">
-<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/astore_n.png">
-<meta property="og:updated_time" content="2017-06-26T05:10:22.000Z">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035451962417.jpg">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035652173118.jpg">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035684083819.jpg">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035684441397.jpg">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035685125636.jpg">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035701114823.jpg">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035715561364.jpg">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035715804591.jpg">
+<meta property="og:image" content="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035716002061.jpg">
+<meta property="og:updated_time" content="2017-08-24T11:15:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mini JVM系列(4)之执行引擎">
+<meta name="twitter:title" content="Mini JVM系列(6)之控制流 -- 条件判断和循环">
 <meta name="twitter:description" content="Mini JVM in Action">
-<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/runtime_struct.png">
+<meta name="twitter:image" content="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035451962417.jpg">
 
 
 
@@ -113,7 +117,7 @@
   };
 </script>
 
-  <title> Mini JVM系列(4)之执行引擎 | Monkey Coder </title>
+  <title> Mini JVM系列(6)之控制流 -- 条件判断和循环 | Monkey Coder </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -243,7 +247,7 @@
             
             
               
-                Mini JVM系列(4)之执行引擎
+                Mini JVM系列(6)之控制流 -- 条件判断和循环
               
             
           </h1>
@@ -255,8 +259,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2017-06-24T21:43:30+08:00" content="2017-06-24">
-              2017-06-24
+            <time itemprop="dateCreated" datetime="2017-08-23T18:45:58+08:00" content="2017-08-23">
+              2017-08-23
             </time>
           </span>
 
@@ -285,8 +289,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/06/24/jvm_serial_execution_engine/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/24/jvm_serial_execution_engine/" itemprop="commentsCount"></span>
+                <a href="/2017/08/23/jvm-serial-if-loop/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/08/23/jvm-serial-if-loop/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -312,39 +316,29 @@
         <p>Mini JVM in Action</p>
 <a id="more"></a>
 <blockquote>
-<p>引子: 这是本系列的最后一篇文章(后面如果有必要的话会写一篇关于mini jvm代码实现, 类结构的文章, 让大家更好的理解), 介绍一下jvm的执行引擎. 其实一个执行引擎要做的事情就是找到class的main方法, 然后从main方法开始执行整个程序, 直到程序结束. 而执行的代码就在之前解析的方法数据结构中的Code Attribute属性中.</p>
+<p>引子: 一个程序无论多么的复杂, 站在宏观角度看其实都是在三种控制流中执行: 顺序执行, 条件执行, 循环执行. 顺序执行就是一条一条的语句按照语句所在位置的顺序依次执行; 条件执行就是根据条件的真假有选择的执行某一段代码, 而被选择要执行的代码段是顺序执行的; 循环执行就是根据条件重复执行一段代码, 而被重复执行的代码段也是顺序执行的. 可以看到顺序执行是基础, 另外两个是在顺序执行的基础上加了一些控制条件. 之前实现的Mini JVM 已经实现了顺序执行的控制流了, 现在就来看一下如何实现条件判断和循环控制流.</p>
 </blockquote>
-<h3 id="1-运行时栈帧结构"><a href="#1-运行时栈帧结构" class="headerlink" title="1. 运行时栈帧结构"></a>1. 运行时栈帧结构</h3><p>之前解析的class文件都是一些静态的结构, 当执行引擎运行的时候需要把之前静态的结构转成运行时的结构. 先来看一看JVM的运行时结构</p>
-<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/runtime_struct.png" alt="RUNTIME_STRUCT"></p>
-<div style="margin-left:200px">图1-1</div>
-
-<p>因为JVM是一个基于栈的虚拟机, 所以基本上所有的操作都是需要通过对栈的操作完成的. 执行的过程就是从main函数开始(一开始就会为main函数创建一个函数栈帧), 执行main函数的指令(在Code Attribute中), 如果要调用方法就创建一个新的函数栈帧, 如果函数执行完成就弹出第一个函数栈帧.</p>
-<h3 id="2-JVM的指令"><a href="#2-JVM的指令" class="headerlink" title="2. JVM的指令"></a>2. JVM的指令</h3><p>不管你在java源文件中写了什么函数, 用了什么NB的算法, 经过编译器的编译, 到了class文件中都是一个个的字节, 而Code Attribute中的code[]字段中的字节就是函数翻译过来的字节码指令. </p>
-<p>JVM支持的指令大致上可以分成3种没有操作数的, 1个操作数的, 2个操作数的. 因为JVM用一个字节来表示指令, 所以指令的最多只有256个. </p>
-<p>JVM指令通用形式如下:</p>
-<p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/instruction.png" alt="INSTRUCTION"></p>
-<p>所以mini jvm就是要用java来执行JVM的指令来完成功能</p>
-<h3 id="3-几个常用的指令解析"><a href="#3-几个常用的指令解析" class="headerlink" title="3. 几个常用的指令解析"></a>3. 几个常用的指令解析</h3><p>因为jvm的指令太多了, 在这里不可能全部都解析一遍, 所以就选择了几个mini jvm中比较关键的也已经实现了的指令进行解析</p>
-<h4 id="3-1-invokespecial"><a href="#3-1-invokespecial" class="headerlink" title="3.1 invokespecial"></a>3.1 invokespecial</h4><p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/invokespecial.png" alt="INVOKESPECIAL"></p>
-<p>说明: invokespecial用于调用实例方法, 专门用来处理调用超类方法、私有方法和实例初始化方法.</p>
-<p>indexByte1和indexByte2用于组成常量池中的索引((indexbyte1 &lt;&lt; 8)|indexbyte2). 所指向的常量项必须是MethodRef Info类型. 同时该条指令还会创建一个函数栈帧, 然后从当前的操作数栈中出栈被调用的方法的参数, 并且将其放到被调用方法的函数栈帧的本地变量表中.</p>
-<h4 id="3-2-aload-n"><a href="#3-2-aload-n" class="headerlink" title="3.2 aload_n"></a>3.2 aload_n</h4><p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/aload_n.png" alt="ALOAD_N"> </p>
-<p>说明: aload_n从局部变量表加载一个 reference 类型值到操作数栈中. 至于从当前函数栈帧的本地变量表中加载哪个变量是有N的值决定的.</p>
-<h4 id="3-3-astore-n"><a href="#3-3-astore-n" class="headerlink" title="3.3 astore_n"></a>3.3 astore_n</h4><p><img src="http://o6qqyj17y.bkt.clouddn.com/mini-jvm/astore_n.png" alt="ASTORE_N"></p>
-<p>说明: 将一个 reference 类型数据保存到局部变量表中. 至于保存在局部变量表的哪个位置就由N的值决定.</p>
-<p>好了, 指令就介绍到这里, 要看所有指令的说明可以看<a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.1" target="_blank" rel="external">oracle的jvm指令集</a>. 里面有对每一个指令的详细说明. </p>
-<p>所以执行引擎要做的工作就是根据每一个指令要执行的功能进行对应的实现.<br>至于到底是怎么做的就请大家看代码吧, 这里就不详述了. </p>
-<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><p>对于真正的jvm, 现在实现的mini jvm的功能真的是太弱太弱了, 但是即使是实现这么弱的功能也花费了我大概一个月的时间, 可想而知真正的jvm的功能的强大以及其的复杂度.<br>这次的mini jvm主要是对之前看的一些jvm的文章书籍的一次实战演练, 虽然实现的功能比较弱, 但是更加形象的了解了jvm的组成, java代码的执行流程, 虽然还不能像第一篇文章开头说的那样对自己写的每一个字节都了如指掌, 但是相比较以前也是有了长足的进步.<br>总之, 这次的mini jvm自己是受益良多. 其中代码中留下的一些todo在后面也会慢慢的补充, 如果有同学感兴趣的话欢迎一起来完善这个”小玩意”. </p>
-<h3 id="5-代码地址"><a href="#5-代码地址" class="headerlink" title="5. 代码地址"></a>5. <a href="https://github.com/thlcly/Mini-JVM" target="_blank" rel="external">代码地址</a></h3><h3 id="6-参考"><a href="#6-参考" class="headerlink" title="6. 参考"></a>6. 参考</h3><blockquote>
-<ol>
-<li><p><a href="https://docs.oracle.com/javase/specs/jvms/se8/html/index.html" target="_blank" rel="external">The Java® Virtual Machine Specification</a></p>
-</li>
-<li><p>深入理解Java虚拟机：JVM高级特性与最佳实践（第2版）</p>
-</li>
-<li><p>深入java虚拟机第二版</p>
-</li>
-</ol>
-</blockquote>
+<h3 id="1-总览"><a href="#1-总览" class="headerlink" title="1. 总览"></a>1. 总览</h3><p>首先先来看一下这个版本的Mini JVM所要支持的控制流:</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035451962417.jpg" alt="EmployeeV2"></p>
+<p>没错, 红色框的内容就是要实现的条件判断和循环控制流</p>
+<p>在具体实现之前, 我们先来回顾一下我们整天都在写的<code>if</code>, <code>while/for</code>的执行流程是怎么样的. 对于<code>if</code>语句, 首先先要判断一下条件, 如果为<code>true</code>则执行<code>if</code>代码块, 如果为<code>false</code>则执行if之后的代码块; 对于<code>while/for</code>语句, 首先先要判断一下条件, 如果为<code>true</code>则执行<code>while/for</code>代码块, 等<code>while/for</code>代码块执行完之后再判断一下条件, 直到条件不满足时再执行<code>while/for</code>之后的代码块. 从上面的描述可以看到, 其实条件控制流和循环控制流是一会事, 都是根据条件执行代码段, 只是循环控制流有可能会反复执行而已. </p>
+<h3 id="2-实现"><a href="#2-实现" class="headerlink" title="2. 实现"></a>2. 实现</h3><p>知道了条件控制流和循环控制流的本质之后, 我们再来了看一下Java编译器把这两个控制流编译成了什么命令, 让其可以实现对应的逻辑.</p>
+<h4 id="2-1-条件控制流"><a href="#2-1-条件控制流" class="headerlink" title="2.1 条件控制流"></a>2.1 条件控制流</h4><p><img src="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035652173118.jpg" alt="if-statement"></p>
+<p>可以看到, 打红框框的就是if语句被编译之后的字节码, 但是有同学就问了这一串数字是啥呀….?!, 别急, 我帮这串”天书”翻译一下:</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035684083819.jpg" alt="command-1"><br><img src="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035684441397.jpg" alt="command-2"><br><img src="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035685125636.jpg" alt="command-3"></p>
+<p>这串翻译之后就是上面那个样子(其实在之前执行引擎那篇文章中已经提到过, 这里再补充一下, 这些数字所代表的具体意义是在oracle jvm虚拟机规范中的操作码中有定义的, 所以参照那个文档就可以对这个看似无意义的数字进行翻译). 从这些命令当中可以看到有两个命令是之前没有遇见到过的, 这两个命令也是实现<code>if</code>控制流, 甚至<code>while/for</code>控制流的关键. 一个是<code>if_icmpge</code>, 一个是<code>goto</code>. </p>
+<p>通过名字就可以知道, <code>if_icmpge</code>就是一个判断命令, 用于比较栈顶两 int 型数值大小, 当结果大于等于 0 时跳转. 同理也可以猜到类似的命令还有<code>if_icmpgt</code>, <code>if_icmpne</code>等. 至于其他的类型也有类似的命令. 知道了原理之后要实现这个命令也很简单, 只要计算表达式的值是否符合跳转的条件, 如果符合条件则计算下一个命令的偏移量然后将下一个命令的值置为这个新的偏移量(如果了解操作系统的话, 就类似于操作系统中函数的调用, 实际上就是改变pc(程序计数器)的值, 让其指向下一条指令的位置).</p>
+<p>而至于<code>goto</code>命令, 顾名思义就是跳转, 这个命令的实现更加的简单, 都不需要计算, 直接”无脑”跳转就好了.</p>
+<p>所以依赖于一批<code>if_*</code>命令和一个<code>goto</code>指令就实现了<code>if</code>控制流.</p>
+<h4 id="2-2-循环控制流"><a href="#2-2-循环控制流" class="headerlink" title="2.2 循环控制流"></a>2.2 循环控制流</h4><p>知道了条件控制流之后, 以及前面已经介绍过了循环控制流就可能不断执行的条件控制流, 所以对于循环控制流的实现也很容易想到了. 还是照旧让我们来看一下Java编译器把循环控制流编译成了什么命令:</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035701114823.jpg" alt="loop-statement"></p>
+<p>嗯, 还是一串数字, 再来看一下翻译之后的命令:</p>
+<p><img src="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035715561364.jpg" alt="command-1"><br><img src="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035715804591.jpg" alt="command-2"><br><img src="http://o6qqyj17y.bkt.clouddn.com/2017-08-24-15035716002061.jpg" alt="command-3"></p>
+<p>上面就是for循环的命令, 可以看到其实它和条件的判断的命令根本没有什么区别, 就是使用<code>if_*</code>指令集和<code>goto</code>命令来实现的. 唯一的区别就是<code>goto</code>语句会跳到<code>goto</code>前面的命令, 这样就会再次执行<code>if_icmpgt</code>命令, 也正是这样就实现了循环. 所以实际上可以把条件判断控制流看成是特殊的循环控制流, 也即条件控制流是之会执行一次的循环控制流. </p>
+<p>如果细心的同学仔细观察可以看到这个有一个地方比较有意思, 就是<code>goto</code>命令的两个偏移量是<code>0xff</code>和<code>0xf3</code>, 通过这个值计算出来的偏移量加上<code>goto</code>命令本身的偏移量得到的最后的偏移量实际上是会大于2个字节的能表示的最大值的, 这个时候产生的溢出刚好可以让下一个命令的偏移量移到<code>goto</code>命令之前, 从而实现循环.</p>
+<p>所以不管条件还是循环, 编译成字节码之后, 在jvm看来都是一样的, 没有什么区别. </p>
+<h3 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h3><p>如果同学之前看过或者学过一些汇编的知识, 其实可以发现jvm这个条件,循环的实现和汇编的条件,循环跳转的实现是很相似的. 都是通过一些类似<code>if_*</code>的命令和一个<code>goto</code>命令实现的. 所以不管你这个语言的特性多么强大, 语法可以写的多么简洁, 多么花哨, 到了指令这一层其实都是大同小异的. 所以说即使是写java这种高级语言, 了解一些底层的东西也还是有必要的. </p>
+<p>这个版本的<a href="https://github.com/thlcly/Mini-JVM" target="_blank" rel="external">Mini JVM的代码</a>也已经提交, 有兴趣的, 可以看看.</p>
 
       
     </div>
@@ -368,17 +362,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/24/jvm_serial_class_file3/" rel="next" title="Mini JVM系列(3)之解析Class File -- 字段、方法、属性">
-                <i class="fa fa-chevron-left"></i> Mini JVM系列(3)之解析Class File -- 字段、方法、属性
+              <a href="/2017/08/11/telegram-bot/" rel="next" title="开发一个Telegram Bot">
+                <i class="fa fa-chevron-left"></i> 开发一个Telegram Bot
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/30/jdk_source_code_Integer/" rel="prev" title="Integer源码阅读笔记">
-                Integer源码阅读笔记 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -404,8 +394,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/06/24/jvm_serial_execution_engine/"
-           data-title="Mini JVM系列(4)之执行引擎" data-url="http://thlcly.xyz/2017/06/24/jvm_serial_execution_engine/">
+      <div class="ds-thread" data-thread-key="2017/08/23/jvm-serial-if-loop/"
+           data-title="Mini JVM系列(6)之控制流 -- 条件判断和循环" data-url="http://thlcly.xyz/2017/08/23/jvm-serial-if-loop/">
       </div>
     
   </div>
@@ -511,7 +501,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-运行时栈帧结构"><span class="nav-number">1.</span> <span class="nav-text">1. 运行时栈帧结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-JVM的指令"><span class="nav-number">2.</span> <span class="nav-text">2. JVM的指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-几个常用的指令解析"><span class="nav-number">3.</span> <span class="nav-text">3. 几个常用的指令解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-invokespecial"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 invokespecial</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-aload-n"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 aload_n</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-astore-n"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 astore_n</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4. 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-代码地址"><span class="nav-number">5.</span> <span class="nav-text">5. 代码地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-参考"><span class="nav-number">6.</span> <span class="nav-text">6. 参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-总览"><span class="nav-number">1.</span> <span class="nav-text">1. 总览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-实现"><span class="nav-number">2.</span> <span class="nav-text">2. 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-条件控制流"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 条件控制流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-循环控制流"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 循环控制流</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-总结"><span class="nav-number">3.</span> <span class="nav-text">3. 总结</span></a></li></ol></div>
             
           </div>
         </section>
